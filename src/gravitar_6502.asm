@@ -1,3 +1,1053 @@
+; file LOOSEU.MAC
+
+5000: 20 9B 50 jsr $509b
+5003: C6 D6    dec $d6
+5005: C6 D6    dec $d6
+5007: EE 52 04 inc $0452
+500A: D0 03    bne $500f
+500C: EE 53 04 inc $0453
+500F: A2 01    ldx #$01
+5011: 20 DF 50 jsr $50df
+5014: 95 42    sta $42, x
+5016: A9 02    lda #$02
+5018: 95 E3    sta $e3, x
+501A: A9 01    lda #$01
+501C: 9D 6C 01 sta $016c, x
+501F: A9 04    lda #$04
+5021: 95 00    sta $00, x
+5023: A9 00    lda #$00
+5025: 95 EB    sta $eb, x
+5027: CA       dex
+5028: 10 E7    bpl $5011
+502A: 86 88    stx $88
+502C: 86 89    stx $89
+502E: 20 A9 50 jsr $50a9
+5031: A2 01    ldx #$01
+5033: A9 00    lda #$00
+5035: 95 49    sta $49, x
+5037: 95 EE    sta $ee, x
+5039: 9D 4E 04 sta $044e, x
+503C: 9D 7A 01 sta $017a, x
+503F: 95 F6    sta $f6, x
+5041: 9D 3C 01 sta $013c, x
+5044: CA       dex
+5045: 10 EE    bpl $5035
+5047: 85 D1    sta $d1
+5049: 85 D2    sta $d2
+504B: 85 CF    sta $cf
+504D: A2 02    ldx #$02
+504F: 86 D0    stx $d0
+5051: 60       rts
+5052: 20 DF 50 jsr $50df
+5055: 85 42    sta $42
+5057: A9 02    lda #$02
+5059: 85 E3    sta $e3
+505B: C6 D6    dec $d6
+505D: EE 50 04 inc $0450
+5060: D0 03    bne $5065
+5062: EE 51 04 inc $0451
+5065: 20 9B 50 jsr $509b
+5068: A9 01    lda #$01
+506A: 85 D0    sta $d0
+506C: 8D 6C 01 sta $016c
+506F: A9 00    lda #$00
+5071: 8D 4E 04 sta $044e
+5074: 8D 4F 04 sta $044f
+5077: 85 49    sta $49
+5079: 85 EE    sta $ee
+507B: 85 CF    sta $cf
+507D: 8D 7A 01 sta $017a
+5080: 85 F6    sta $f6
+5082: 8D 3C 01 sta $013c
+5085: 85 D1    sta $d1
+5087: 85 D2    sta $d2
+5089: 20 A9 50 jsr $50a9
+508C: A9 FF    lda #$ff
+508E: 85 88    sta $88
+5090: 85 43    sta $43
+5092: A9 04    lda #$04
+5094: 85 00    sta $00
+5096: A9 00    lda #$00
+5098: 85 EB    sta $eb
+509A: 60       rts
+509B: A2 05    ldx #$05
+509D: A9 00    lda #$00
+509F: 9D 68 01 sta $0168, x
+50A2: 9D 62 01 sta $0162, x
+50A5: CA       dex
+50A6: 10 F7    bpl $509f
+50A8: 60       rts
+50A9: A0 1D    ldy #$1d
+50AB: A2 0E    ldx #$0e
+50AD: BD D0 50 lda $50d0, x
+50B0: 99 44 01 sta $0144, y
+50B3: 48       pha
+50B4: 0A       asl a
+50B5: 0A       asl a
+50B6: 0A       asl a
+50B7: 0A       asl a
+50B8: 99 71 04 sta $0471, y
+50BB: 88       dey
+50BC: 99 71 04 sta $0471, y
+50BF: 68       pla
+50C0: 99 44 01 sta $0144, y
+50C3: 88       dey
+50C4: CA       dex
+50C5: 10 E6    bpl $50ad
+50C7: A9 FF    lda #$ff
+50C9: 8D 58 01 sta $0158
+50CC: 8D 59 01 sta $0159	; NO ROOM LEFT FOR THIS GUY
+50CF: 60       rts
+
+50D0:
+	.BYTE 2,4,6,8,9,9,9,9
+	.BYTE 9,9,9,9,9,9,9
+	
+50DF: A5 F0    lda $f0
+50E1: 29 0C    and #$0c
+50E3: 4A       lsr a
+50E4: 4A       lsr a
+50E5: A8       tay
+50E6: B9 EA 50 lda $50ea, y
+50E9: 60       rts
+50ea:
+	.BYTE 2,3,4,5
+	
+50EE: 20 19 54 jsr $5419                                           
+50F1: 20 67 54 jsr $5467                                           
+50F4: 20 72 93 jsr $9372
+50F7: 20 C2 E1 jsr $e1c2
+50FA: A6 CF    ldx $cf
+50FC: D6 42    dec $42, x
+50FE: 10 1C    bpl $511c
+5100: A9 02    lda #$02
+5102: 8D 6D 04 sta $046d
+5105: A9 00    lda #$00
+5107: 85 F4    sta $f4
+5109: A9 1A    lda #$1a
+510B: 9D 6F 04 sta $046f, x
+510E: A9 12    lda #$12
+5110: 95 00    sta $00, x
+5112: A9 04    lda #$04
+5114: 95 EB    sta $eb, x
+5116: 8E 6C 04 stx $046c
+5119: 4C 31 51 jmp $5131
+511C: A9 1A    lda #$1a
+511E: 95 00    sta $00, x
+5120: A9 0C    lda #$0c
+5122: 95 EB    sta $eb, x
+5124: A9 FF    lda #$ff
+5126: 95 88    sta $88, x
+5128: 20 56 53 jsr $5356
+512B: 20 6F 53 jsr $536f
+512E: 20 D7 51 jsr $51d7
+5131: A9 01    lda #$01
+5133: 85 CE    sta $ce
+5135: A9 00    lda #$00
+5137: A2 0C    ldx #$0c
+5139: 95 0B    sta $0b, x
+513B: CA       dex
+513C: 10 FB    bpl $5139
+513E: 85 4B    sta $4b
+5140: 85 4C    sta $4c
+5142: 85 F4    sta $f4
+5144: 85 F5    sta $f5
+5146: 85 11    sta $11
+5148: 85 27    sta $27
+514A: 8D 6E 04 sta $046e
+514D: 8E 43 01 stx $0143
+5150: 86 30    stx $30
+5152: A9 38    lda #$38
+5154: 85 0F    sta $0f
+5156: 86 10    stx $10
+5158: 60       rts
+5159: 20 19 54 jsr $5419
+515C: 20 67 54 jsr $5467
+515F: 20 72 93 jsr $9372
+5162: 20 C2 E1 jsr $e1c2
+5165: 20 F8 51 jsr $51f8
+5168: A9 FF    lda #$ff
+516A: A6 CF    ldx $cf
+516C: 95 88    sta $88, x
+516E: B5 4D    lda $4d, x
+5170: A8       tay
+5171: B9 31 C1 lda $c131, y
+5174: C9 A8    cmp #$a8
+5176: D0 0C    bne $5184
+5178: A9 FF    lda #$ff
+517A: 8D 3E 01 sta $013e
+517D: A0 0C    ldy #$0c
+517F: A9 1A    lda #$1a
+5181: 4C 88 51 jmp $5188
+5184: A9 06    lda #$06
+5186: A0 00    ldy #$00
+5188: 48       pha
+5189: D6 42    dec $42, x
+518B: 10 18    bpl $51a5
+518D: A9 00    lda #$00
+518F: 85 F4    sta $f4
+5191: A9 02    lda #$02
+5193: 8D 6D 04 sta $046d
+5196: A9 12    lda #$12
+5198: 95 00    sta $00, x
+519A: 68       pla
+519B: 9D 6F 04 sta $046f, x
+519E: A9 04    lda #$04
+51A0: 95 EB    sta $eb, x
+51A2: 4C B0 51 jmp $51b0
+51A5: 68       pla
+51A6: 95 00    sta $00, x
+51A8: 94 EB    sty $eb, x
+51AA: 8E 6C 04 stx $046c
+51AD: 20 D7 51 jsr $51d7
+51B0: A9 38    lda #$38
+51B2: 85 0F    sta $0f
+51B4: A9 FF    lda #$ff
+51B6: 85 30    sta $30
+51B8: 8D 43 01 sta $0143
+51BB: 85 10    sta $10
+51BD: A9 01    lda #$01
+51BF: 85 CE    sta $ce
+51C1: A9 00    lda #$00
+51C3: 85 0E    sta $0e
+51C5: 85 0D    sta $0d
+51C7: 85 F4    sta $f4
+51C9: 85 F5    sta $f5
+51CB: 85 4B    sta $4b
+51CD: 85 4C    sta $4c
+51CF: 85 27    sta $27
+51D1: 8D 6E 04 sta $046e
+51D4: 85 11    sta $11
+51D6: 60       rts
+51D7: A6 CF    ldx $cf
+51D9: B5 42    lda $42, x
+51DB: 10 0D    bpl $51ea
+51DD: 25 42    and $42
+51DF: 25 43    and $43
+51E1: 10 07    bpl $51ea
+51E3: A9 10    lda #$10
+51E5: 85 00    sta $00
+51E7: 85 01    sta $01
+51E9: 60       rts
+51EA: A5 CF    lda $cf
+51EC: 49 01    eor #$01
+51EE: AA       tax
+51EF: B4 42    ldy $42, x
+51F1: 10 02    bpl $51f5
+51F3: 49 01    eor #$01
+51F5: 85 CF    sta $cf
+51F7: 60       rts
+51F8: A6 CF    ldx $cf
+51FA: B5 4D    lda $4d, x
+51FC: 0A       asl a
+51FD: 18       clc
+51FE: 65 CF    adc $cf
+5200: A8       tay
+5201: B5 E9    lda $e9, x
+5203: 99 71 04 sta $0471, y
+5206: 60       rts
+5207: 20 67 54 jsr $5467
+520A: A6 CF    ldx $cf
+520C: B5 4D    lda $4d, x
+520E: AA       tax
+520F: BD ED C0 lda $c0ed, x
+5212: 7D 14 53 adc $5314, x
+5215: 85 0F    sta $0f
+5217: BD DC C0 lda $c0dc, x
+521A: 7D 23 53 adc $5323, x
+521D: 85 10    sta $10
+521F: BD FE C0 lda $c0fe, x
+5222: 7D F6 52 adc $52f6, x
+5225: 85 0D    sta $0d
+5227: BD 0F C1 lda $c10f, x
+522A: 7D 05 53 adc $5305, x
+522D: 85 0E    sta $0e
+522F: BD 32 53 lda $5332, x
+5232: 85 11    sta $11
+5234: 85 27    sta $27
+5236: 4A       lsr a
+5237: 4A       lsr a
+5238: 4A       lsr a
+5239: 29 06    and #$06
+523B: 85 1E    sta $1e
+523D: BD 31 C1 lda $c131, x
+5240: C9 A8    cmp #$a8
+5242: D0 26    bne $526a
+5244: A5 FA    lda $fa
+5246: 30 0A    bmi $5252
+5248: A9 FF    lda #$ff
+524A: 8D 3E 01 sta $013e
+524D: AD 43 01 lda $0143
+5250: 30 15    bmi $5267
+5252: 8A       txa
+5253: 0A       asl a
+5254: 65 CF    adc $cf
+5256: AA       tax
+5257: BD 44 01 lda $0144, x
+525A: 85 21    sta $21
+525C: A9 FF    lda #$ff
+525E: 20 EF 54 jsr $54ef
+5261: A9 09    lda #$09
+5263: A6 CF    ldx $cf
+5265: 95 49    sta $49, x
+5267: 4C 8C 52 jmp $528c
+526A: A6 CF    ldx $cf
+526C: B5 4D    lda $4d, x
+526E: 0A       asl a
+526F: 18       clc
+5270: 65 CF    adc $cf
+5272: AA       tax
+5273: BD 44 01 lda $0144, x
+5276: 30 14    bmi $528c
+5278: A5 FA    lda $fa
+527A: 30 0D    bmi $5289
+527C: A9 00    lda #$00
+527E: A2 07    ldx #$07
+5280: 1D E4 02 ora $02e4, x
+5283: CA       dex
+5284: 10 FA    bpl $5280
+5286: AA       tax
+5287: D0 03    bne $528c
+5289: 20 7A 54 jsr $547a
+528C: 20 72 93 jsr $9372
+528F: A6 CF    ldx $cf
+5291: B5 4D    lda $4d, x
+5293: AA       tax
+5294: BD 31 C1 lda $c131, x
+5297: C9 A8    cmp #$a8
+5299: D0 19    bne $52b4
+529B: A9 7F    lda #$7f
+529D: 25 F4    and $f4
+529F: 85 F4    sta $f4
+52A1: AD 43 01 lda $0143
+52A4: 30 0E    bmi $52b4
+52A6: 20 41 BF jsr $bf41
+52A9: 20 41 BF jsr $bf41
+52AC: 20 41 BF jsr $bf41
+52AF: A9 FF    lda #$ff
+52B1: 8D 43 01 sta $0143
+52B4: A4 CF    ldy $cf
+52B6: D0 06    bne $52be
+52B8: 2C 3C 01 bit $013c
+52BB: 4C C1 52 jmp $52c1
+52BE: 2C 3D 01 bit $013d
+52C1: 50 05    bvc $52c8
+52C3: A9 00    lda #$00
+52C5: 99 3C 01 sta $013c, y
+52C8: 20 56 53 jsr $5356
+52CB: 20 6F 53 jsr $536f
+52CE: A9 01    lda #$01
+52D0: 85 CE    sta $ce
+52D2: A9 FF    lda #$ff
+52D4: 85 30    sta $30
+52D6: A9 1A    lda #$1a
+52D8: A6 CF    ldx $cf
+52DA: 95 00    sta $00, x
+52DC: A9 0C    lda #$0c
+52DE: 95 EB    sta $eb, x
+52E0: B5 F6    lda $f6, x
+52E2: 29 01    and #$01
+52E4: D0 06    bne $52ec
+52E6: 20 F3 53 jsr $53f3
+52E9: 4C EF 52 jmp $52ef
+52EC: 20 04 54 jsr $5404
+52EF: A9 00    lda #$00
+52F1: 85 4B    sta $4b
+52F3: 85 4C    sta $4c
+52F5: 60       rts
+52F6: A0 A0    ldy #$a0
+52F8: 60       rts
+52F9: 60       rts
+52FA: A0 00    ldy #$00
+52FC: A0 00    ldy #$00
+52FE: 60       rts
+52FF: 60       rts
+5300: A0 A0    ldy #$a0
+5302: 60       rts
+5303: 60       rts
+5304: A0 FF    ldy #$ff
+5306: FF 00 00 isb $0000, x
+5309: 00       brk
+530A: 00       brk
+530B: FF 00 00 isb $0000, x
+530E: FF FF FF isb $ffff, x
+5311: 00       brk
+5312: 00       brk
+5313: 00       brk
+5314: A0 60    ldy #$60
+5316: 60       rts
+5317: A0 00    ldy #$00
+5319: A0 00    ldy #$00
+531B: 60       rts
+531C: 00       brk
+531D: 60       rts
+531E: A0 60    ldy #$60
+5320: 60       rts
+5321: A0 00    ldy #$00
+5323: FF 00 00 isb $0000, x
+5326: FF 00 FF isb $ff00, x
+5329: 00       brk
+532A: 00       brk
+532B: 00       brk
+532C: FF FF 00 isb $00ff, x
+532F: 00       brk
+5330: FF 00 28 isb $2800, x
+5333: 38       sec
+5334: 08       php
+5335: 18       clc
+5336: 10 20    bpl $5358
+5338: 30 00    bmi $533a
+533A: 10 28    bpl $5364
+533C: 28       plp
+533D: 38       sec
+533E: 08       php
+533F: 18       clc
+5340: 10 BD    bpl $52ff
+5342: ED C0 85 sbc $85c0
+5345: 38       sec
+5346: BD DC C0 lda $c0dc, x
+5349: 85 39    sta $39
+534B: BD FE C0 lda $c0fe, x
+534E: 85 3A    sta $3a
+5350: BD 0F C1 lda $c10f, x
+5353: 85 3B    sta $3b
+5355: 60       rts
+5356: A0 07    ldy #$07
+5358: A6 CF    ldx $cf
+535A: B5 4D    lda $4d, x
+535C: 0A       asl a
+535D: 18       clc
+535E: 65 CF    adc $cf
+5360: AA       tax
+5361: B9 E4 02 lda $02e4, y
+5364: 18       clc
+5365: F0 01    beq $5368
+5367: 38       sec
+5368: 3E F6 04 rol $04f6, x
+536B: 88       dey
+536C: 10 F3    bpl $5361
+536E: 60       rts
+536F: A0 07    ldy #$07
+5371: A6 CF    ldx $cf
+5373: B5 4D    lda $4d, x
+5375: 0A       asl a
+5376: 18       clc
+5377: 65 CF    adc $cf
+5379: AA       tax
+537A: B9 03 03 lda $0303, y
+537D: 18       clc
+537E: F0 01    beq $5381
+5380: 38       sec
+5381: 7E BA 04 ror $04ba, x
+5384: B9 FB 02 lda $02fb, y
+5387: 18       clc
+5388: F0 01    beq $538b
+538A: 38       sec
+538B: 7E D8 04 ror $04d8, x
+538E: 88       dey
+538F: 10 E9    bpl $537a
+5391: 60       rts
+5392: A9 FF    lda #$ff
+5394: 8D 3A 01 sta $013a
+5397: 85 30    sta $30
+5399: 8D 43 01 sta $0143
+539C: 85 10    sta $10
+539E: 8D 3E 01 sta $013e
+53A1: A9 01    lda #$01
+53A3: 85 CE    sta $ce
+53A5: A9 38    lda #$38
+53A7: 85 0F    sta $0f
+53A9: 20 67 54 jsr $5467
+53AC: 20 72 93 jsr $9372
+53AF: A5 F0    lda $f0
+53B1: 0A       asl a
+53B2: 2A       rol a
+53B3: 2A       rol a
+53B4: 29 03    and #$03
+53B6: A8       tay
+53B7: B9 D2 C3 lda $c3d2, y
+53BA: A6 CF    ldx $cf
+53BC: 9D 16 05 sta $0516, x
+53BF: A9 00    lda #$00
+53C1: 8D 6E 01 sta $016e
+53C4: 8D 6F 01 sta $016f
+53C7: 85 0E    sta $0e
+53C9: 85 0D    sta $0d
+53CB: 85 F3    sta $f3
+53CD: 85 F4    sta $f4
+53CF: 85 4B    sta $4b
+53D1: 85 4C    sta $4c
+53D3: 85 11    sta $11
+53D5: 8D 6E 04 sta $046e
+53D8: 85 27    sta $27
+53DA: 20 C2 E1 jsr $e1c2
+53DD: 20 F3 53 jsr $53f3
+53E0: AD BE 59 lda $59be
+53E3: 85 18    sta $18
+53E5: 20 19 54 jsr $5419
+53E8: A6 CF    ldx $cf
+53EA: A9 1A    lda #$1a
+53EC: 95 00    sta $00, x
+53EE: A9 0C    lda #$0c
+53F0: 95 EB    sta $eb, x
+53F2: 60       rts
+53F3: A9 C8    lda #$c8
+53F5: 85 52    sta $52
+53F7: A9 00    lda #$00
+53F9: 85 51    sta $51
+53FB: A9 96    lda #$96
+53FD: 85 54    sta $54
+53FF: A9 00    lda #$00
+5401: 85 53    sta $53
+5403: 60       rts
+5404: AD FD C0 lda $c0fd
+5407: 85 52    sta $52
+5409: AD EC C0 lda $c0ec
+540C: 85 51    sta $51
+540E: AD 0E C1 lda $c10e
+5411: 85 54    sta $54
+5413: AD 1F C1 lda $c11f
+5416: 85 53    sta $53
+5418: 60       rts
+5419: A2 01    ldx #$01
+541B: A4 CF    ldy $cf
+541D: B9 F6 00 lda $00f6, y
+5420: 29 01    and #$01
+5422: D0 06    bne $542a
+5424: 20 37 54 jsr $5437
+5427: 4C 2D 54 jmp $542d
+542A: 20 4C 54 jsr $544c
+542D: BD 65 54 lda $5465, x
+5430: 9D 34 01 sta $0134, x
+5433: CA       dex
+5434: 10 E5    bpl $541b
+5436: 60       rts
+5437: A9 37    lda #$37
+5439: 9D 08 01 sta $0108, x
+543C: A9 00    lda #$00
+543E: 9D 0C 01 sta $010c, x
+5441: A9 A8    lda #$a8
+5443: 9D 14 01 sta $0114, x
+5446: A9 FD    lda #$fd
+5448: 9D 18 01 sta $0118, x
+544B: 60       rts
+544C: AD 07 C1 lda $c107
+544F: 9D 14 01 sta $0114, x
+5452: AD 18 C1 lda $c118
+5455: 9D 18 01 sta $0118, x
+5458: AD F6 C0 lda $c0f6
+545B: 9D 08 01 sta $0108, x
+545E: AD E5 C0 lda $c0e5
+5461: 9D 0C 01 sta $010c, x
+5464: 60       rts
+5465: 10 18    bpl $547f
+5467: A0 0E    ldy #$0e
+5469: A9 00    lda #$00
+546B: 99 EC 02 sta $02ec, y
+546E: 88       dey
+546F: 10 FA    bpl $546b
+5471: A2 0F    ldx #$0f
+5473: 9D BF 03 sta $03bf, x
+5476: CA       dex
+5477: 10 FA    bpl $5473
+5479: 60       rts
+547A: A6 CF    ldx $cf
+547C: B4 4D    ldy $4d, x
+547E: B9 31 C1 lda $c131, y
+5481: 84 21    sty $21
+5483: C9 A8    cmp #$a8
+5485: D0 01    bne $5488
+5487: 60       rts
+5488: 20 D0 C1 jsr $c1d0
+548B: 20 C0 C8 jsr $c8c0
+548E: 20 C0 C8 jsr $c8c0
+5491: 20 C0 C8 jsr $c8c0
+5494: 20 EB E0 jsr $e0eb
+5497: A4 21    ldy $21
+5499: 98       tya
+549A: 0A       asl a
+549B: 18       clc
+549C: 65 CF    adc $cf
+549E: AA       tax
+549F: BD 44 01 lda $0144, x
+54A2: 85 21    sta $21
+54A4: A9 FF    lda #$ff
+54A6: 9D 44 01 sta $0144, x
+54A9: A9 1C    lda #$1c
+54AB: 18       clc
+54AC: 65 CF    adc $cf
+54AE: AA       tax
+54AF: A0 1C    ldy #$1c
+54B1: BD 44 01 lda $0144, x
+54B4: 30 16    bmi $54cc
+54B6: C5 21    cmp $21
+54B8: D0 01    bne $54bb
+54BA: 18       clc
+54BB: B0 05    bcs $54c2
+54BD: C8       iny
+54BE: B9 98 55 lda $5598, y
+54C1: 88       dey
+54C2: 9D 44 01 sta $0144, x
+54C5: 0A       asl a
+54C6: 0A       asl a
+54C7: 0A       asl a
+54C8: 0A       asl a
+54C9: 9D 71 04 sta $0471, x
+54CC: 88       dey
+54CD: 88       dey
+54CE: CA       dex
+54CF: CA       dex
+54D0: 10 DF    bpl $54b1
+54D2: A6 CF    ldx $cf
+54D4: B5 F6    lda $f6, x
+54D6: 29 03    and #$03
+54D8: A8       tay
+54D9: F0 08    beq $54e3
+54DB: 8A       txa
+54DC: 18       clc
+54DD: 69 0A    adc #$0a
+54DF: 88       dey
+54E0: D0 FA    bne $54dc
+54E2: AA       tax
+54E3: BD 44 01 lda $0144, x
+54E6: 3D 46 01 and $0146, x
+54E9: 3D 48 01 and $0148, x
+54EC: 3D 4A 01 and $014a, x
+54EF: 10 53    bpl $5544
+54F1: A6 CF    ldx $cf
+54F3: A9 00    lda #$00
+54F5: 95 EE    sta $ee, x
+54F7: 9D 3C 01 sta $013c, x
+54FA: A9 1C    lda #$1c
+54FC: 18       clc
+54FD: 65 CF    adc $cf
+54FF: AA       tax
+5500: A5 21    lda $21
+5502: 18       clc
+5503: 69 01    adc #$01
+5505: C9 09    cmp #$09
+5507: 90 02    bcc $550b
+5509: A9 09    lda #$09
+550B: 9D 44 01 sta $0144, x
+550E: 0A       asl a
+550F: 0A       asl a
+5510: 0A       asl a
+5511: 0A       asl a
+5512: 9D 71 04 sta $0471, x
+5515: CA       dex
+5516: CA       dex
+5517: 10 E7    bpl $5500
+5519: A9 38    lda #$38
+551B: 85 0F    sta $0f
+551D: A9 FF    lda #$ff
+551F: 85 10    sta $10
+5521: 8D 58 01 sta $0158
+5524: 8D 59 01 sta $0159
+5527: A9 00    lda #$00
+5529: 85 27    sta $27
+552B: 85 11    sta $11
+552D: 85 1E    sta $1e
+552F: 85 0D    sta $0d
+5531: 85 0E    sta $0e
+5533: A6 CF    ldx $cf
+5535: B5 F6    lda $f6, x
+5537: 48       pha
+5538: 29 03    and #$03
+553A: C9 02    cmp #$02
+553C: 68       pla
+553D: 69 01    adc #$01
+553F: 95 F6    sta $f6, x
+5541: 20 19 54 jsr $5419
+5544: A6 CF    ldx $cf
+5546: B4 4D    ldy $4d, x
+5548: 98       tya
+5549: 0A       asl a
+554A: 65 CF    adc $cf
+554C: 9D 3A 01 sta $013a, x
+554F: 85 21    sta $21
+5551: B5 EE    lda $ee, x
+5553: A4 21    ldy $21
+5555: 39 C2 5A and $5ac2, y
+5558: 95 EE    sta $ee, x
+555A: 60       rts
+555B: A9 FF    lda #$ff
+555D: 85 88    sta $88
+555F: 85 89    sta $89
+5561: 85 4D    sta $4d
+5563: A5 F1    lda $f1
+5565: 85 DF    sta $df
+5567: A9 00    lda #$00
+5569: 85 F3    sta $f3
+556B: A5 4F    lda $4f
+556D: 29 03    and #$03
+556F: D0 02    bne $5573
+5571: C6 3F    dec $3f
+5573: A5 3F    lda $3f
+5575: C9 C0    cmp #$c0
+5577: 90 07    bcc $5580
+5579: A9 40    lda #$40
+557B: A0 01    ldy #$01
+557D: 4C 84 55 jmp $5584
+5580: A9 00    lda #$00
+5582: A0 02    ldy #$02
+5584: 85 30    sta $30
+5586: 84 CE    sty $ce
+5588: A5 3F    lda $3f
+558A: D0 04    bne $5590
+558C: A9 20    lda #$20
+558E: 85 00    sta $00
+5590: 20 67 54 jsr $5467
+5593: A9 08    lda #$08
+5595: 85 EB    sta $eb
+5597: 60       rts
+
+55BA: 08       php
+55BB: CA       dex
+55BC: 10 FA    bpl $55b8
+55BE: A8       tay
+55BF: A2 07    ldx #$07
+55C1: B9 DE 55 lda $55de, y
+55C4: 9D 17 02 sta $0217, x
+55C7: B9 56 56 lda $5656, y
+55CA: 9D 00 02 sta $0200, x
+55CD: B9 CE 56 lda $56ce, y
+55D0: 9D 5C 02 sta $025c, x
+55D3: B9 46 57 lda $5746, y
+55D6: 9D 45 02 sta $0245, x
+55D9: 88       dey
+55DA: CA       dex
+55DB: 10 E4    bpl $55c1
+55DD: 60       rts
+55DE: 60       rts
+55DF: E0 40    cpx #$40
+55E1: 60       rts
+55E2: 60       rts
+55E3: 40       rti
+55E4: 60       rts
+55E5: E0 90    cpx #$90
+55E7: 30 30    bmi $5619
+55E9: B0 70    bcs $565b
+55EB: D0 30    bne $561d
+55ED: 30 20    bmi $560f
+55EF: 60       rts
+55F0: 20 60 20 jsr $2060
+55F3: 60       rts
+55F4: 20 C0 40 jsr $40c0
+55F7: 80 E0    nop #$e0
+55F9: C0 60    cpy #$60
+55FB: 20 A0 C0 jsr $c0a0
+55FE: C0 80    cpy #$80
+5600: A0 40    ldy #$40
+5602: 40       rti
+5603: C0 20    cpy #$20
+5605: 40       rti
+5606: A0 E0    ldy #$e0
+5608: E0 E0    cpx #$e0
+560A: 00       brk
+560B: C0 00    cpy #$00
+560D: 60       rts
+560E: A0 E0    ldy #$e0
+5610: E0 A0    cpx #$a0
+5612: E0 80    cpx #$80
+5614: 60       rts
+5615: 60       rts
+5616: 00       brk
+5617: A0 20    ldy #$20
+5619: 60       rts
+561A: C0 E0    cpy #$e0
+561C: C0 E0    cpy #$e0
+561E: C0 60    cpy #$60
+5620: A0 E0    ldy #$e0
+5622: 60       rts
+5623: C0 E0    cpy #$e0
+5625: 80 C0    nop #$c0
+5627: 80 A0    nop #$a0
+5629: 40       rti
+562A: 40       rti
+562B: C0 20    cpy #$20
+562D: 40       rti
+562E: 60       rts
+562F: 70 3B    bvs $566c
+5631: B6 40    ldx $40, y
+5633: 71 53    adc ($53), y
+5635: FB A0 A0 isb $a0a0, y
+5638: E0 60    cpx #$60
+563A: 00       brk
+563B: A0 40    ldy #$40
+563D: 00       brk
+563E: 60       rts
+57BE: A9 00    lda #$00                                            
+57C0: A2 0D    ldx #$0d
+57C2: 95 0B    sta $0b, x
+57C4: CA       dex
+57C5: 10 FB    bpl $57c2
+57C7: A2 A7    ldx #$a7
+57C9: 9D 00 02 sta $0200, x
+57CC: CA       dex
+57CD: D0 FA    bne $57c9
+57CF: 20 67 54 jsr $5467
+57D2: A9 04    lda #$04
+57D4: 85 1E    sta $1e
+57D6: 20 C2 E1 jsr $e1c2
+57D9: A9 20    lda #$20
+57DB: 85 11    sta $11
+57DD: 85 27    sta $27
+57DF: 8D 36 01 sta $0136
+57E2: 8D 37 01 sta $0137
+57E5: A6 CF    ldx $cf
+57E7: B5 4D    lda $4d, x
+57E9: AA       tax
+57EA: BD AF 59 lda $59af, x
+57ED: 85 10    sta $10
+57EF: A5 D0    lda $d0
+57F1: F0 10    beq $5803
+57F3: BD 31 C1 lda $c131, x
+57F6: C9 A8    cmp #$a8
+57F8: F0 06    beq $5800
+57FA: 20 19 5B jsr $5b19
+57FD: 4C 03 58 jmp $5803
+5800: 20 F3 E0 jsr $e0f3
+5803: 20 31 5B jsr $5b31
+5806: A6 CF    ldx $cf
+5808: B4 49    ldy $49, x
+580A: A5 F0    lda $f0
+580C: 29 10    and #$10
+580E: D0 06    bne $5816
+5810: B9 BE 59 lda $59be, y
+5813: 4C 19 58 jmp $5819
+5816: B9 C8 59 lda $59c8, y
+5819: 85 18    sta $18
+581B: B9 A5 59 lda $59a5, y
+581E: 95 E5    sta $e5, x
+5820: A9 10    lda #$10
+5822: 8D 38 01 sta $0138
+5825: A9 F0    lda #$f0
+5827: 8D 39 01 sta $0139
+582A: 95 88    sta $88, x
+582C: B9 9B 59 lda $599b, y
+582F: 95 E7    sta $e7, x
+5831: A9 00    lda #$00
+5833: 85 51    sta $51
+5835: 85 52    sta $52
+5837: 85 53    sta $53
+5839: 85 54    sta $54
+583B: 85 7A    sta $7a
+583D: 85 4C    sta $4c
+583F: 85 4B    sta $4b
+5841: 8D 0F 60 sta $600f
+5844: 85 37    sta $37
+5846: 85 48    sta $48
+5848: 85 2B    sta $2b
+584A: A9 FF    lda #$ff
+584C: 85 0E    sta $0e
+584E: 85 15    sta $15
+5850: 85 16    sta $16
+5852: 85 36    sta $36
+5854: 85 30    sta $30
+5856: 8D 3E 01 sta $013e
+5859: 85 2D    sta $2d
+585B: B5 4D    lda $4d, x
+585D: AA       tax
+585E: BD 31 C1 lda $c131, x
+5861: 10 09    bpl $586c
+5863: A9 00    lda #$00
+5865: 85 2D    sta $2d
+5867: A9 07    lda #$07
+5869: 4C 6E 58 jmp $586e
+586C: A9 08    lda #$08
+586E: 85 2A    sta $2a
+5870: E0 0C    cpx #$0c
+5872: D0 04    bne $5878
+5874: A9 FF    lda #$ff
+5876: 85 51    sta $51
+5878: A9 03    lda #$03
+587A: 8D 0F 60 sta $600f
+587D: A9 04    lda #$04
+587F: 85 28    sta $28
+5881: 85 29    sta $29
+5883: A9 40    lda #$40
+5885: 85 2F    sta $2f
+5887: 85 0D    sta $0d
+5889: 20 B6 55 jsr $55b6
+588C: A6 CF    ldx $cf
+588E: B5 4D    lda $4d, x
+5890: 0A       asl a
+5891: 18       clc
+5892: 65 CF    adc $cf
+5894: A8       tay
+5895: B9 44 01 lda $0144, y
+5898: 30 58    bmi $58f2
+589A: B5 EE    lda $ee, x
+589C: 39 C2 5A and $5ac2, y
+589F: D0 4C    bne $58ed
+58A1: B9 C2 5A lda $5ac2, y
+58A4: 15 EE    ora $ee, x
+58A6: 95 EE    sta $ee, x
+58A8: B9 44 01 lda $0144, y
+58AB: 0A       asl a
+58AC: 0A       asl a
+58AD: 0A       asl a
+58AE: 0A       asl a
+58AF: 95 E9    sta $e9, x
+58B1: B5 49    lda $49, x
+58B3: C9 07    cmp #$07
+58B5: 90 02    bcc $58b9
+58B7: A9 07    lda #$07
+58B9: A4 CF    ldy $cf
+58BB: B6 4D    ldx $4d, y
+58BD: F0 06    beq $58c5
+58BF: 18       clc
+58C0: 69 08    adc #$08
+58C2: CA       dex
+58C3: D0 FA    bne $58bf
+58C5: A8       tay
+58C6: A6 CF    ldx $cf
+58C8: B5 4D    lda $4d, x
+58CA: 0A       asl a
+58CB: 18       clc
+58CC: 65 CF    adc $cf
+58CE: AA       tax
+58CF: B9 D2 59 lda $59d2, y
+58D2: 9D BA 04 sta $04ba, x
+58D5: B9 4A 5A lda $5a4a, y
+58D8: 9D D8 04 sta $04d8, x
+58DB: C0 20    cpy #$20
+58DD: 90 05    bcc $58e4
+58DF: A9 FF    lda #$ff
+58E1: 4C E7 58 jmp $58e7
+58E4: B9 F9 5A lda $5af9, y
+58E7: 9D F6 04 sta $04f6, x
+58EA: 4C F2 58 jmp $58f2
+58ED: B9 71 04 lda $0471, y
+58F0: 95 E9    sta $e9, x
+58F2: A6 CF    ldx $cf
+58F4: B4 49    ldy $49, x
+58F6: A5 F0    lda $f0
+58F8: 29 10    and #$10
+58FA: D0 06    bne $5902
+58FC: B9 87 59 lda $5987, y
+58FF: 4C 05 59 jmp $5905
+5902: B9 91 59 lda $5991, y
+5905: 18       clc
+5906: 75 F6    adc $f6, x
+5908: C9 08    cmp #$08
+590A: 90 02    bcc $590e
+590C: A9 08    lda #$08
+590E: 85 ED    sta $ed
+5910: B5 4D    lda $4d, x
+5912: AA       tax
+5913: BD 31 C1 lda $c131, x
+5916: 29 20    and #$20
+5918: D0 1B    bne $5935
+591A: A6 CF    ldx $cf
+591C: B5 4D    lda $4d, x
+591E: 0A       asl a
+591F: 18       clc
+5920: 65 CF    adc $cf
+5922: AA       tax
+5923: BD BA 04 lda $04ba, x
+5926: 85 23    sta $23
+5928: BD D8 04 lda $04d8, x
+592B: 85 24    sta $24
+592D: BD F6 04 lda $04f6, x
+5930: 85 21    sta $21
+5932: 4C 56 59 jmp $5956
+5935: A6 CF    ldx $cf
+5937: B4 F6    ldy $f6, x
+5939: C0 06    cpy #$06
+593B: 90 02    bcc $593f
+593D: A0 06    ldy #$06
+593F: B9 80 59 lda $5980, y
+5942: 8D 3E 01 sta $013e
+5945: A9 00    lda #$00
+5947: 85 23    sta $23
+5949: 85 24    sta $24
+594B: A0 FF    ldy #$ff
+594D: B5 F6    lda $f6, x
+594F: C9 02    cmp #$02
+5951: B0 01    bcs $5954
+5953: C8       iny
+5954: 84 21    sty $21
+5956: 20 E0 5A jsr $5ae0
+5959: A2 0F    ldx #$0f
+595B: 46 24    lsr $24
+595D: 66 23    ror $23
+595F: 90 08    bcc $5969
+5961: A9 08    lda #$08
+5963: 9D FB 02 sta $02fb, x
+5966: 4C 6E 59 jmp $596e
+5969: A9 00    lda #$00
+596B: 9D FB 02 sta $02fb, x
+596E: CA       dex
+596F: 10 EA    bpl $595b
+5971: A9 02    lda #$02
+5973: 85 CE    sta $ce
+5975: A6 CF    ldx $cf
+5977: A9 14    lda #$14
+5979: 95 00    sta $00, x
+597B: A9 06    lda #$06
+597D: 95 EB    sta $eb, x
+597F: 60       rts
+
+5AE0: A9 7F    lda #$7f
+5AE2: A2 07    ldx #$07
+5AE4: 06 21    asl $21
+5AE6: 90 08    bcc $5af0
+5AE8: A9 7F    lda #$7f
+5AEA: 9D E4 02 sta $02e4, x
+5AED: 4C F5 5A jmp $5af5
+5AF0: A9 00    lda #$00
+5AF2: 9D E4 02 sta $02e4, x
+5AF5: CA       dex
+5AF6: 10 EC    bpl $5ae4
+5AF8: 60       rts
+
+5B1B: B5 4D    lda $4d, x
+5B1D: 0A       asl a
+5B1E: 18       clc
+5B1F: 65 CF    adc $cf
+5B21: AA       tax
+5B22: A4 CF    ldy $cf
+5B24: BD 44 01 lda $0144, x
+5B27: C9 09    cmp #$09
+5B29: 90 02    bcc $5b2d
+5B2B: A9 09    lda #$09
+5B2D: 99 49 00 sta $0049, y
+5B30: 60       rts
+5B31: A6 CF    ldx $cf
+5B33: B5 4D    lda $4d, x
+5B35: 0A       asl a
+5B36: 18       clc
+5B37: 69 96    adc #$96
+5B39: 85 22    sta $22
+5B3B: A9 0A    lda #$0a
+5B3D: 85 23    sta $23
+5B3F: A4 22    ldy $22
+5B41: B9 72 5B lda $5b72, y
+5B44: A6 23    ldx $23
+5B46: 95 56    sta $56, x
+5B48: B9 73 5B lda $5b73, y
+5B4B: 95 57    sta $57, x
+5B4D: B9 26 5C lda $5c26, y
+5B50: 95 62    sta $62, x
+5B52: B9 27 5C lda $5c27, y
+5B55: 95 63    sta $63, x
+5B57: B9 DA 5C lda $5cda, y
+5B5A: 95 6E    sta $6e, x
+5B5C: B9 DB 5C lda $5cdb, y
+5B5F: 95 6F    sta $6f, x
+5B61: A5 22    lda $22
+5B63: 38       sec
+5B64: E9 1E    sbc #$1e
+5B66: 85 22    sta $22
+5B68: A5 23    lda $23
+5B6A: 38       sec
+5B6B: E9 02    sbc #$02
+5B6D: 85 23    sta $23
+5B6F: B0 CE    bcs $5b3f
+5B71: 60       rts
+
+
 	; ADAPTATION,DISTRIBUTION,PERFORMANCEOR DISPLAY OF
 	; THIS COMPUTER PROGRAM OR THE ASSOCIATED AUDIOVISUAL
 	; WORK IS STRICTLY PROHIBITED!!!!!!!
@@ -49,42 +1099,42 @@
 904E: BD 53 90 lda $9053, x
 9051: 48       pha
 9052: 60       rts
-
-TODO create table with values minus 1!
-    .word	$50FF 
-    .word	$4F91 
-    .word	$53BD 
-    .word	$57D3 
-    .word	$93ED 
-    .word	$5058 
-    .word	$5106 
-    .word	$52A2
-    .word	$92B4 
-    .word	$927B 
-    .word	$935A 
-    .word	$55F2 
-    .word	$910B 
-    .word	$934A 
-    .word	$9213 
-    .word	$CB34
-    .word	$94A8
-    .word	$9401 
-    .word	$9551 
-     
-    .word	$50FF 
-    .word	$4F91 
-    .word	$53BD 
-    .word	$5721 
-    .word	$91ED
-    .word	$5058 
-    .word	$5106 
-    .word	$52A2 
-    .word	$92B4 
-    .word	$927B 
-    .word	$935A 
-    .word	$5575 
-    .word	$910B
-    .word	$93B5 
+9053:
+	.word	$5052-1    ; $9053
+	.word	$5000-1    ; $9055
+	.word	$5392-1    ; $9057
+	.word	$57be-1    ; $9059
+	.word	$93d4-1    ; $905b
+	.word	$50ee-1    ; $905d
+	.word	$5159-1    ; $905f
+	.word	$5207-1    ; $9061
+	.word	$92a3-1    ; $9063
+	.word	$92b5-1    ; $9065
+	.word	$937c-1    ; $9067
+	.word	$555b-1    ; $9069
+	.word	$91f3-1    ; $906b
+	.word	$930c-1    ; $906d
+	.word	$924b-1    ; $906f
+	.word	$cb14-1    ; $9071
+	.word	$9435-1    ; $9073
+	.word	$94a9-1    ; $9075
+	.word	$9502-1    ; $9077
+9079:
+	.word	$5052-1    ; $9079
+	.word	$5000-1    ; $907b
+	.word	$5392-1    ; $907d
+	.word	$57be-1    ; $907f
+	.word	$9122-1    ; $9081
+	.word	$50ee-1    ; $9083
+	.word	$5159-1    ; $9085
+	.word	$5207-1    ; $9087
+	.word	$92a3-1    ; $9089
+	.word	$92b5-1    ; $908b
+	.word	$937c-1    ; $908d
+	.word	$555b-1    ; $908f
+	.word	$9176-1    ; $9091
+	.word	$930c-1    ; $9093
+	.word	$91b6-1    ; $9095
 
   
 9097: A6 CF    ldx $cf
@@ -235,10 +1285,10 @@ TODO create table with values minus 1!
 91F7: A6 CF    ldx $cf
 91F9: B5 88    lda $88, x
 91FB: F0 1B    beq $9218
-91FD: 20 D1 98 jsr $98d1
-9200: 20 98 95 jsr $9598
+91FD: 20 D1 98 jsr $98d1 ; UP SHIP POS.
+9200: 20 98 95 jsr $9598	; UP VELOCITY
 9203: 20 A7 97 jsr $97a7
-9206: 20 11 97 jsr $9711
+9206: 20 11 97 jsr $9711        
 9209: 20 3D C4 jsr $c43d
 920C: 20 E5 C1 jsr $c1e5
 920F: 20 62 BC jsr $bc62
@@ -421,22 +1471,20 @@ TODO create table with values minus 1!
 93A3: A9 EB    lda #$eb
 93A5: 25 F4    and $f4
 93A7: 85 F4    sta $f4
-93A9: A9 FD    lda #$fd
+93A9: A9 FD    lda #$fd    ; MDANGR!MATARI?0FF
 93AB: 25 F5    and $f5
 93AD: 85 F5    sta $f5
 93AF: A6 CF    ldx $cf
 93B1: A9 06    lda #$06
 93B3: 95 EB    sta $eb, x
 93B5: 60       rts
-93B6: 81 81    sta ($81, x)
-93B8: 81 64    sta ($64, x)
-93BA: 60       rts
-93BB: 81 81    sta ($81, x)
-93BD: 81 50    sta ($50, x)
-93BF: 60       rts
-93C0: 81 81    sta ($81, x)
-93C2: 70 81    bvs $9345
-93C4: 60       rts
+93B6: 
+   .BYTE 81,81,81,64,60,81,81,81
+   .BYTE 50,60,81,81,70,81,60
+
+;PBSCAL:	.BYTE 2,2,2,3,3,2,2,2
+;	.BYTE 3,3,2,2,3,2,3
+
 
 93D7: 20 D1 98 jsr $98d1
 93DA: 20 60 9F jsr $9f60
@@ -651,7 +1699,7 @@ TODO create table with values minus 1!
 95C5: 85 1A    sta $1a
 95C7: A5 28    lda $28
 95C9: 85 19    sta $19
-95CB: 20 6E DE jsr multiply_de6e
+95CB: 20 6E DE jsr $DE6E
 95CE: A4 1E    ldy $1e
 95D0: 46 1C    lsr resh_1c
 95D2: 66 1B    ror resl_1b
@@ -690,7 +1738,7 @@ TODO create table with values minus 1!
 9615: 85 1A    sta $1a
 9617: A5 29    lda $29
 9619: 85 19    sta $19
-961B: 20 6E DE jsr multiply_de6e
+961B: 20 6E DE jsr $DE6E
 961E: A4 1E    ldy $1e
 9620: 46 1C    lsr resh_1c
 9622: 66 1B    ror resl_1b
@@ -1932,7 +2980,7 @@ A002: 85 24    sta $24
 A004: A5 24    lda $24
 A006: 85 1A    sta $1a
 A008: 84 22    sty $22
-A00A: 20 6E DE jsr multiply_de6e
+A00A: 20 6E DE jsr $DE6E
 A00D: A5 1C    lda resh_1c
 A00F: 85 38    sta $38
 A011: A4 22    ldy $22
@@ -1941,7 +2989,7 @@ A014: B1 5A    lda ($5a), y
 A016: 88       dey
 A017: 29 7F    and #$7f
 A019: 85 19    sta $19
-A01B: 20 6E DE jsr multiply_de6e
+A01B: 20 6E DE jsr $DE6E
 A01E: A4 22    ldy $22
 A020: A5 1B    lda resl_1b
 A022: 18       clc
@@ -2102,7 +3150,7 @@ A149: 85 24    sta $24
 A14B: A5 24    lda $24
 A14D: 85 1A    sta $1a
 A14F: 84 22    sty $22
-A151: 20 6E DE jsr multiply_de6e
+A151: 20 6E DE jsr $DE6E
 A154: A4 22    ldy $22
 A156: A5 1C    lda resh_1c
 A158: 85 38    sta $38
@@ -2110,7 +3158,7 @@ A15A: C8       iny
 A15B: B1 5A    lda ($5a), y
 A15D: 29 7F    and #$7f
 A15F: 85 19    sta $19
-A161: 20 6E DE jsr multiply_de6e
+A161: 20 6E DE jsr $DE6E
 A164: A4 22    ldy $22
 A166: A5 1B    lda resl_1b
 A168: 18       clc
@@ -2137,522 +3185,7 @@ A191: 20 83 A0 jsr $a083
 A194: C6 21    dec $21
 A196: D0 92    bne $a12a
 A198: 60       rts
-A199: 06 28    asl $28
-A19B: 00       brk
-A19C: 28       plp
-A19D: 1C 28 32 nop $3228, x
-A1A0: 28       plp
-A1A1: 40       rti
-A1A2: 28       plp
-A1A3: 00       brk
-A1A4: 28       plp
-A1A5: 5A       nop
-A1A6: 28       plp
-A1A7: 68       pla
-A1A8: 28       plp
-A1A9: 00       brk
-A1AA: 28       plp
-A1AB: 6E 28 74 ror $7428
-A1AE: 28       plp
-A1AF: 7A       nop
-A1B0: 28       plp
-A1B1: 80 28    nop #$28
-A1B3: 9A       txs
-A1B4: 28       plp
-A1B5: AC 28 BE ldy $be28
-A1B8: 28       plp
-A1B9: 00       brk
-A1BA: 00       brk
-A1BB: 00       brk
-A1BC: 00       brk
-A1BD: 00       brk
-A1BE: 00       brk
-A1BF: 00       brk
-A1C0: 00       brk
-A1C1: CE 2A EC dec $ec2a
-A1C4: 2A       rol a
-A1C5: 12       kil
-A1C6: 2B 44    anc #$44
-A1C8: 2B 5A    anc #$5a
-A1CA: 2B 78    anc #$78
-A1CC: 2B 9E    anc #$9e
-A1CE: 2B D0    anc #$d0
-A1D0: 2B 00    anc #$00
-A1D2: 00       brk
-A1D3: 00       brk
-A1D4: 00       brk
-A1D5: 00       brk
-A1D6: 00       brk
-A1D7: 00       brk
-A1D8: 00       brk
-A1D9: E6 2B    inc $2b
-A1DB: F4 2B    nop $2b, x
-A1DD: 06 2C    asl $2c
-A1DF: 20 2C 3A jsr $3a2c
-A1E2: 2C 60 2C bit $2c60
-A1E5: 82 2C    nop #$2c
-A1E7: AC 2C BE ldy $be2c
-A1EA: 2C D0 2C bit $2cd0
-A1ED: EA       nop
-A1EE: 2C 08 2D bit $2d08
-A1F1: 26 2D    rol $2d
-A1F3: 40       rti
-A1F4: 2D 4E 2D and $2d4e
-A1F7: 6C 2D CA jmp ($ca2d)
-A1FA: 28       plp
-A1FB: E8       inx
-A1FC: 28       plp
-A1FD: 0E 29 30 asl $3029
-A200: 29 52    and #$52
-A202: 29 60    and #$60
-A204: 29 86    and #$86
-A206: 29 B4    and #$b4
-A208: 29 C2    and #$c2
-A20A: 29 E8    and #$e8
-A20C: 29 12    and #$12
-A20E: 2A       rol a
-A20F: 34 2A    nop $2a, x
-A211: 56 2A    lsr $2a, x
-A213: 78       sei
-A214: 2A       rol a
-A215: A2 2A    ldx #$2a
-A217: AC 2A 00 ldy $002a
-A21A: 00       brk
-A21B: 00       brk
-A21C: 00       brk
-A21D: 00       brk
-A21E: 00       brk
-A21F: 7E 2D 8C ror $8c2d, x
-A222: 2D AE 2D and $2dae
-A225: D4 2D    nop $2d, x
-A227: EE 2D 14 inc $142d
-A22A: 2E 46 2E rol $2e46
-A22D: 78       sei
-A22E: 2E AE 2E rol $2eae
-A231: C8       iny
-A232: 2E 00 00 rol $0000
-A235: 00       brk
-A236: 00       brk
-A237: 00       brk
-A238: 00       brk
-A239: 00       brk
-A23A: 28       plp
-A23B: D2       kil
-A23C: 2E 00 28 rol $2800
-A23F: D8       cld
-A240: 2E 00 28 rol $2800
-A243: 00       brk
-A244: 28       plp
-A245: D2       kil
-A246: 2E D2 2E rol $2ed2
-A249: 00       brk
-A24A: 28       plp
-A24B: D8       cld
-A24C: 2E 00 28 rol $2800
-A24F: D8       cld
-A250: 2E D2 2E rol $2ed2
-A253: 00       brk
-A254: 28       plp
-A255: D8       cld
-A256: 2E 00 28 rol $2800
-A259: D8       cld
-A25A: 2E DE 2E rol $2ede
-A25D: F4 2E    nop $2e, x
-A25F: 00       brk
-A260: 28       plp
-A261: 06 2F    asl $2f
-A263: 18       clc
-A264: 2F D2 2E rla $2ed2
-A267: 2A       rol a
-A268: 2F 40 2F rla $2f40
-A26B: D8       cld
-A26C: 2E 00 28 rol $2800
-A26F: 52       kil
-A270: 2F 00 28 rla $2800
-A273: 60       rts
-A274: 2F 00 28 rla $2800
-A277: 00       brk
-A278: 28       plp
-A279: 00       brk
-A27A: 00       brk
-A27B: 00       brk
-A27C: 00       brk
-A27D: 00       brk
-A27E: 00       brk
-A27F: 72       kil
-A280: 2F 94 2F rla $2f94
-A283: B2       kil
-A284: 2F D4 2F rla $2fd4
-A287: FA       nop
-A288: 2F 0C 30 rla $300c
-A28B: 32       kil
-A28C: 30 58    bmi $a2e6
-A28E: 30 86    bmi $a216
-A290: 30 B0    bmi $a242
-A292: 30 00    bmi $a294
-A294: 00       brk
-A295: 00       brk
-A296: 00       brk
-A297: 00       brk
-A298: 00       brk
-A299: 00       brk
-A29A: 28       plp
-A29B: C6 30    dec $30
-A29D: D4 30    nop $30, x
-A29F: DE 30 E4 dec $e430, x
-A2A2: 30 F6    bmi $a29a
-A2A4: 30 08    bmi $a2ae
-A2A6: 31 00    and ($00), y
-A2A8: 28       plp
-A2A9: 0E 31 28 asl $2831
-A2AC: 31 56    and ($56), y
-A2AE: 31 7C    and ($7c), y
-A2B0: 31 A2    and ($a2), y
-A2B2: 31 D0    and ($d0), y
-A2B4: 31 00    and ($00), y
-A2B6: 28       plp
-A2B7: E2 31    nop #$31
-A2B9: 0E 37 20 asl $2037
-A2BC: 37 36    rla $36, x
-A2BE: 37 0E    rla $0e, x
-A2C0: 37 20    rla $20, x
-A2C2: 37 54    rla $54, x
-A2C4: 37 7E    rla $7e, x
-A2C6: 37 94    rla $94, x
-A2C8: 37 C2    rla $c2, x
-A2CA: 37 00    rla $00, x
-A2CC: 28       plp
-A2CD: D8       cld
-A2CE: 37 F6    rla $f6, x
-A2D0: 37 00    rla $00, x
-A2D2: 28       plp
-A2D3: 14 38    nop $38, x
-A2D5: 2A       rol a
-A2D6: 38       sec
-A2D7: 00       brk
-A2D8: 28       plp
-A2D9: 00       brk
-A2DA: 00       brk
-A2DB: 00       brk
-A2DC: 00       brk
-A2DD: 00       brk
-A2DE: 00       brk
-A2DF: A6 33    ldx $33
-A2E1: C0 33    cpy #$33
-A2E3: DE 33 0C dec $0c33, x
-A2E6: 34 26    nop $26, x
-A2E8: 34 50    nop $50, x
-A2EA: 34 76    nop $76, x
-A2EC: 34 90    nop $90, x
-A2EE: 34 BE    nop $be, x
-A2F0: 34 DC    nop $dc, x
-A2F2: 34 00    nop $00, x
-A2F4: 00       brk
-A2F5: 00       brk
-A2F6: 00       brk
-A2F7: 00       brk
-A2F8: 00       brk
-A2F9: 00       brk
-A2FA: 28       plp
-A2FB: EC 31 FE cpx $fe31
-A2FE: 31 28    and ($28), y
-A300: 32       kil
-A301: 4E 32 74 lsr $7432
-A304: 32       kil
-A305: 92       kil
-A306: 32       kil
-A307: A8       tay
-A308: 32       kil
-A309: C2 32    nop #$32
-A30B: E0 32    cpx #$32
-A30D: F6 32    inc $32, x
-A30F: 10 33    bpl $a344
-A311: 2A       rol a
-A312: 33 44    rla ($44), y
-A314: 33 6A    rla ($6a), y
-A316: 33 90    rla ($90), y
-A318: 33 00    rla ($00), y
-A31A: FF 00 00 isb $0000, x
-A31D: E0 01    cpx #$01
-A31F: C0 FE    cpy #$fe
-A321: 20 FF 00 jsr $00ff
-A324: 00       brk
-A325: C0 01    cpy #$01
-A327: 40       rti
-A328: FF 00 00 isb $0000, x
-A32B: C0 00    cpy #$00
-A32D: 80 FF    nop #$ff
-A32F: E0 FE    cpx #$fe
-A331: 00       brk
-A332: 00       brk
-A333: 00       brk
-A334: 00       brk
-A335: 20 02 00 jsr $0002
-A338: FF 00 00 isb $0000, x
-A33B: 00       brk
-A33C: 00       brk
-A33D: 00       brk
-A33E: 00       brk
-A33F: 00       brk
-A340: 00       brk
-A341: E0 FE    cpx #$fe
-A343: A0 FF    ldy #$ff
-A345: A0 00    ldy #$00
-A347: A0 FF    ldy #$ff
-A349: 00       brk
-A34A: 00       brk
-A34B: 20 FF E0 jsr $e0ff
-A34E: 01 00    ora ($00, x)
-A350: 00       brk
-A351: 00       brk
-A352: 00       brk
-A353: 00       brk
-A354: 00       brk
-A355: 00       brk
-A356: 00       brk
-A357: 00       brk
-A358: 00       brk
-A359: 80 FE    nop #$fe
-A35B: 20 FF 00 jsr $00ff
-A35E: 00       brk
-A35F: 60       rts
-A360: 00       brk
-A361: E0 00    cpx #$00
-A363: E0 FE    cpx #$fe
-A365: 40       rti
-A366: 00       brk
-A367: 00       brk
-A368: 02       kil
-A369: 80 FE    nop #$fe
-A36B: C0 FF    cpy #$ff
-A36D: 80 FF    nop #$ff
-A36F: 80 00    nop #$00
-A371: C0 01    cpy #$01
-A373: 60       rts
-A374: FE 40 00 inc $0040, x
-A377: 60       rts
-A378: 01 80    ora ($80, x)
-A37A: 00       brk
-A37B: C0 FF    cpy #$ff
-A37D: 20 00 00 jsr $0000
-A380: 00       brk
-A381: A0 FF    ldy #$ff
-A383: 00       brk
-A384: 00       brk
-A385: 80 00    nop #$00
-A387: 40       rti
-A388: 00       brk
-A389: 00       brk
-A38A: 00       brk
-A38B: 80 FF    nop #$ff
-A38D: 40       rti
-A38E: 00       brk
-A38F: A0 FF    ldy #$ff
-A391: 20 00 00 jsr $0000
-A394: 00       brk
-A395: 40       rti
-A396: 00       brk
-A397: 80 FF    nop #$ff
-A399: 00       brk
-A39A: 00       brk
-A39B: 00       brk
-A39C: 00       brk
-A39D: 00       brk
-A39E: 00       brk
-A39F: 00       brk
-A3A0: FF 00 FF isb $ff00, x
-A3A3: 00       brk
-A3A4: FF 00 00 isb $0000, x
-A3A7: 00       brk
-A3A8: 00       brk
-A3A9: 00       brk
-A3AA: 00       brk
-A3AB: 00       brk
-A3AC: 00       brk
-A3AD: 00       brk
-A3AE: 01 00    ora ($00, x)
-A3B0: 01 00    ora ($00, x)
-A3B2: 01 00    ora ($00, x)
-A3B4: 00       brk
-A3B5: 00       brk
-A3B6: 00       brk
-A3B7: 00       brk
-A3B8: 00       brk
-A3B9: 00       brk
-A3BA: 00       brk
-A3BB: 00       brk
-A3BC: FF 00 00 isb $0000, x
-A3BF: 00       brk
-A3C0: 01 00    ora ($00, x)
-A3C2: 00       brk
-A3C3: 00       brk
-A3C4: 00       brk
-A3C5: 00       brk
-A3C6: FF 00 FF isb $ff00, x
-A3C9: 00       brk
-A3CA: 00       brk
-A3CB: 00       brk
-A3CC: 01 00    ora ($00, x)
-A3CE: 00       brk
-A3CF: 00       brk
-A3D0: 01 00    ora ($00, x)
-A3D2: FF 00 00 isb $0000, x
-A3D5: 00       brk
-A3D6: 01 00    ora ($00, x)
-A3D8: 00       brk
-A3D9: 00       brk
-A3DA: FF 00 00 isb $0000, x
-A3DD: 00       brk
-A3DE: 00       brk
-A3DF: 00       brk
-A3E0: 00       brk
-A3E1: 00       brk
-A3E2: 00       brk
-A3E3: 00       brk
-A3E4: 02       kil
-A3E5: 00       brk
-A3E6: FD 00 00 sbc $0000, x
-A3E9: 00       brk
-A3EA: 01 00    ora ($00, x)
-A3EC: 01 00    ora ($00, x)
-A3EE: 00       brk
-A3EF: 00       brk
-A3F0: 01 00    ora ($00, x)
-A3F2: FF 00 00 isb $0000, x
-A3F5: 00       brk
-A3F6: 00       brk
-A3F7: 00       brk
-A3F8: 00       brk
-A3F9: 00       brk
-A3FA: 00       brk
-A3FB: 00       brk
-A3FC: 00       brk
-A3FD: 00       brk
-A3FE: 00       brk
-A3FF: 00       brk
-A400: FF 00 FF isb $ff00, x
-A403: 00       brk
-A404: 00       brk
-A405: 00       brk
-A406: 02       kil
-A407: 00       brk
-A408: 00       brk
-A409: 00       brk
-A40A: FF 00 00 isb $0000, x
-A40D: 00       brk
-A40E: 00       brk
-A40F: 00       brk
-A410: 01 00    ora ($00, x)
-A412: 01 00    ora ($00, x)
-A414: 00       brk
-A415: 00       brk
-A416: 00       brk
-A417: 00       brk
-A418: 00       brk
-A419: 00       brk
-A41A: 00       brk
-A41B: C0 02    cpy #$02
-A41D: C0 00    cpy #$00
-A41F: 00       brk
-A420: 02       kil
-A421: C0 FB    cpy #$fb
-A423: 00       brk
-A424: 00       brk
-A425: 40       rti
-A426: FE 00 00 inc $0000, x
-A429: 00       brk
-A42A: 01 00    ora ($00, x)
-A42C: 00       brk
-A42D: 00       brk
-A42E: 00       brk
-A42F: 00       brk
-A430: 00       brk
-A431: 00       brk
-A432: 00       brk
-A433: 00       brk
-A434: 00       brk
-A435: 00       brk
-A436: 00       brk
-A437: 80 FF    nop #$ff
-A439: 00       brk
-A43A: 00       brk
-A43B: 00       brk
-A43C: 00       brk
-A43D: 00       brk
-A43E: 00       brk
-A43F: 00       brk
-A440: 00       brk
-A441: 00       brk
-A442: 00       brk
-A443: 00       brk
-A444: 00       brk
-A445: 00       brk
-A446: 00       brk
-A447: 00       brk
-A448: 00       brk
-A449: 00       brk
-A44A: 00       brk
-A44B: 00       brk
-A44C: 00       brk
-A44D: 00       brk
-A44E: 00       brk
-A44F: 00       brk
-A450: 00       brk
-A451: 00       brk
-A452: 00       brk
-A453: 00       brk
-A454: 00       brk
-A455: 00       brk
-A456: 00       brk
-A457: 00       brk
-A458: 00       brk
-A459: 00       brk
-A45A: 00       brk
-A45B: 00       brk
-A45C: 00       brk
-A45D: 00       brk
-A45E: 00       brk
-A45F: 00       brk
-A460: FF 00 FF isb $ff00, x
-A463: 00       brk
-A464: 01 00    ora ($00, x)
-A466: 00       brk
-A467: 00       brk
-A468: FF 00 01 isb $0100, x
-A46B: 00       brk
-A46C: 00       brk
-A46D: 00       brk
-A46E: FF 00 01 isb $0100, x
-A471: 00       brk
-A472: 01 00    ora ($00, x)
-A474: 00       brk
-A475: 00       brk
-A476: 00       brk
-A477: 00       brk
-A478: 00       brk
-A479: 00       brk
-A47A: FF 00 FE isb $fe00, x
-A47D: 00       brk
-A47E: 00       brk
-A47F: 00       brk
-A480: 00       brk
-A481: 00       brk
-A482: 00       brk
-A483: 00       brk
-A484: 00       brk
-A485: C0 00    cpy #$00
-A487: 00       brk
-A488: 00       brk
-A489: C0 00    cpy #$00
-A48B: 00       brk
-A48C: 00       brk
-A48D: 00       brk
-A48E: FF 00 00 isb $0000, x
-A491: C0 FE    cpy #$fe
-A493: 80 00    nop #$00
-A495: 00       brk
-A496: 01 40    ora ($40, x)
-A498: 02       kil
+
 A499: A2 02    ldx #$02
 A49B: B5 38    lda $38, x
 A49D: 38       sec
@@ -2683,8 +3216,7 @@ A4CA: CA       dex
 A4CB: CA       dex
 A4CC: 10 E4    bpl $a4b2
 A4CE: 60       rts
-A4CF: 01 00    ora ($00, x)
-A4D1: 02       kil
+
 A4D2: 20 99 A4 jsr $a499
 A4D5: A5 39    lda $39
 A4D7: 05 3B    ora $3b
@@ -2714,26 +3246,7 @@ A50A: B0 05    bcs $a511
 A50C: 65 38    adc $38
 A50E: D9 22 A5 cmp $a522, y
 A511: 60       rts
-A512: 24 24    bit $24
-A514: 24 24    bit $24
-A516: 24 24    bit $24
-A518: 24 24    bit $24
-A51A: 2E 2E 2E rol $2e2e
-A51D: 2E 2E 2E rol $2e2e
-A520: 2E 2E 40 rol $402e
-A523: 40       rti
-A524: 40       rti
-A525: 40       rti
-A526: 40       rti
-A527: 40       rti
-A528: 40       rti
-A529: 40       rti
-A52A: 13 10    slo ($10), y
-A52C: 23 30    rla ($30, x)
-A52E: 11 14    ora ($14), y
-A530: 24 50    bit $50
-A532: 18       clc
-A533: 1C 32 70 nop $7032, x
+
 A536: A5 31    lda $31
 A538: 38       sec
 A539: E5 0D    sbc $0d
@@ -2792,3776 +3305,7 @@ A59A: 85 3A    sta $3a
 A59C: A5 0E    lda $0e
 A59E: 85 3B    sta $3b
 A5A0: 60       rts
-A5A1: 40       rti
-A5A2: 00       brk
-A5A3: 60       rts
-A5A4: 00       brk
-A5A5: 60       rts
-A5A6: 00       brk
-A5A7: A0 FF    ldy #$ff
-A5A9: 60       rts
-A5AA: 00       brk
-A5AB: 40       rti
-A5AC: 00       brk
-A5AD: C0 00    cpy #$00
-A5AF: C0 00    cpy #$00
-A5B1: 40       rti
-A5B2: FF 60 00 isb $0060, x
-A5B5: 40       rti
-A5B6: 00       brk
-A5B7: 60       rts
-A5B8: 00       brk
-A5B9: 80 00    nop #$00
-A5BB: 80 FF    nop #$ff
-A5BD: FF 00 60 isb $6000, x
-A5C0: 00       brk
-A5C1: A0 FF    ldy #$ff
-A5C3: 40       rti
-A5C4: 00       brk
-A5C5: C0 00    cpy #$00
-A5C7: 40       rti
-A5C8: FF C0 00 isb $00c0, x
-A5CB: FF 00 A0 isb $a000, x
-A5CE: 00       brk
-A5CF: 60       rts
-A5D0: FF FF 00 isb $00ff, x
-A5D3: FF 00 FF isb $ff00, x
-A5D6: 00       brk
-A5D7: FF 00 FF isb $ff00, x
-A5DA: 00       brk
-A5DB: FF 00 FF isb $ff00, x
-A5DE: 00       brk
-A5DF: 00       brk
-A5E0: 00       brk
-A5E1: 40       rti
-A5E2: FF 40 00 isb $0040, x
-A5E5: 80 FF    nop #$ff
-A5E7: FF 00 FF isb $ff00, x
-A5EA: 00       brk
-A5EB: 01 FF    ora ($ff, x)
-A5ED: FF 00 01 isb $0100, x
-A5F0: FF A0 00 isb $00a0, x
-A5F3: 60       rts
-A5F4: FF 80 00 isb $0080, x
-A5F7: 80 00    nop #$00
-A5F9: C0 00    cpy #$00
-A5FB: 40       rti
-A5FC: 00       brk
-A5FD: 00       brk
-A5FE: 00       brk
-A5FF: 60       rts
-A600: 00       brk
-A601: 40       rti
-A602: FF 60 FF isb $ff60, x
-A605: 00       brk
-A606: 00       brk
-A607: 00       brk
-A608: 00       brk
-A609: 00       brk
-A60A: 00       brk
-A60B: 40       rti
-A60C: 01 C0    ora ($c0, x)
-A60E: 00       brk
-A60F: 40       rti
-A610: 00       brk
-A611: 00       brk
-A612: 00       brk
-A613: A0 FF    ldy #$ff
-A615: 80 FF    nop #$ff
-A617: 40       rti
-A618: FF 00 00 isb $0000, x
-A61B: C0 00    cpy #$00
-A61D: E0 00    cpx #$00
-A61F: 00       brk
-A620: 00       brk
-A621: A0 FF    ldy #$ff
-A623: 60       rts
-A624: FE 80 FF inc $ff80, x
-A627: 00       brk
-A628: 00       brk
-A629: 40       rti
-A62A: 01 E0    ora ($e0, x)
-A62C: 00       brk
-A62D: A0 FF    ldy #$ff
-A62F: 40       rti
-A630: FF 00 00 isb $0000, x
-A633: C0 00    cpy #$00
-A635: 80 FF    nop #$ff
-A637: E0 FE    cpx #$fe
-A639: 00       brk
-A63A: 00       brk
-A63B: E0 00    cpx #$00
-A63D: 40       rti
-A63E: 00       brk
-A63F: 80 00    nop #$00
-A641: A0 00    ldy #$00
-A643: 00       brk
-A644: 00       brk
-A645: 00       brk
-A646: 00       brk
-A647: E0 00    cpx #$00
-A649: 60       rts
-A64A: 01 00    ora ($00, x)
-A64C: 00       brk
-A64D: 00       brk
-A64E: 00       brk
-A64F: 20 01 00 jsr $0001
-A652: 00       brk
-A653: 00       brk
-A654: 01 00    ora ($00, x)
-A656: FF 00 00 isb $0000, x
-A659: 00       brk
-A65A: 00       brk
-A65B: 00       brk
-A65C: 01 00    ora ($00, x)
-A65E: 82 AA    nop #$aa
-A660: 81 00    sta ($00, x)
-A662: 00       brk
-A663: 00       brk
-A664: 00       brk
-A665: 00       brk
-A666: 00       brk
-A667: AA       tax
-A668: 01 00    ora ($00, x)
-A66A: 01 AA    ora ($aa, x)
-A66C: 00       brk
-A66D: 00       brk
-A66E: 00       brk
-A66F: 00       brk
-A670: 81 00    sta ($00, x)
-A672: 81 80    sta ($80, x)
-A674: 81 00    sta ($00, x)
-A676: 00       brk
-A677: 00       brk
-A678: 02       kil
-A679: 55 02    eor $02, x
-A67B: 00       brk
-A67C: 00       brk
-A67D: 80 80    nop #$80
-A67F: 20 82 AA jsr $aa82
-A682: 80 00    nop #$00
-A684: 00       brk
-A685: 00       brk
-A686: 02       kil
-A687: 66 01    ror $01
-A689: 60       rts
-A68A: 80 C0    nop #$c0
-A68C: 80 00    nop #$00
-A68E: 00       brk
-A68F: C0 00    cpy #$00
-A691: 80 80    nop #$80
-A693: 10 81    bpl $a616
-A695: 00       brk
-A696: 00       brk
-A697: 00       brk
-A698: 81 55    sta ($55, x)
-A69A: 00       brk
-A69B: 00       brk
-A69C: 02       kil
-A69D: 40       rti
-A69E: 01 00    ora ($00, x)
-A6A0: 00       brk
-A6A1: 00       brk
-A6A2: 00       brk
-A6A3: 00       brk
-A6A4: 81 60    sta ($60, x)
-A6A6: 01 00    ora ($00, x)
-A6A8: 00       brk
-A6A9: 00       brk
-A6AA: 00       brk
-A6AB: CC 01 00 cpy $0001
-A6AE: 00       brk
-A6AF: 00       brk
-A6B0: 02       kil
-A6B1: 55 81    eor $81, x
-A6B3: 00       brk
-A6B4: 00       brk
-A6B5: 00       brk
-A6B6: 0A       asl a
-A6B7: 0E 18 1E asl $1e18
-A6BA: 2A       rol a
-A6BB: 2C 32 34 bit $3432
-A6BE: 36 38    rol $38, x
-A6C0: 3A       nop
-A6C1: 3C 48 50 nop $5048, x
-A6C4: 58       cli
-A6C5: 05 02    ora $02
-A6C7: 05 03    ora $03
-A6C9: 06 01    asl $01
-A6CB: 03 01    slo ($01, x)
-A6CD: 01 01    ora ($01, x)
-A6CF: 01 01    ora ($01, x)
-A6D1: 06 04    asl $04
-A6D3: 04 02    nop $02
-A6D5: C0 00    cpy #$00
-A6D7: 40       rti
-A6D8: 00       brk
-A6D9: 00       brk
-A6DA: 00       brk
-A6DB: 60       rts
-A6DC: FF A0 00 isb $00a0, x
-A6DF: 80 FF    nop #$ff
-A6E1: 80 FF    nop #$ff
-A6E3: 60       rts
-A6E4: 00       brk
-A6E5: 60       rts
-A6E6: 00       brk
-A6E7: 40       rti
-A6E8: 00       brk
-A6E9: 00       brk
-A6EA: 00       brk
-A6EB: C0 FF    cpy #$ff
-A6ED: 40       rti
-A6EE: 00       brk
-A6EF: 00       brk
-A6F0: 00       brk
-A6F1: C0 FF    cpy #$ff
-A6F3: 40       rti
-A6F4: FF 60 00 isb $0060, x
-A6F7: A0 FF    ldy #$ff
-A6F9: 00       brk
-A6FA: 00       brk
-A6FB: 60       rts
-A6FC: 00       brk
-A6FD: A0 00    ldy #$00
-A6FF: 80 FF    nop #$ff
-A701: 80 00    nop #$00
-A703: 00       brk
-A704: 00       brk
-A705: A0 FF    ldy #$ff
-A707: 60       rts
-A708: 00       brk
-A709: 80 FF    nop #$ff
-A70B: 80 FF    nop #$ff
-A70D: A0 00    ldy #$00
-A70F: 60       rts
-A710: 00       brk
-A711: 00       brk
-A712: 00       brk
-A713: 80 FF    nop #$ff
-A715: 80 FF    nop #$ff
-A717: FF 00 00 isb $0000, x
-A71A: 00       brk
-A71B: 01 FF    ora ($ff, x)
-A71D: 60       rts
-A71E: 00       brk
-A71F: 80 00    nop #$00
-A721: 80 FF    nop #$ff
-A723: A0 FF    ldy #$ff
-A725: FF 00 01 isb $0100, x
-A728: FF A0 00 isb $00a0, x
-A72B: 60       rts
-A72C: 00       brk
-A72D: A0 FF    ldy #$ff
-A72F: 60       rts
-A730: 00       brk
-A731: 00       brk
-A732: 00       brk
-A733: A0 FF    ldy #$ff
-A735: 60       rts
-A736: FF 40 00 isb $0040, x
-A739: 80 00    nop #$00
-A73B: 40       rti
-A73C: 00       brk
-A73D: A0 FF    ldy #$ff
-A73F: 60       rts
-A740: 00       brk
-A741: C0 FF    cpy #$ff
-A743: 40       rti
-A744: 00       brk
-A745: 00       brk
-A746: 00       brk
-A747: C0 FF    cpy #$ff
-A749: 40       rti
-A74A: 00       brk
-A74B: 60       rts
-A74C: FF A0 FF isb $ffa0, x
-A74F: C0 00    cpy #$00
-A751: 40       rti
-A752: 00       brk
-A753: 80 FF    nop #$ff
-A755: E0 FF    cpx #$ff
-A757: A0 FF    ldy #$ff
-A759: 00       brk
-A75A: 00       brk
-A75B: 40       rti
-A75C: 00       brk
-A75D: A0 FE    ldy #$fe
-A75F: 00       brk
-A760: 00       brk
-A761: A0 00    ldy #$00
-A763: 00       brk
-A764: 00       brk
-A765: 80 00    nop #$00
-A767: A0 FF    ldy #$ff
-A769: 40       rti
-A76A: 00       brk
-A76B: C0 FF    cpy #$ff
-A76D: 40       rti
-A76E: FF C0 FF isb $ffc0, x
-A771: 00       brk
-A772: 00       brk
-A773: 80 03    nop #$03
-A775: 00       brk
-A776: 00       brk
-A777: 40       rti
-A778: FF A0 FF isb $ffa0, x
-A77B: A0 FF    ldy #$ff
-A77D: C0 FF    cpy #$ff
-A77F: 00       brk
-A780: 00       brk
-A781: A0 00    ldy #$00
-A783: 80 00    nop #$00
-A785: 80 00    nop #$00
-A787: 20 03 A0 jsr $a003
-A78A: FF A0 FF isb $ffa0, x
-A78D: 00       brk
-A78E: 00       brk
-A78F: 80 FF    nop #$ff
-A791: 00       brk
-A792: 00       brk
-A793: A0 FF    ldy #$ff
-A795: 00       brk
-A796: 03 00    slo ($00, x)
-A798: 00       brk
-A799: 80 00    nop #$00
-A79B: 00       brk
-A79C: 00       brk
-A79D: 7E 04 80 ror $8004, x
-A7A0: FF 00 00 isb $0000, x
-A7A3: 80 FF    nop #$ff
-A7A5: 80 FF    nop #$ff
-A7A7: 00       brk
-A7A8: 00       brk
-A7A9: 00       brk
-A7AA: 00       brk
-A7AB: 00       brk
-A7AC: FF 60 FF isb $ff60, x
-A7AF: 60       rts
-A7B0: 00       brk
-A7B1: 00       brk
-A7B2: 00       brk
-A7B3: 60       rts
-A7B4: 00       brk
-A7B5: E0 03    cpx #$03
-A7B7: 00       brk
-A7B8: 00       brk
-A7B9: 80 01    nop #$01
-A7BB: 40       rti
-A7BC: 00       brk
-A7BD: 00       brk
-A7BE: 00       brk
-A7BF: 40       rti
-A7C0: 00       brk
-A7C1: 60       rts
-A7C2: 00       brk
-A7C3: 80 00    nop #$00
-A7C5: 40       rti
-A7C6: 00       brk
-A7C7: 40       rti
-A7C8: 00       brk
-A7C9: 20 01 40 jsr $4001
-A7CC: 00       brk
-A7CD: 40       rti
-A7CE: 00       brk
-A7CF: 00       brk
-A7D0: 00       brk
-A7D1: 60       rts
-A7D2: 00       brk
-A7D3: 00       brk
-A7D4: 00       brk
-A7D5: 40       rti
-A7D6: 00       brk
-A7D7: 80 00    nop #$00
-A7D9: 00       brk
-A7DA: 00       brk
-A7DB: 60       rts
-A7DC: 00       brk
-A7DD: 00       brk
-A7DE: 00       brk
-A7DF: 00       brk
-A7E0: 01 00    ora ($00, x)
-A7E2: 00       brk
-A7E3: 00       brk
-A7E4: 00       brk
-A7E5: 00       brk
-A7E6: 01 00    ora ($00, x)
-A7E8: 00       brk
-A7E9: 00       brk
-A7EA: 01 00    ora ($00, x)
-A7EC: 81 AA    sta ($aa, x)
-A7EE: 00       brk
-A7EF: 00       brk
-A7F0: 81 00    sta ($00, x)
-A7F2: 01 00    ora ($00, x)
-A7F4: 81 00    sta ($00, x)
-A7F6: 00       brk
-A7F7: 00       brk
-A7F8: 01 00    ora ($00, x)
-A7FA: 00       brk
-A7FB: 00       brk
-A7FC: 81 00    sta ($00, x)
-A7FE: 81 00    sta ($00, x)
-A800: 81 00    sta ($00, x)
-A802: 01 00    ora ($00, x)
-A804: 00       brk
-A805: 00       brk
-A806: 01 00    ora ($00, x)
-A808: 01 00    ora ($00, x)
-A80A: 01 00    ora ($00, x)
-A80C: 81 00    sta ($00, x)
-A80E: 81 00    sta ($00, x)
-A810: 81 00    sta ($00, x)
-A812: 00       brk
-A813: 00       brk
-A814: 81 00    sta ($00, x)
-A816: 00       brk
-A817: 00       brk
-A818: 81 00    sta ($00, x)
-A81A: 01 00    ora ($00, x)
-A81C: 00       brk
-A81D: 00       brk
-A81E: 01 00    ora ($00, x)
-A820: 00       brk
-A821: 00       brk
-A822: 00       brk
-A823: 81 80    sta ($80, x)
-A825: 00       brk
-A826: 00       brk
-A827: 00       brk
-A828: 81 00    sta ($00, x)
-A82A: 81 00    sta ($00, x)
-A82C: 00       brk
-A82D: 00       brk
-A82E: 00       brk
-A82F: 00       brk
-A830: 81 00    sta ($00, x)
-A832: 81 00    sta ($00, x)
-A834: 01 00    ora ($00, x)
-A836: 00       brk
-A837: 00       brk
-A838: 01 00    ora ($00, x)
-A83A: 00       brk
-A83B: 00       brk
-A83C: 00       brk
-A83D: 66 02    ror $02
-A83F: 00       brk
-A840: 01 00    ora ($00, x)
-A842: 00       brk
-A843: 00       brk
-A844: 01 00    ora ($00, x)
-A846: 01 00    ora ($00, x)
-A848: 01 00    ora ($00, x)
-A84A: 01 00    ora ($00, x)
-A84C: 01 00    ora ($00, x)
-A84E: 00       brk
-A84F: 00       brk
-A850: 01 00    ora ($00, x)
-A852: 01 00    ora ($00, x)
-A854: 00       brk
-A855: 00       brk
-A856: 01 00    ora ($00, x)
-A858: 00       brk
-A859: 00       brk
-A85A: 01 00    ora ($00, x)
-A85C: 01 00    ora ($00, x)
-A85E: 00       brk
-A85F: 00       brk
-A860: 01 00    ora ($00, x)
-A862: 00       brk
-A863: 00       brk
-A864: 00       brk
-A865: 00       brk
-A866: 0E 20 38 asl $3820
-A869: 42       kil
-A86A: 50 62    bvc $a8ce
-A86C: 7A       nop
-A86D: 00       brk
-A86E: 00       brk
-A86F: 00       brk
-A870: 00       brk
-A871: 00       brk
-A872: 00       brk
-A873: 00       brk
-A874: 00       brk
-A875: 07 09    slo $09
-A877: 0C 05 07 nop $0705
-A87A: 09 0C    ora #$0c
-A87C: 05 00    ora $00
-A87E: 00       brk
-A87F: 00       brk
-A880: 00       brk
-A881: FF 00 40 isb $4000, x
-A884: FF C0 00 isb $00c0, x
-A887: FF 00 00 isb $0000, x
-A88A: 00       brk
-A88B: A0 FF    ldy #$ff
-A88D: 60       rts
-A88E: 00       brk
-A88F: FF 00 00 isb $0000, x
-A892: 00       brk
-A893: A0 FF    ldy #$ff
-A895: 60       rts
-A896: FF 00 00 isb $0000, x
-A899: FF 00 A0 isb $a000, x
-A89C: 00       brk
-A89D: 60       rts
-A89E: 00       brk
-A89F: 00       brk
-A8A0: 00       brk
-A8A1: 01 FF    ora ($ff, x)
-A8A3: 00       brk
-A8A4: 00       brk
-A8A5: FF 00 60 isb $6000, x
-A8A8: 00       brk
-A8A9: 60       rts
-A8AA: 00       brk
-A8AB: 40       rti
-A8AC: 00       brk
-A8AD: 00       brk
-A8AE: 00       brk
-A8AF: A0 FF    ldy #$ff
-A8B1: C0 FF    cpy #$ff
-A8B3: A0 FF    ldy #$ff
-A8B5: 00       brk
-A8B6: 00       brk
-A8B7: FF 00 80 isb $8000, x
-A8BA: 00       brk
-A8BB: 80 FF    nop #$ff
-A8BD: 00       brk
-A8BE: 00       brk
-A8BF: FF 00 00 isb $0000, x
-A8C2: 00       brk
-A8C3: 60       rts
-A8C4: FF 60 00 isb $0060, x
-A8C7: 40       rti
-A8C8: 00       brk
-A8C9: 60       rts
-A8CA: 00       brk
-A8CB: A0 00    ldy #$00
-A8CD: 00       brk
-A8CE: 00       brk
-A8CF: C0 FF    cpy #$ff
-A8D1: A0 FF    ldy #$ff
-A8D3: A0 FF    ldy #$ff
-A8D5: 00       brk
-A8D6: 00       brk
-A8D7: 40       rti
-A8D8: 00       brk
-A8D9: C0 FF    cpy #$ff
-A8DB: FF 00 A0 isb $a000, x
-A8DE: 00       brk
-A8DF: 60       rts
-A8E0: 00       brk
-A8E1: 01 FF    ora ($ff, x)
-A8E3: FF 00 FF isb $ff00, x
-A8E6: 00       brk
-A8E7: 00       brk
-A8E8: 00       brk
-A8E9: A0 FF    ldy #$ff
-A8EB: 60       rts
-A8EC: 00       brk
-A8ED: FF 00 00 isb $0000, x
-A8F0: 00       brk
-A8F1: C0 FF    cpy #$ff
-A8F3: 40       rti
-A8F4: FF 00 00 isb $0000, x
-A8F7: FF 00 80 isb $8000, x
-A8FA: 00       brk
-A8FB: 80 00    nop #$00
-A8FD: 00       brk
-A8FE: 00       brk
-A8FF: 20 FF E0 jsr $e0ff
-A902: FF 00 00 isb $0000, x
-A905: FF 00 60 isb $6000, x
-A908: 00       brk
-A909: A0 00    ldy #$00
-A90B: 00       brk
-A90C: 00       brk
-A90D: 20 FF E0 jsr $e0ff
-A910: FF 00 00 isb $0000, x
-A913: FF 00 60 isb $6000, x
-A916: 00       brk
-A917: A0 00    ldy #$00
-A919: 40       rti
-A91A: FF C0 FF isb $ffc0, x
-A91D: 00       brk
-A91E: 00       brk
-A91F: FF 00 40 isb $4000, x
-A922: 00       brk
-A923: 40       rti
-A924: 00       brk
-A925: 80 00    nop #$00
-A927: 80 00    nop #$00
-A929: 40       rti
-A92A: 00       brk
-A92B: 40       rti
-A92C: 00       brk
-A92D: 00       brk
-A92E: 00       brk
-A92F: 01 FF    ora ($ff, x)
-A931: 80 00    nop #$00
-A933: 80 00    nop #$00
-A935: C0 00    cpy #$00
-A937: 40       rti
-A938: FF 00 00 isb $0000, x
-A93B: FF 00 00 isb $0000, x
-A93E: 00       brk
-A93F: 40       rti
-A940: FF 40 FF isb $ff40, x
-A943: 20 FF 80 jsr $80ff
-A946: 01 E0    ora ($e0, x)
-A948: 00       brk
-A949: 00       brk
-A94A: 00       brk
-A94B: 00       brk
-A94C: 00       brk
-A94D: E0 00    cpx #$00
-A94F: 00       brk
-A950: 00       brk
-A951: A0 00    ldy #$00
-A953: E0 00    cpx #$00
-A955: 00       brk
-A956: 00       brk
-A957: 00       brk
-A958: 00       brk
-A959: 60       rts
-A95A: 00       brk
-A95B: 80 01    nop #$01
-A95D: 00       brk
-A95E: FF 80 01 isb $0180, x
-A961: 00       brk
-A962: 00       brk
-A963: A0 00    ldy #$00
-A965: 00       brk
-A966: 00       brk
-A967: 40       rti
-A968: 00       brk
-A969: A0 00    ldy #$00
-A96B: 40       rti
-A96C: 00       brk
-A96D: 00       brk
-A96E: 00       brk
-A96F: C0 FF    cpy #$ff
-A971: 80 00    nop #$00
-A973: 00       brk
-A974: 00       brk
-A975: 00       brk
-A976: 00       brk
-A977: A0 00    ldy #$00
-A979: 80 00    nop #$00
-A97B: 00       brk
-A97C: 00       brk
-A97D: 00       brk
-A97E: FF 20 FF isb $ff20, x
-A981: A0 FF    ldy #$ff
-A983: 00       brk
-A984: 00       brk
-A985: 40       rti
-A986: 00       brk
-A987: 00       brk
-A988: 00       brk
-A989: 00       brk
-A98A: 01 80    ora ($80, x)
-A98C: FF 80 00 isb $0080, x
-A98F: 00       brk
-A990: 00       brk
-A991: 00       brk
-A992: 01 C0    ora ($c0, x)
-A994: FF C0 FF isb $ffc0, x
-A997: 80 FF    nop #$ff
-A999: 80 00    nop #$00
-A99B: A0 00    ldy #$00
 
-A9A9: C0 FF    cpy #$ff
-A9AB: C0 00    cpy #$00
-A9AD: 00       brk
-A9AE: 00       brk
-A9AF: 80 00    nop #$00
-A9B1: 80 00    nop #$00
-A9B3: 00       brk
-A9B4: 00       brk
-A9B5: 80 FF    nop #$ff
-A9B7: 00       brk
-A9B8: 00       brk
-A9B9: 80 01    nop #$01
-A9BB: 00       brk
-A9BC: 00       brk
-A9BD: C0 FF    cpy #$ff
-A9BF: 00       brk
-A9C0: 01 00    ora ($00, x)
-A9C2: 00       brk
-A9C3: 80 00    nop #$00
-A9C5: 00       brk
-A9C6: 00       brk
-A9C7: 40       rti
-A9C8: 01 00    ora ($00, x)
-A9CA: 00       brk
-A9CB: C0 FF    cpy #$ff
-A9CD: C0 00    cpy #$00
-A9CF: 00       brk
-A9D0: 00       brk
-A9D1: 80 00    nop #$00
-A9D3: 00       brk
-A9D4: 00       brk
-A9D5: C0 00    cpy #$00
-A9D7: 00       brk
-A9D8: 00       brk
-A9D9: 80 00    nop #$00
-A9DB: 00       brk
-A9DC: 00       brk
-A9DD: 80 FF    nop #$ff
-A9DF: A0 FF    ldy #$ff
-A9E1: C0 00    cpy #$00
-A9E3: 00       brk
-A9E4: 00       brk
-A9E5: 40       rti
-A9E6: 00       brk
-A9E7: 00       brk
-A9E8: 00       brk
-A9E9: E0 00    cpx #$00
-A9EB: 00       brk
-A9EC: 00       brk
-A9ED: 80 00    nop #$00
-A9EF: 00       brk
-A9F0: 00       brk
-A9F1: 00       brk
-A9F2: 00       brk
-A9F3: E0 00    cpx #$00
-A9F5: 80 00    nop #$00
-A9F7: 00       brk
-A9F8: 00       brk
-A9F9: 00       brk
-A9FA: 00       brk
-A9FB: 00       brk
-A9FC: 81 00    sta ($00, x)
-A9FE: 81 E0    sta ($e0, x)
-AA00: 80 00    nop #$00
-AA02: 00       brk
-AA03: 55 02    eor $02, x
-AA05: 00       brk
-AA06: 00       brk
-AA07: 00       brk
-AA08: 00       brk
-AA09: 00       brk
-AA0A: 00       brk
-AA0B: 00       brk
-AA0C: 00       brk
-AA0D: 00       brk
-AA0E: 01 00    ora ($00, x)
-AA10: 00       brk
-AA11: 00       brk
-AA12: 00       brk
-AA13: 00       brk
-AA14: 00       brk
-AA15: 00       brk
-AA16: 01 00    ora ($00, x)
-AA18: 00       brk
-AA19: 00       brk
-AA1A: 81 00    sta ($00, x)
-AA1C: 00       brk
-AA1D: 00       brk
-AA1E: 00       brk
-AA1F: AA       tax
-AA20: 01 00    ora ($00, x)
-AA22: 00       brk
-AA23: 00       brk
-AA24: 01 00    ora ($00, x)
-AA26: 00       brk
-AA27: AA       tax
-AA28: 00       brk
-AA29: 00       brk
-AA2A: 00       brk
-AA2B: AA       tax
-AA2C: 80 00    nop #$00
-AA2E: 00       brk
-AA2F: 00       brk
-AA30: 00       brk
-AA31: 00       brk
-AA32: 00       brk
-AA33: 00       brk
-AA34: 01 00    ora ($00, x)
-AA36: 00       brk
-AA37: 00       brk
-AA38: 00       brk
-AA39: 00       brk
-AA3A: 00       brk
-AA3B: 66 81    ror $81
-AA3D: 00       brk
-AA3E: 81 00    sta ($00, x)
-AA40: 00       brk
-AA41: AA       tax
-AA42: 00       brk
-AA43: 00       brk
-AA44: 00       brk
-AA45: 00       brk
-AA46: 00       brk
-AA47: 00       brk
-AA48: 82 55    nop #$55
-AA4A: 01 00    ora ($00, x)
-AA4C: 00       brk
-AA4D: 00       brk
-AA4E: 00       brk
-AA4F: 00       brk
-AA50: 81 00    sta ($00, x)
-AA52: 81 80    sta ($80, x)
-AA54: 80 CC    nop #$cc
-AA56: 00       brk
-AA57: AA       tax
-AA58: 01 E0    ora ($e0, x)
-AA5A: 00       brk
-AA5B: 00       brk
-AA5C: 00       brk
-AA5D: 80 81    nop #$81
-AA5F: 00       brk
-AA60: 00       brk
-AA61: 55 01    eor $01, x
-AA63: 00       brk
-AA64: 00       brk
-AA65: 40       rti
-AA66: 80 00    nop #$00
-AA68: 00       brk
-AA69: 00       brk
-AA6A: 00       brk
-AA6B: AA       tax
-AA6C: 00       brk
-AA6D: 00       brk
-AA6E: 00       brk
-AA6F: 00       brk
-AA70: 00       brk
-AA71: 00       brk
-AA72: 81 00    sta ($00, x)
-AA74: 00       brk
-AA75: 00       brk
-AA76: 00       brk
-AA77: 00       brk
-AA78: 00       brk
-AA79: 00       brk
-AA7A: 82 00    nop #$00
-AA7C: 00       brk
-AA7D: 00       brk
-AA7E: 00       brk
-AA7F: 55 01    eor $01, x
-AA81: 00       brk
-AA82: 00       brk
-AA83: 00       brk
-AA84: 00       brk
-AA85: 00       brk
-AA86: 00       brk
-AA87: 00       brk
-AA88: 82 00    nop #$00
-AA8A: 00       brk
-AA8B: 00       brk
-AA8C: 00       brk
-AA8D: 55 01    eor $01, x
-AA8F: 00       brk
-AA90: 00       brk
-AA91: 00       brk
-AA92: 01 00    ora ($00, x)
-AA94: 00       brk
-AA95: 00       brk
-AA96: 00       brk
-AA97: 00       brk
-AA98: 00       brk
-AA99: 00       brk
-AA9A: 82 80    nop #$80
-AA9C: 81 80    sta ($80, x)
-AA9E: 81 00    sta ($00, x)
-AAA0: 00       brk
-AAA1: 00       brk
-AAA2: 01 00    ora ($00, x)
-AAA4: 00       brk
-AAA5: 00       brk
-AAA6: 00       brk
-AAA7: 00       brk
-AAA8: 00       brk
-AAA9: 00       brk
-AAAA: 01 00    ora ($00, x)
-AAAC: 00       brk
-AAAD: 00       brk
-AAAE: 00       brk
-AAAF: 2B 01    anc #$01
-AAB1: 00       brk
-AAB2: 00       brk
-AAB3: 00       brk
-AAB4: 00       brk
-AAB5: 00       brk
-AAB6: 06 0E    asl $0e
-AAB8: 1A       nop
-AAB9: 26 38    rol $38
-AABB: 48       pha
-AABC: 5C 64 6C nop $6c64, x
-AABF: 78       sei
-AAC0: 86 94    stx $94
-AAC2: A0 A6    ldy #$a6
-AAC4: B4 03    ldy $03, x
-AAC6: 04 06    nop $06
-AAC8: 06 09    asl $09
-AACA: 08       php
-AACB: 0A       asl a
-AACC: 04 04    nop $04
-AACE: 06 07    asl $07
-AAD0: 07 06    slo $06
-AAD2: 03 07    slo ($07, x)
-AAD4: 04 FF    nop $ff
-AAD6: 00       brk
-AAD7: 00       brk
-AAD8: 00       brk
-AAD9: C0 FF    cpy #$ff
-AADB: C0 FF    cpy #$ff
-AADD: 80 FF    nop #$ff
-AADF: 00       brk
-AAE0: 00       brk
-AAE1: FF 00 80 isb $8000, x
-AAE4: 00       brk
-AAE5: 40       rti
-AAE6: 00       brk
-AAE7: 40       rti
-AAE8: 00       brk
-AAE9: 00       brk
-AAEA: 00       brk
-AAEB: C0 FF    cpy #$ff
-AAED: C0 FF    cpy #$ff
-AAEF: 80 FF    nop #$ff
-AAF1: 00       brk
-AAF2: 00       brk
-AAF3: FF 00 20 isb $2000, x
-AAF6: 00       brk
-AAF7: 60       rts
-AAF8: 00       brk
-AAF9: 40       rti
-AAFA: 00       brk
-AAFB: 40       rti
-AAFC: 00       brk
-AAFD: 00       brk
-AAFE: 00       brk
-AAFF: 01 FF    ora ($ff, x)
-AB01: 00       brk
-AB02: 00       brk
-AB03: FF 00 40 isb $4000, x
-AB06: 00       brk
-AB07: 80 00    nop #$00
-AB09: 40       rti
-AB0A: 00       brk
-AB0B: 00       brk
-AB0C: 00       brk
-AB0D: 01 FF    ora ($ff, x)
-AB0F: 00       brk
-AB10: 00       brk
-AB11: C0 00    cpy #$00
-AB13: 40       rti
-AB14: 00       brk
-AB15: 40       rti
-AB16: 00       brk
-AB17: 40       rti
-AB18: 00       brk
-AB19: 80 00    nop #$00
-AB1B: 20 00 40 jsr $4000
-AB1E: 00       brk
-AB1F: A0 00    ldy #$00
-AB21: 00       brk
-AB22: 00       brk
-AB23: 80 FF    nop #$ff
-AB25: C0 FF    cpy #$ff
-AB27: C0 FF    cpy #$ff
-AB29: 40       rti
-AB2A: 00       brk
-AB2B: C0 00    cpy #$00
-AB2D: 20 00 40 jsr $4000
-AB30: 00       brk
-AB31: 20 00 80 jsr $8000
-AB34: 00       brk
-AB35: 00       brk
-AB36: 00       brk
-AB37: 80 FF    nop #$ff
-AB39: C0 FF    cpy #$ff
-AB3B: C0 FF    cpy #$ff
-AB3D: 00       brk
-AB3E: 00       brk
-AB3F: C0 00    cpy #$00
-AB41: 40       rti
-AB42: 00       brk
-AB43: 40       rti
-AB44: 00       brk
-AB45: 60       rts
-AB46: 00       brk
-AB47: 60       rts
-AB48: 00       brk
-AB49: 80 00    nop #$00
-AB4B: 40       rti
-AB4C: 00       brk
-AB4D: 40       rti
-AB4E: 00       brk
-AB4F: 00       brk
-AB50: 00       brk
-AB51: C0 FF    cpy #$ff
-AB53: C0 FF    cpy #$ff
-AB55: 80 FF    nop #$ff
-AB57: 40       rti
-AB58: 00       brk
-AB59: C0 00    cpy #$00
-AB5B: 40       rti
-AB5C: 00       brk
-AB5D: 40       rti
-AB5E: 00       brk
-AB5F: 60       rts
-AB60: 00       brk
-AB61: 20 00 00 jsr $0000
-AB64: 00       brk
-AB65: C0 FF    cpy #$ff
-AB67: C0 FF    cpy #$ff
-AB69: 80 FF    nop #$ff
-AB6B: 00       brk
-AB6C: 00       brk
-AB6D: FF 00 40 isb $4000, x
-AB70: 00       brk
-AB71: 40       rti
-AB72: 00       brk
-AB73: 40       rti
-AB74: 00       brk
-AB75: 40       rti
-AB76: 00       brk
-AB77: 00       brk
-AB78: 00       brk
-AB79: 01 FF    ora ($ff, x)
-AB7B: 00       brk
-AB7C: 00       brk
-AB7D: FF 00 40 isb $4000, x
-AB80: 00       brk
-AB81: 40       rti
-AB82: 00       brk
-AB83: 40       rti
-AB84: 00       brk
-AB85: 40       rti
-AB86: 00       brk
-AB87: 00       brk
-AB88: 00       brk
-AB89: 01 FF    ora ($ff, x)
-AB8B: 00       brk
-AB8C: 00       brk
-AB8D: FF 00 40 isb $4000, x
-AB90: 00       brk
-AB91: 40       rti
-AB92: 00       brk
-AB93: 40       rti
-AB94: 00       brk
-AB95: 40       rti
-AB96: 00       brk
-AB97: 00       brk
-AB98: 00       brk
-AB99: 01 FF    ora ($ff, x)
-AB9B: 00       brk
-AB9C: 00       brk
-AB9D: FF 00 40 isb $4000, x
-ABA0: 00       brk
-ABA1: 40       rti
-ABA2: 00       brk
-ABA3: 80 00    nop #$00
-ABA5: 00       brk
-ABA6: 00       brk
-ABA7: C0 FF    cpy #$ff
-ABA9: C0 FF    cpy #$ff
-ABAB: 80 FF    nop #$ff
-ABAD: 00       brk
-ABAE: 00       brk
-ABAF: C0 00    cpy #$00
-ABB1: 40       rti
-ABB2: 00       brk
-ABB3: 60       rts
-ABB4: 00       brk
-ABB5: A0 00    ldy #$00
-ABB7: 40       rti
-ABB8: 00       brk
-ABB9: 40       rti
-ABBA: 00       brk
-ABBB: 40       rti
-ABBC: 00       brk
-ABBD: 40       rti
-ABBE: 00       brk
-ABBF: 00       brk
-ABC0: 00       brk
-ABC1: 01 FF    ora ($ff, x)
-ABC3: 40       rti
-ABC4: 00       brk
-ABC5: C0 00    cpy #$00
-ABC7: 80 00    nop #$00
-ABC9: E0 01    cpx #$01
-ABCB: 60       rts
-ABCC: FF A0 00 isb $00a0, x
-ABCF: 00       brk
-ABD0: 00       brk
-ABD1: 40       rti
-ABD2: 00       brk
-ABD3: 00       brk
-ABD4: 00       brk
-ABD5: 00       brk
-ABD6: 00       brk
-ABD7: 80 00    nop #$00
-ABD9: 40       rti
-ABDA: FF 20 02 isb $0220, x
-ABDD: A0 FF    ldy #$ff
-ABDF: 60       rts
-ABE0: 00       brk
-ABE1: 00       brk
-ABE2: 00       brk
-ABE3: 40       rti
-ABE4: 00       brk
-ABE5: 00       brk
-ABE6: 00       brk
-ABE7: 20 00 00 jsr $0000
-ABEA: 00       brk
-ABEB: 60       rts
-ABEC: 00       brk
-ABED: A0 FF    ldy #$ff
-ABEF: 00       brk
-ABF0: 02       kil
-ABF1: 00       brk
-ABF2: 00       brk
-ABF3: 40       rti
-ABF4: 00       brk
-ABF5: 00       brk
-ABF6: 00       brk
-ABF7: C0 FF    cpy #$ff
-ABF9: 00       brk
-ABFA: 00       brk
-ABFB: 40       rti
-ABFC: 00       brk
-ABFD: 00       brk
-ABFE: 02       kil
-ABFF: 00       brk
-AC00: 00       brk
-AC01: 40       rti
-AC02: 00       brk
-AC03: 00       brk
-AC04: 00       brk
-AC05: C0 FF    cpy #$ff
-AC07: C0 00    cpy #$00
-AC09: 40       rti
-AC0A: FF A0 FF isb $ffa0, x
-AC0D: 80 00    nop #$00
-AC0F: 00       brk
-AC10: 00       brk
-AC11: 80 FF    nop #$ff
-AC13: 60       rts
-AC14: 02       kil
-AC15: 00       brk
-AC16: 00       brk
-AC17: 60       rts
-AC18: FF A0 00 isb $00a0, x
-AC1B: 40       rti
-AC1C: 00       brk
-AC1D: 00       brk
-AC1E: 00       brk
-AC1F: 80 00    nop #$00
-AC21: 00       brk
-AC22: 00       brk
-AC23: 80 FF    nop #$ff
-AC25: 80 00    nop #$00
-AC27: E0 01    cpx #$01
-AC29: 00       brk
-AC2A: 00       brk
-AC2B: 80 FF    nop #$ff
-AC2D: 80 00    nop #$00
-AC2F: 40       rti
-AC30: 00       brk
-AC31: 00       brk
-AC32: 00       brk
-AC33: C0 FF    cpy #$ff
-AC35: A0 FF    ldy #$ff
-AC37: 00       brk
-AC38: 00       brk
-AC39: A0 00    ldy #$00
-AC3B: 00       brk
-AC3C: 00       brk
-AC3D: 60       rts
-AC3E: 00       brk
-AC3F: A0 FF    ldy #$ff
-AC41: A0 01    ldy #$01
-AC43: 60       rts
-AC44: FF A0 00 isb $00a0, x
-AC47: 00       brk
-AC48: 00       brk
-AC49: 40       rti
-AC4A: 00       brk
-AC4B: 00       brk
-AC4C: 00       brk
-AC4D: 60       rts
-AC4E: 00       brk
-AC4F: A0 FF    ldy #$ff
-AC51: 00       brk
-AC52: 00       brk
-AC53: 80 FF    nop #$ff
-AC55: 20 02 A0 jsr $a002
-AC58: FF 60 00 isb $0060, x
-AC5B: 00       brk
-AC5C: 00       brk
-AC5D: 40       rti
-AC5E: 00       brk
-AC5F: 00       brk
-AC60: 00       brk
-AC61: 00       brk
-AC62: 00       brk
-AC63: 40       rti
-AC64: 00       brk
-AC65: 80 00    nop #$00
-AC67: 80 FF    nop #$ff
-AC69: E0 01    cpx #$01
-AC6B: 00       brk
-AC6C: 00       brk
-AC6D: 40       rti
-AC6E: 00       brk
-AC6F: 00       brk
-AC70: 00       brk
-AC71: A0 FF    ldy #$ff
-AC73: 00       brk
-AC74: 00       brk
-AC75: 80 00    nop #$00
-AC77: 80 FF    nop #$ff
-AC79: 40       rti
-AC7A: 02       kil
-AC7B: 00       brk
-AC7C: 00       brk
-AC7D: 40       rti
-AC7E: 00       brk
-AC7F: 00       brk
-AC80: 00       brk
-AC81: 20 00 00 jsr $0000
-AC84: 00       brk
-AC85: C0 00    cpy #$00
-AC87: 40       rti
-AC88: FF 20 02 isb $0220, x
-AC8B: 00       brk
-AC8C: 00       brk
-AC8D: 40       rti
-AC8E: 00       brk
-AC8F: 00       brk
-AC90: 00       brk
-AC91: 40       rti
-AC92: 00       brk
-AC93: 00       brk
-AC94: 00       brk
-AC95: C0 FF    cpy #$ff
-AC97: 20 02 80 jsr $8002
-AC9A: FF 80 00 isb $0080, x
-AC9D: 00       brk
-AC9E: 00       brk
-AC9F: 40       rti
-ACA0: 00       brk
-ACA1: 00       brk
-ACA2: 00       brk
-ACA3: C0 FF    cpy #$ff
-ACA5: 40       rti
-ACA6: 00       brk
-ACA7: 00       brk
-ACA8: 00       brk
-ACA9: A0 00    ldy #$00
-ACAB: 60       rts
-ACAC: FF 00 00 isb $0000, x
-ACAF: 80 FF    nop #$ff
-ACB1: 60       rts
-ACB2: 02       kil
-ACB3: 00       brk
-ACB4: 00       brk
-ACB5: 40       rti
-ACB6: 00       brk
-ACB7: 00       brk
-ACB8: 00       brk
-ACB9: 80 00    nop #$00
-ACBB: 00       brk
-ACBC: 00       brk
-ACBD: 80 82    nop #$82
-ACBF: 80 02    nop #$02
-ACC1: 00       brk
-ACC2: 00       brk
-ACC3: 00       brk
-ACC4: 00       brk
-ACC5: 00       brk
-ACC6: 00       brk
-ACC7: 00       brk
-ACC8: 00       brk
-ACC9: 00       brk
-ACCA: 02       kil
-ACCB: 00       brk
-ACCC: 83 00    sax ($00, x)
-ACCE: 00       brk
-ACCF: 80 81    nop #$81
-ACD1: 80 01    nop #$01
-ACD3: 00       brk
-ACD4: 00       brk
-ACD5: 00       brk
-ACD6: 00       brk
-ACD7: 00       brk
-ACD8: 00       brk
-ACD9: 00       brk
-ACDA: 01 00    ora ($00, x)
-ACDC: 00       brk
-ACDD: 80 01    nop #$01
-ACDF: 80 81    nop #$81
-ACE1: 00       brk
-ACE2: 00       brk
-ACE3: 00       brk
-ACE4: 00       brk
-ACE5: 00       brk
-ACE6: 00       brk
-ACE7: 00       brk
-ACE8: 00       brk
-ACE9: 00       brk
-ACEA: 81 00    sta ($00, x)
-ACEC: 00       brk
-ACED: 00       brk
-ACEE: 01 00    ora ($00, x)
-ACF0: 00       brk
-ACF1: 00       brk
-ACF2: 00       brk
-ACF3: 00       brk
-ACF4: 00       brk
-ACF5: 00       brk
-ACF6: 00       brk
-ACF7: 00       brk
-ACF8: 81 00    sta ($00, x)
-ACFA: 03 00    slo ($00, x)
-ACFC: 83 C0    sax ($c0, x)
-ACFE: 80 00    nop #$00
-AD00: 04 00    nop $00
-AD02: 00       brk
-AD03: CC 80 00 cpy $0080
-AD06: 00       brk
-AD07: 00       brk
-AD08: 00       brk
-AD09: 80 82    nop #$82
-AD0B: 80 02    nop #$02
-AD0D: 00       brk
-AD0E: 01 00    ora ($00, x)
-AD10: 00       brk
-AD11: 00       brk
-AD12: 04 00    nop $00
-AD14: 00       brk
-AD15: 00       brk
-AD16: 84 00    sty $00
-AD18: 01 00    ora ($00, x)
-AD1A: 00       brk
-AD1B: 00       brk
-AD1C: 00       brk
-AD1D: 00       brk
-AD1E: 82 00    nop #$00
-AD20: 02       kil
-AD21: 00       brk
-AD22: 00       brk
-AD23: 00       brk
-AD24: 00       brk
-AD25: 00       brk
-AD26: 81 80    sta ($80, x)
-AD28: 81 00    sta ($00, x)
-AD2A: 00       brk
-AD2B: AA       tax
-AD2C: 01 00    ora ($00, x)
-AD2E: 00       brk
-AD2F: 80 01    nop #$01
-AD31: 80 81    nop #$81
-AD33: 00       brk
-AD34: 00       brk
-AD35: 80 82    nop #$82
-AD37: 80 02    nop #$02
-AD39: 00       brk
-AD3A: 00       brk
-AD3B: 00       brk
-AD3C: 01 00    ora ($00, x)
-AD3E: 00       brk
-AD3F: 80 01    nop #$01
-AD41: 80 81    nop #$81
-AD43: 00       brk
-AD44: 00       brk
-AD45: 00       brk
-AD46: 84 00    sty $00
-AD48: 00       brk
-AD49: 80 81    nop #$81
-AD4B: 80 01    nop #$01
-AD4D: 00       brk
-AD4E: 00       brk
-AD4F: 00       brk
-AD50: 00       brk
-AD51: 00       brk
-AD52: 00       brk
-AD53: 00       brk
-AD54: 00       brk
-AD55: 00       brk
-AD56: 01 00    ora ($00, x)
-AD58: 02       kil
-AD59: 00       brk
-AD5A: 82 00    nop #$00
-AD5C: 00       brk
-AD5D: 00       brk
-AD5E: 00       brk
-AD5F: 00       brk
-AD60: 00       brk
-AD61: 00       brk
-AD62: 00       brk
-AD63: 55 81    eor $81, x
-AD65: 00       brk
-AD66: 00       brk
-AD67: 00       brk
-AD68: 02       kil
-AD69: 00       brk
-AD6A: 82 00    nop #$00
-AD6C: 00       brk
-AD6D: 00       brk
-AD6E: 00       brk
-AD6F: 00       brk
-AD70: 00       brk
-AD71: 00       brk
-AD72: 00       brk
-AD73: 80 00    nop #$00
-AD75: 00       brk
-AD76: 00       brk
-AD77: 00       brk
-AD78: 03 00    slo ($00, x)
-AD7A: 83 00    sax ($00, x)
-AD7C: 00       brk
-AD7D: 00       brk
-AD7E: 00       brk
-AD7F: 00       brk
-AD80: 00       brk
-AD81: 00       brk
-AD82: 00       brk
-AD83: 00       brk
-AD84: 01 00    ora ($00, x)
-AD86: 00       brk
-AD87: 80 80    nop #$80
-AD89: 00       brk
-AD8A: 00       brk
-AD8B: 00       brk
-AD8C: 82 00    nop #$00
-AD8E: 02       kil
-AD8F: 00       brk
-AD90: 00       brk
-AD91: 00       brk
-AD92: 00       brk
-AD93: 00       brk
-AD94: 00       brk
-AD95: 00       brk
-AD96: 81 AA    sta ($aa, x)
-AD98: 00       brk
-AD99: 00       brk
-AD9A: 00       brk
-AD9B: 80 02    nop #$02
-AD9D: 80 82    nop #$82
-AD9F: 00       brk
-ADA0: 00       brk
-ADA1: 55 81    eor $81, x
-ADA3: 00       brk
-ADA4: 00       brk
-ADA5: 00       brk
-ADA6: 00       brk
-ADA7: 00       brk
-ADA8: 01 00    ora ($00, x)
-ADAA: 00       brk
-ADAB: 00       brk
-ADAC: 0E 20 30 asl $3020
-ADAF: 40       rti
-ADB0: 46 58    lsr $58
-ADB2: 6E 74 86 ror $8674
-ADB5: 9A       txs
-ADB6: AA       tax
-ADB7: BA       tsx
-ADB8: CA       dex
-ADB9: DE E2 07 dec $07e2, x
-ADBC: 09 08    ora #$08
-ADBE: 08       php
-ADBF: 03 09    slo ($09, x)
-ADC1: 0B 03    anc #$03
-ADC3: 09 0A    ora #$0a
-ADC5: 08       php
-ADC6: 08       php
-ADC7: 08       php
-ADC8: 0A       asl a
-ADC9: 02       kil
-ADCA: 08       php
-ADCB: FF 00 00 isb $0000, x
-ADCE: 00       brk
-ADCF: 01 FF    ora ($ff, x)
-ADD1: FF 00 00 isb $0000, x
-ADD4: 00       brk
-ADD5: 80 FF    nop #$ff
-ADD7: 80 00    nop #$00
-ADD9: 00       brk
-ADDA: 00       brk
-ADDB: 01 FF    ora ($ff, x)
-ADDD: FF 00 80 isb $8000, x
-ADE0: FF FF 00 isb $00ff, x
-ADE3: 00       brk
-ADE4: 00       brk
-ADE5: 01 FF    ora ($ff, x)
-ADE7: 00       brk
-ADE8: 00       brk
-ADE9: FF 00 00 isb $0000, x
-ADEC: 00       brk
-ADED: 01 FF    ora ($ff, x)
-ADEF: 00       brk
-ADF0: 00       brk
-ADF1: FF 00 FF isb $ff00, x
-ADF4: 00       brk
-ADF5: 00       brk
-ADF6: 00       brk
-ADF7: 80 FF    nop #$ff
-ADF9: 81 FF    sta ($ff, x)
-ADFB: 00       brk
-ADFC: 00       brk
-ADFD: FF 00 FF isb $ff00, x
-AE00: 00       brk
-AE01: 00       brk
-AE02: 00       brk
-AE03: 01 FF    ora ($ff, x)
-AE05: 00       brk
-AE06: 00       brk
-AE07: FF 00 00 isb $0000, x
-AE0A: 00       brk
-AE0B: 01 FF    ora ($ff, x)
-AE0D: 00       brk
-AE0E: 00       brk
-AE0F: FF 00 FF isb $ff00, x
-AE12: 00       brk
-AE13: 00       brk
-AE14: 00       brk
-AE15: 01 FF    ora ($ff, x)
-AE17: 00       brk
-AE18: 00       brk
-AE19: FF 00 00 isb $0000, x
-AE1C: 00       brk
-AE1D: 80 FF    nop #$ff
-AE1F: 80 00    nop #$00
-AE21: 00       brk
-AE22: 00       brk
-AE23: 01 FF    ora ($ff, x)
-AE25: 00       brk
-AE26: 00       brk
-AE27: FF 00 FF isb $ff00, x
-AE2A: 00       brk
-AE2B: 00       brk
-AE2C: 00       brk
-AE2D: 80 FF    nop #$ff
-AE2F: 81 FF    sta ($ff, x)
-AE31: 00       brk
-AE32: 00       brk
-AE33: FF 00 00 isb $0000, x
-AE36: 00       brk
-AE37: 01 FF    ora ($ff, x)
-AE39: 00       brk
-AE3A: 00       brk
-AE3B: FF 00 00 isb $0000, x
-AE3E: 00       brk
-AE3F: 01 FF    ora ($ff, x)
-AE41: FF 00 01 isb $0100, x
-AE44: FF FF 00 isb $00ff, x
-AE47: 00       brk
-AE48: 00       brk
-AE49: 81 FF    sta ($ff, x)
-AE4B: 80 FF    nop #$ff
-AE4D: FF 00 01 isb $0100, x
-AE50: FF 00 00 isb $0000, x
-AE53: FF 00 00 isb $0000, x
-AE56: 00       brk
-AE57: 80 FF    nop #$ff
-AE59: 81 FF    sta ($ff, x)
-AE5B: FF 00 01 isb $0100, x
-AE5E: FF 80 00 isb $0080, x
-AE61: 80 FF    nop #$ff
-AE63: 00       brk
-AE64: 00       brk
-AE65: FF 00 FF isb $ff00, x
-AE68: 00       brk
-AE69: 01 FF    ora ($ff, x)
-AE6B: 00       brk
-AE6C: FF 00 02 isb $0200, x
-AE6F: 00       brk
-AE70: FF 00 FF isb $ff00, x
-AE73: 80 01    nop #$01
-AE75: 80 00    nop #$00
-AE77: 80 00    nop #$00
-AE79: 80 01    nop #$01
-AE7B: 00       brk
-AE7C: FF 00 03 isb $0300, x
-AE7F: 80 00    nop #$00
-AE81: 00       brk
-AE82: FF 80 01 isb $0180, x
-AE85: 00       brk
-AE86: 01 00    ora ($00, x)
-AE88: 01 00    ora ($00, x)
-AE8A: 01 80    ora ($80, x)
-AE8C: 01 00    ora ($00, x)
-AE8E: FF 00 02 isb $0200, x
-AE91: 00       brk
-AE92: FF 00 00 isb $0000, x
-AE95: 00       brk
-AE96: 01 00    ora ($00, x)
-AE98: 00       brk
-AE99: 80 00    nop #$00
-AE9B: 00       brk
-AE9C: 03 00    slo ($00, x)
-AE9E: 01 00    ora ($00, x)
-AEA0: 00       brk
-AEA1: 00       brk
-AEA2: 01 00    ora ($00, x)
-AEA4: 00       brk
-AEA5: 80 03    nop #$03
-AEA7: 00       brk
-AEA8: FF 00 02 isb $0200, x
-AEAB: 00       brk
-AEAC: FF 00 01 isb $0100, x
-AEAF: 00       brk
-AEB0: 01 00    ora ($00, x)
-AEB2: 00       brk
-AEB3: 00       brk
-AEB4: 01 00    ora ($00, x)
-AEB6: 00       brk
-AEB7: 80 02    nop #$02
-AEB9: 00       brk
-AEBA: FF 80 01 isb $0180, x
-AEBD: 80 00    nop #$00
-AEBF: 00       brk
-AEC0: 00       brk
-AEC1: 00       brk
-AEC2: 01 00    ora ($00, x)
-AEC4: 00       brk
-AEC5: 00       brk
-AEC6: 01 00    ora ($00, x)
-AEC8: 01 00    ora ($00, x)
-AECA: 00       brk
-AECB: 80 01    nop #$01
-AECD: 80 FF    nop #$ff
-AECF: 00       brk
-AED0: 00       brk
-AED1: 80 01    nop #$01
-AED3: 00       brk
-AED4: 00       brk
-AED5: 80 01    nop #$01
-AED7: 00       brk
-AED8: 00       brk
-AED9: 80 00    nop #$00
-AEDB: 00       brk
-AEDC: 00       brk
-AEDD: 00       brk
-AEDE: 01 00    ora ($00, x)
-AEE0: 00       brk
-AEE1: 00       brk
-AEE2: 01 80    ora ($80, x)
-AEE4: 00       brk
-AEE5: 00       brk
-AEE6: 01 80    ora ($80, x)
-AEE8: 00       brk
-AEE9: 80 FF    nop #$ff
-AEEB: 00       brk
-AEEC: 00       brk
-AEED: 80 00    nop #$00
-AEEF: 00       brk
-AEF0: 01 80    ora ($80, x)
-AEF2: 00       brk
-AEF3: 00       brk
-AEF4: FF 80 01 isb $0180, x
-AEF7: 80 00    nop #$00
-AEF9: 00       brk
-AEFA: 00       brk
-AEFB: 00       brk
-AEFC: 01 80    ora ($80, x)
-AEFE: 00       brk
-AEFF: 80 00    nop #$00
-AF01: 80 00    nop #$00
-AF03: 80 01    nop #$01
-AF05: 00       brk
-AF06: FF 00 01 isb $0100, x
-AF09: 00       brk
-AF0A: 01 00    ora ($00, x)
-AF0C: 81 00    sta ($00, x)
-AF0E: 00       brk
-AF0F: 00       brk
-AF10: 81 00    sta ($00, x)
-AF12: 81 00    sta ($00, x)
-AF14: 00       brk
-AF15: 00       brk
-AF16: 01 00    ora ($00, x)
-AF18: 01 00    ora ($00, x)
-AF1A: 00       brk
-AF1B: 00       brk
-AF1C: 81 00    sta ($00, x)
-AF1E: 01 00    ora ($00, x)
-AF20: 01 00    ora ($00, x)
-AF22: 81 00    sta ($00, x)
-AF24: 00       brk
-AF25: 00       brk
-AF26: 01 00    ora ($00, x)
-AF28: 00       brk
-AF29: 00       brk
-AF2A: 01 00    ora ($00, x)
-AF2C: 00       brk
-AF2D: 00       brk
-AF2E: 81 00    sta ($00, x)
-AF30: 01 00    ora ($00, x)
-AF32: 81 00    sta ($00, x)
-AF34: 00       brk
-AF35: 00       brk
-AF36: 00       brk
-AF37: 00       brk
-AF38: 00       brk
-AF39: 00       brk
-AF3A: 01 00    ora ($00, x)
-AF3C: 00       brk
-AF3D: 00       brk
-AF3E: 01 00    ora ($00, x)
-AF40: 00       brk
-AF41: 00       brk
-AF42: 00       brk
-AF43: 00       brk
-AF44: 00       brk
-AF45: 00       brk
-AF46: 00       brk
-AF47: 00       brk
-AF48: 81 00    sta ($00, x)
-AF4A: 01 00    ora ($00, x)
-AF4C: 81 00    sta ($00, x)
-AF4E: 01 00    ora ($00, x)
-AF50: 01 00    ora ($00, x)
-AF52: 00       brk
-AF53: 00       brk
-AF54: 00       brk
-AF55: 00       brk
-AF56: 00       brk
-AF57: 00       brk
-AF58: 00       brk
-AF59: 00       brk
-AF5A: 81 00    sta ($00, x)
-AF5C: 01 00    ora ($00, x)
-AF5E: 01 00    ora ($00, x)
-AF60: 00       brk
-AF61: 00       brk
-AF62: 00       brk
-AF63: 00       brk
-AF64: 00       brk
-AF65: 00       brk
-AF66: 00       brk
-AF67: 00       brk
-AF68: 01 00    ora ($00, x)
-AF6A: 00       brk
-AF6B: 00       brk
-AF6C: 00       brk
-AF6D: 00       brk
-AF6E: 81 00    sta ($00, x)
-AF70: 00       brk
-AF71: 00       brk
-AF72: 00       brk
-AF73: 00       brk
-AF74: 00       brk
-AF75: 00       brk
-AF76: 00       brk
-AF77: 00       brk
-AF78: 00       brk
-AF79: 00       brk
-AF7A: 00       brk
-AF7B: 00       brk
-AF7C: 00       brk
-AF7D: 00       brk
-AF7E: 00       brk
-AF7F: 00       brk
-AF80: 00       brk
-AF81: 00       brk
-AF82: 01 00    ora ($00, x)
-AF84: 81 00    sta ($00, x)
-AF86: 01 00    ora ($00, x)
-AF88: 00       brk
-AF89: 00       brk
-AF8A: 81 00    sta ($00, x)
-AF8C: 00       brk
-AF8D: 00       brk
-AF8E: 00       brk
-AF8F: 00       brk
-AF90: 01 00    ora ($00, x)
-AF92: 00       brk
-AF93: 00       brk
-AF94: 81 00    sta ($00, x)
-AF96: 00       brk
-AF97: 00       brk
-AF98: 01 00    ora ($00, x)
-AF9A: 00       brk
-AF9B: 00       brk
-AF9C: 01 00    ora ($00, x)
-AF9E: 81 00    sta ($00, x)
-AFA0: 01 00    ora ($00, x)
-AFA2: 01 00    ora ($00, x)
-AFA4: 00       brk
-AFA5: 00       brk
-AFA6: 81 00    sta ($00, x)
-AFA8: 01 00    ora ($00, x)
-AFAA: 01 00    ora ($00, x)
-AFAC: 00       brk
-AFAD: 00       brk
-AFAE: 00       brk
-AFAF: 06 16    asl $16
-AFB1: 28       plp
-AFB2: 34 46    nop $46, x
-AFB4: 5E 76 90 lsr $9076, x
-AFB7: 9C 00 00 shy $0000, x
-AFBA: 00       brk
-AFBB: 00       brk
-AFBC: 00       brk
-AFBD: 00       brk
-AFBE: 03 08    slo ($08, x)
-AFC0: 09 06    ora #$06
-AFC2: 09 0C    ora #$0c
-AFC4: 0C 0D 06 nop $060d
-AFC7: 02       kil
-AFC8: 00       brk
-AFC9: 00       brk
-AFCA: 00       brk
-AFCB: FF 00 FF isb $ff00, x
-AFCE: 00       brk
-AFCF: FF 00 FF isb $ff00, x
-AFD2: 00       brk
-AFD3: FF 00 FF isb $ff00, x
-AFD6: 00       brk
-AFD7: FF 00 FF isb $ff00, x
-AFDA: 00       brk
-AFDB: FF 00 FF isb $ff00, x
-AFDE: 00       brk
-AFDF: FF 00 FF isb $ff00, x
-AFE2: 00       brk
-AFE3: FF 00 FF isb $ff00, x
-AFE6: 00       brk
-AFE7: FF 00 FF isb $ff00, x
-AFEA: 00       brk
-AFEB: 00       brk
-AFEC: 00       brk
-AFED: 00       brk
-AFEE: FF 00 00 isb $0000, x
-AFF1: 00       brk
-AFF2: 01 00    ora ($00, x)
-AFF4: 00       brk
-AFF5: 00       brk
-AFF6: 00       brk
-AFF7: 00       brk
-AFF8: FF 00 FF isb $ff00, x
-AFFB: 00       brk
-AFFC: 00       brk
-AFFD: 00       brk
-AFFE: 01 00    ora ($00, x)
-B000: 00       brk
-B001: 00       brk
-B002: 01 00    ora ($00, x)
-B004: FF 00 00 isb $0000, x
-B007: 00       brk
-B008: 01 00    ora ($00, x)
-B00A: 00       brk
-B00B: 00       brk
-B00C: 00       brk
-B00D: 00       brk
-B00E: 81 00    sta ($00, x)
-B010: 00       brk
-B011: 00       brk
-B012: 01 00    ora ($00, x)
-B014: 00       brk
-B015: 00       brk
-B016: 00       brk
-B017: 00       brk
-B018: 81 00    sta ($00, x)
-B01A: 81 00    sta ($00, x)
-B01C: 00       brk
-B01D: 00       brk
-B01E: 01 00    ora ($00, x)
-B020: 00       brk
-B021: 00       brk
-B022: 01 00    ora ($00, x)
-B024: 81 00    sta ($00, x)
-B026: 00       brk
-B027: 00       brk
-B028: 01 00    ora ($00, x)
-B02A: 00       brk
-B02B: 01 01    ora ($01, x)
-B02D: 01 01    ora ($01, x)
-B02F: 01 01    ora ($01, x)
-B031: 01 01    ora ($01, x)
-B033: 01 01    ora ($01, x)
-B035: 01 01    ora ($01, x)
-B037: 01 01    ora ($01, x)
-B039: 01 01    ora ($01, x)
-B03B: 00       brk
-B03C: 02       kil
-B03D: 04 06    nop $06
-B03F: 08       php
-B040: 0A       asl a
-B041: 0C 0E 10 nop $100e
-B044: 12       kil
-B045: 14 16    nop $16, x
-B047: 18       clc
-B048: 1A       nop
-B049: 1C 1E FF nop $ff1e, x
-B04C: 00       brk
-B04D: FF 00 01 isb $0100, x
-B050: FF FF 00 isb $00ff, x
-B053: 00       brk
-B054: 00       brk
-B055: 01 FF    ora ($ff, x)
-B057: FF 00 01 isb $0100, x
-B05A: FF FF 00 isb $00ff, x
-B05D: 01 FF    ora ($ff, x)
-B05F: FF 00 FF isb $ff00, x
-B062: 00       brk
-B063: 00       brk
-B064: 00       brk
-B065: 01 FF    ora ($ff, x)
-B067: FF 00 FF isb $ff00, x
-B06A: 00       brk
-B06B: 01 FF    ora ($ff, x)
-B06D: 00       brk
-B06E: 00       brk
-B06F: FF 00 FF isb $ff00, x
-B072: 00       brk
-B073: FF 00 01 isb $0100, x
-B076: FF FF 00 isb $00ff, x
-B079: 00       brk
-B07A: 00       brk
-B07B: 01 FF    ora ($ff, x)
-B07D: FF 00 01 isb $0100, x
-B080: FF FF 00 isb $00ff, x
-B083: 01 FF    ora ($ff, x)
-B085: FF 00 FF isb $ff00, x
-B088: 00       brk
-B089: FF 00 01 isb $0100, x
-B08C: FF FF 00 isb $00ff, x
-B08F: FF 00 FF isb $ff00, x
-B092: 00       brk
-B093: 01 FF    ora ($ff, x)
-B095: FF 00 01 isb $0100, x
-B098: FF FF 00 isb $00ff, x
-B09B: FF 00 00 isb $0000, x
-B09E: 01 00    ora ($00, x)
-B0A0: 00       brk
-B0A1: 00       brk
-B0A2: 00       brk
-B0A3: 00       brk
-B0A4: 01 00    ora ($00, x)
-B0A6: 02       kil
-B0A7: 00       brk
-B0A8: FF 00 00 isb $0000, x
-B0AB: 00       brk
-B0AC: 01 00    ora ($00, x)
-B0AE: 01 00    ora ($00, x)
-B0B0: 01 00    ora ($00, x)
-B0B2: 00       brk
-B0B3: 00       brk
-B0B4: 00       brk
-B0B5: 00       brk
-B0B6: 01 00    ora ($00, x)
-B0B8: 01 00    ora ($00, x)
-B0BA: 01 00    ora ($00, x)
-B0BC: 00       brk
-B0BD: 00       brk
-B0BE: 01 00    ora ($00, x)
-B0C0: 02       kil
-B0C1: 00       brk
-B0C2: FF 00 FF isb $ff00, x
-B0C5: 00       brk
-B0C6: 00       brk
-B0C7: 00       brk
-B0C8: 00       brk
-B0C9: 00       brk
-B0CA: 01 00    ora ($00, x)
-B0CC: 01 00    ora ($00, x)
-B0CE: 00       brk
-B0CF: 00       brk
-B0D0: 01 00    ora ($00, x)
-B0D2: 00       brk
-B0D3: 00       brk
-B0D4: 01 00    ora ($00, x)
-B0D6: 00       brk
-B0D7: 00       brk
-B0D8: 01 00    ora ($00, x)
-B0DA: 00       brk
-B0DB: 00       brk
-B0DC: 00       brk
-B0DD: 00       brk
-B0DE: 01 00    ora ($00, x)
-B0E0: 00       brk
-B0E1: 00       brk
-B0E2: 00       brk
-B0E3: 00       brk
-B0E4: 00       brk
-B0E5: 00       brk
-B0E6: 00       brk
-B0E7: 00       brk
-B0E8: 01 00    ora ($00, x)
-B0EA: 00       brk
-B0EB: 00       brk
-B0EC: 00       brk
-B0ED: 00       brk
-B0EE: 00       brk
-B0EF: 00       brk
-B0F0: 01 00    ora ($00, x)
-B0F2: 00       brk
-B0F3: 00       brk
-B0F4: 00       brk
-B0F5: 00       brk
-B0F6: 01 00    ora ($00, x)
-B0F8: 81 00    sta ($00, x)
-B0FA: 81 00    sta ($00, x)
-B0FC: 00       brk
-B0FD: 00       brk
-B0FE: 00       brk
-B0FF: 00       brk
-B100: 01 00    ora ($00, x)
-B102: 01 00    ora ($00, x)
-B104: 00       brk
-B105: 00       brk
-B106: 00       brk
-B107: 00       brk
-B108: 00       brk
-B109: 00       brk
-B10A: 01 00    ora ($00, x)
-B10C: 01 00    ora ($00, x)
-B10E: 00       brk
-B10F: 00       brk
-B110: 01 00    ora ($00, x)
-B112: 81 00    sta ($00, x)
-B114: 81 00    sta ($00, x)
-B116: 81 00    sta ($00, x)
-B118: 00       brk
-B119: 00       brk
-B11A: 00       brk
-B11B: 00       brk
-B11C: 01 00    ora ($00, x)
-B11E: 81 00    sta ($00, x)
-B120: 00       brk
-B121: 00       brk
-B122: 01 00    ora ($00, x)
-B124: 81 00    sta ($00, x)
-B126: 01 00    ora ($00, x)
-B128: 00       brk
-B129: 00       brk
-B12A: 01 00    ora ($00, x)
-B12C: 00       brk
-B12D: 00       brk
-B12E: 00       brk
-B12F: 00       brk
-B130: 01 00    ora ($00, x)
-B132: 00       brk
-B133: 00       brk
-B134: 00       brk
-B135: 00       brk
-B136: 00       brk
-B137: 00       brk
-B138: 00       brk
-B139: 00       brk
-B13A: 01 00    ora ($00, x)
-B13C: 00       brk
-B13D: 00       brk
-B13E: 00       brk
-B13F: 00       brk
-B140: 00       brk
-B141: 01 05    ora ($05, x)
-B143: 04 01    nop $01
-B145: 04 04    nop $04
-B147: 01 05    ora ($05, x)
-B149: 04 01    nop $01
-B14B: 01 03    ora ($03, x)
-B14D: 01 04    ora ($04, x)
-B14F: 01 01    ora ($01, x)
-B151: 00       brk
-B152: 02       kil
-B153: 0C 14 16 nop $1614
-B156: 1E 26 28 asl $2826, x
-B159: 32       kil
-B15A: 3A       nop
-B15B: 3C 3E 44 nop $443e, x
-B15E: 46 4E    lsr $4e
-B160: 50 FF    bvc $b161
-B162: 00       brk
-B163: FF 00 01 isb $0100, x
-B166: FF FF 00 isb $00ff, x
-B169: 80 00    nop #$00
-B16B: 80 00    nop #$00
-B16D: FF 00 FF isb $ff00, x
-B170: 00       brk
-B171: 00       brk
-B172: 00       brk
-B173: 01 FF    ora ($ff, x)
-B175: FF 00 FF isb $ff00, x
-B178: 00       brk
-B179: 01 FF    ora ($ff, x)
-B17B: FF 00 01 isb $0100, x
-B17E: FF FF 00 isb $00ff, x
-B181: FF 00 FF isb $ff00, x
-B184: 00       brk
-B185: 00       brk
-B186: 00       brk
-B187: 01 FF    ora ($ff, x)
-B189: FF 00 01 isb $0100, x
-B18C: FF FF 00 isb $00ff, x
-B18F: FF 00 00 isb $0000, x
-B192: 00       brk
-B193: 01 FF    ora ($ff, x)
-B195: FF 00 60 isb $6000, x
-B198: FF A0 00 isb $00a0, x
-B19B: 01 FF    ora ($ff, x)
-B19D: FF 00 01 isb $0100, x
-B1A0: FF 80 00 isb $0080, x
-B1A3: 80 00    nop #$00
-B1A5: FF 00 00 isb $0000, x
-B1A8: 00       brk
-B1A9: 01 FF    ora ($ff, x)
-B1AB: 00       brk
-B1AC: 00       brk
-B1AD: FF 00 00 isb $0000, x
-B1B0: 00       brk
-B1B1: 01 FF    ora ($ff, x)
-B1B3: 00       brk
-B1B4: 00       brk
-B1B5: FF 00 FF isb $ff00, x
-B1B8: 00       brk
-B1B9: 00       brk
-B1BA: 00       brk
-B1BB: 01 FF    ora ($ff, x)
-B1BD: 00       brk
-B1BE: 00       brk
-B1BF: FF 00 00 isb $0000, x
-B1C2: 00       brk
-B1C3: 01 FF    ora ($ff, x)
-B1C5: 00       brk
-B1C6: 00       brk
-B1C7: FF 00 FF isb $ff00, x
-B1CA: 00       brk
-B1CB: 01 FF    ora ($ff, x)
-B1CD: 60       rts
-B1CE: 00       brk
-B1CF: A0 FF    ldy #$ff
-B1D1: 00       brk
-B1D2: 00       brk
-B1D3: 80 00    nop #$00
-B1D5: 80 00    nop #$00
-B1D7: A0 FF    ldy #$ff
-B1D9: 60       rts
-B1DA: 00       brk
-B1DB: 00       brk
-B1DC: 00       brk
-B1DD: 01 FF    ora ($ff, x)
-B1DF: FF 00 01 isb $0100, x
-B1E2: FF FF 00 isb $00ff, x
-B1E5: 01 FF    ora ($ff, x)
-B1E7: FF 00 80 isb $8000, x
-B1EA: 00       brk
-B1EB: 80 00    nop #$00
-B1ED: 00       brk
-B1EE: 00       brk
-B1EF: C0 01    cpy #$01
-B1F1: 00       brk
-B1F2: 00       brk
-B1F3: 00       brk
-B1F4: 01 00    ora ($00, x)
-B1F6: 00       brk
-B1F7: C0 00    cpy #$00
-B1F9: 00       brk
-B1FA: 02       kil
-B1FB: 00       brk
-B1FC: 00       brk
-B1FD: 80 FD    nop #$fd
-B1FF: 00       brk
-B200: 00       brk
-B201: 40       rti
-B202: FE 00 00 inc $0000, x
-B205: C0 01    cpy #$01
-B207: C0 01    cpy #$01
-B209: C0 00    cpy #$00
-B20B: 40       rti
-B20C: FE 00 00 inc $0000, x
-B20F: 00       brk
-B210: 01 C0    ora ($c0, x)
-B212: 00       brk
-B213: 00       brk
-B214: 01 00    ora ($00, x)
-B216: 00       brk
-B217: 00       brk
-B218: 01 00    ora ($00, x)
-B21A: 00       brk
-B21B: 00       brk
-B21C: 00       brk
-B21D: C0 00    cpy #$00
-B21F: 00       brk
-B220: 00       brk
-B221: 60       rts
-B222: 00       brk
-B223: 00       brk
-B224: 00       brk
-B225: A0 00    ldy #$00
-B227: 00       brk
-B228: 01 00    ora ($00, x)
-B22A: 00       brk
-B22B: C0 01    cpy #$01
-B22D: 80 00    nop #$00
-B22F: 00       brk
-B230: 00       brk
-B231: 00       brk
-B232: 00       brk
-B233: C0 00    cpy #$00
-B235: 00       brk
-B236: 00       brk
-B237: 60       rts
-B238: 00       brk
-B239: 00       brk
-B23A: 00       brk
-B23B: A0 01    ldy #$01
-B23D: 00       brk
-B23E: FF 40 03 isb $0340, x
-B241: 40       rti
-B242: FE 00 00 inc $0000, x
-B245: C0 00    cpy #$00
-B247: 00       brk
-B248: 00       brk
-B249: 60       rts
-B24A: 00       brk
-B24B: 00       brk
-B24C: 00       brk
-B24D: 80 00    nop #$00
-B24F: 20 01 80 jsr $8001
-B252: 00       brk
-B253: 00       brk
-B254: FF 00 00 isb $0000, x
-B257: C0 00    cpy #$00
-B259: 00       brk
-B25A: 00       brk
-B25B: 60       rts
-B25C: 00       brk
-B25D: 80 00    nop #$00
-B25F: 00       brk
-B260: 00       brk
-B261: 80 FF    nop #$ff
-B263: A0 FF    ldy #$ff
-B265: 00       brk
-B266: 00       brk
-B267: 80 01    nop #$01
-B269: 00       brk
-B26A: 00       brk
-B26B: 00       brk
-B26C: 00       brk
-B26D: C0 00    cpy #$00
-B26F: 00       brk
-B270: 00       brk
-B271: 80 01    nop #$01
-B273: 00       brk
-B274: 00       brk
-B275: 00       brk
-B276: 00       brk
-B277: 80 FF    nop #$ff
-B279: 00       brk
-B27A: 00       brk
-B27B: C0 01    cpy #$01
-B27D: 00       brk
-B27E: 00       brk
-B27F: 00       brk
-B280: 01 00    ora ($00, x)
-B282: 00       brk
-B283: 80 01    nop #$01
-B285: 00       brk
-B286: 02       kil
-B287: 00       brk
-B288: 00       brk
-B289: 00       brk
-B28A: 00       brk
-B28B: 00       brk
-B28C: 00       brk
-B28D: C0 81    cpy #$81
-B28F: 00       brk
-B290: 00       brk
-B291: 00       brk
-B292: 00       brk
-B293: C0 01    cpy #$01
-B295: C0 00    cpy #$00
-B297: C0 81    cpy #$81
-B299: 00       brk
-B29A: 00       brk
-B29B: 00       brk
-B29C: 01 00    ora ($00, x)
-B29E: 81 00    sta ($00, x)
-B2A0: 01 00    ora ($00, x)
-B2A2: 00       brk
-B2A3: 00       brk
-B2A4: 01 00    ora ($00, x)
-B2A6: 00       brk
-B2A7: 00       brk
-B2A8: 00       brk
-B2A9: 00       brk
-B2AA: 00       brk
-B2AB: 00       brk
-B2AC: 00       brk
-B2AD: 00       brk
-B2AE: 00       brk
-B2AF: 00       brk
-B2B0: 00       brk
-B2B1: 00       brk
-B2B2: 01 00    ora ($00, x)
-B2B4: 81 00    sta ($00, x)
-B2B6: 00       brk
-B2B7: C0 01    cpy #$01
-B2B9: 00       brk
-B2BA: 01 00    ora ($00, x)
-B2BC: 00       brk
-B2BD: 00       brk
-B2BE: 00       brk
-B2BF: 00       brk
-B2C0: 00       brk
-B2C1: 00       brk
-B2C2: 00       brk
-B2C3: 00       brk
-B2C4: 00       brk
-B2C5: 00       brk
-B2C6: 00       brk
-B2C7: 00       brk
-B2C8: 00       brk
-B2C9: 00       brk
-B2CA: 81 00    sta ($00, x)
-B2CC: 01 C0    ora ($c0, x)
-B2CE: 81 00    sta ($00, x)
-B2D0: 00       brk
-B2D1: 00       brk
-B2D2: 00       brk
-B2D3: 00       brk
-B2D4: 00       brk
-B2D5: 00       brk
-B2D6: 00       brk
-B2D7: 00       brk
-B2D8: 00       brk
-B2D9: 00       brk
-B2DA: 00       brk
-B2DB: 20 01 00 jsr $0001
-B2DE: 00       brk
-B2DF: 00       brk
-B2E0: 81 00    sta ($00, x)
-B2E2: 00       brk
-B2E3: 00       brk
-B2E4: 00       brk
-B2E5: 00       brk
-B2E6: 00       brk
-B2E7: 00       brk
-B2E8: 01 00    ora ($00, x)
-B2EA: 00       brk
-B2EB: 00       brk
-B2EC: 00       brk
-B2ED: 00       brk
-B2EE: 81 00    sta ($00, x)
-B2F0: 81 00    sta ($00, x)
-B2F2: 00       brk
-B2F3: 00       brk
-B2F4: 00       brk
-B2F5: 00       brk
-B2F6: 00       brk
-B2F7: 00       brk
-B2F8: 00       brk
-B2F9: 00       brk
-B2FA: 00       brk
-B2FB: 00       brk
-B2FC: 00       brk
-B2FD: 80 01    nop #$01
-B2FF: 00       brk
-B300: 00       brk
-B301: 00       brk
-B302: 00       brk
-B303: 00       brk
-B304: 81 01    sta ($01, x)
-B306: 03 02    slo ($02, x)
-B308: 01 04    ora ($04, x)
-B30A: 04 01    nop $01
-B30C: 01 06    ora ($06, x)
-B30E: 0B 09    anc #$09
-B310: 09 0B    ora #$0b
-B312: 04 01    nop $01
-B314: 02       kil
-B315: 00       brk
-B316: 02       kil
-B317: 08       php
-B318: 0C 0E 16 nop $160e
-B31B: 1E 20 22 asl $2220, x
-B31E: 2E 44 56 rol $5644
-B321: 68       pla
-B322: 7E 86 88 ror $8886, x
-B325: FF 00 01 isb $0100, x
-B328: FF FF 00 isb $00ff, x
-B32B: 01 FF    ora ($ff, x)
-B32D: FF 00 FF isb $ff00, x
-B330: 00       brk
-B331: 01 FF    ora ($ff, x)
-B333: FF 00 01 isb $0100, x
-B336: FF FF 00 isb $00ff, x
-B339: FF 00 00 isb $0000, x
-B33C: 00       brk
-B33D: 01 FF    ora ($ff, x)
-B33F: FF 00 00 isb $0000, x
-B342: 00       brk
-B343: 01 FF    ora ($ff, x)
-B345: FF 00 01 isb $0100, x
-B348: FF 00 00 isb $0000, x
-B34B: FF 00 01 isb $0100, x
-B34E: FF FF 00 isb $00ff, x
-B351: 01 FF    ora ($ff, x)
-B353: FF 00 01 isb $0100, x
-B356: FF FF 00 isb $00ff, x
-B359: 00       brk
-B35A: 00       brk
-B35B: 01 FF    ora ($ff, x)
-B35D: FF 00 FF isb $ff00, x
-B360: 00       brk
-B361: 00       brk
-B362: 00       brk
-B363: 01 FF    ora ($ff, x)
-B365: 00       brk
-B366: 00       brk
-B367: FF 00 00 isb $0000, x
-B36A: 00       brk
-B36B: 01 FF    ora ($ff, x)
-B36D: 00       brk
-B36E: 00       brk
-B36F: FF 00 FF isb $ff00, x
-B372: 00       brk
-B373: 00       brk
-B374: 00       brk
-B375: 01 FF    ora ($ff, x)
-B377: 00       brk
-B378: 00       brk
-B379: FF 00 00 isb $0000, x
-B37C: 00       brk
-B37D: 01 FF    ora ($ff, x)
-B37F: FF 00 00 isb $0000, x
-B382: 00       brk
-B383: 01 FF    ora ($ff, x)
-B385: FF 00 01 isb $0100, x
-B388: FF FF 00 isb $00ff, x
-B38B: 01 FF    ora ($ff, x)
-B38D: 00       brk
-B38E: 00       brk
-B38F: FF 00 FF isb $ff00, x
-B392: 00       brk
-B393: 01 FF    ora ($ff, x)
-B395: FF 00 01 isb $0100, x
-B398: FF FF 00 isb $00ff, x
-B39B: 01 FF    ora ($ff, x)
-B39D: FF 00 01 isb $0100, x
-B3A0: FF FF 00 isb $00ff, x
-B3A3: 01 FF    ora ($ff, x)
-B3A5: 00       brk
-B3A6: FF 00 01 isb $0100, x
-B3A9: 00       brk
-B3AA: 01 00    ora ($00, x)
-B3AC: 00       brk
-B3AD: 00       brk
-B3AE: 01 00    ora ($00, x)
-B3B0: FF 00 04 isb $0400, x
-B3B3: 00       brk
-B3B4: 01 00    ora ($00, x)
-B3B6: 00       brk
-B3B7: 00       brk
-B3B8: 01 00    ora ($00, x)
-B3BA: 00       brk
-B3BB: 00       brk
-B3BC: 01 00    ora ($00, x)
-B3BE: 01 00    ora ($00, x)
-B3C0: 00       brk
-B3C1: 00       brk
-B3C2: 03 00    slo ($00, x)
-B3C4: 01 00    ora ($00, x)
-B3C6: 01 00    ora ($00, x)
-B3C8: 00       brk
-B3C9: 00       brk
-B3CA: 01 00    ora ($00, x)
-B3CC: 00       brk
-B3CD: 00       brk
-B3CE: 03 00    slo ($00, x)
-B3D0: 00       brk
-B3D1: FF 00 FF isb $ff00, x
-B3D4: 00       brk
-B3D5: FF 00 00 isb $0000, x
-B3D8: 01 00    ora ($00, x)
-B3DA: 02       kil
-B3DB: 00       brk
-B3DC: 01 00    ora ($00, x)
-B3DE: 01 00    ora ($00, x)
-B3E0: FF 00 01 isb $0100, x
-B3E3: 00       brk
-B3E4: 00       brk
-B3E5: 00       brk
-B3E6: 01 00    ora ($00, x)
-B3E8: 01 00    ora ($00, x)
-B3EA: 02       kil
-B3EB: 00       brk
-B3EC: FF 00 02 isb $0200, x
-B3EF: 00       brk
-B3F0: 01 00    ora ($00, x)
-B3F2: 00       brk
-B3F3: 00       brk
-B3F4: 01 00    ora ($00, x)
-B3F6: 00       brk
-B3F7: 00       brk
-B3F8: 02       kil
-B3F9: 00       brk
-B3FA: 01 00    ora ($00, x)
-B3FC: 01 00    ora ($00, x)
-B3FE: 00       brk
-B3FF: 00       brk
-B400: 00       brk
-B401: 00       brk
-B402: 01 00    ora ($00, x)
-B404: 00       brk
-B405: 00       brk
-B406: 01 00    ora ($00, x)
-B408: 01 00    ora ($00, x)
-B40A: 01 00    ora ($00, x)
-B40C: 00       brk
-B40D: 00       brk
-B40E: 01 00    ora ($00, x)
-B410: 00       brk
-B411: 00       brk
-B412: 01 00    ora ($00, x)
-B414: 00       brk
-B415: 00       brk
-B416: 01 00    ora ($00, x)
-B418: 00       brk
-B419: 00       brk
-B41A: 01 00    ora ($00, x)
-B41C: 00       brk
-B41D: 00       brk
-B41E: 01 00    ora ($00, x)
-B420: 01 00    ora ($00, x)
-B422: 01 00    ora ($00, x)
-B424: 01 00    ora ($00, x)
-B426: 81 00    sta ($00, x)
-B428: 01 00    ora ($00, x)
-B42A: 01 00    ora ($00, x)
-B42C: 00       brk
-B42D: 00       brk
-B42E: 01 00    ora ($00, x)
-B430: 81 00    sta ($00, x)
-B432: 01 00    ora ($00, x)
-B434: 01 00    ora ($00, x)
-B436: 00       brk
-B437: 00       brk
-B438: 01 00    ora ($00, x)
-B43A: 00       brk
-B43B: 00       brk
-B43C: 00       brk
-B43D: 00       brk
-B43E: 01 00    ora ($00, x)
-B440: 00       brk
-B441: 00       brk
-B442: 00       brk
-B443: 00       brk
-B444: 01 00    ora ($00, x)
-B446: 01 00    ora ($00, x)
-B448: 00       brk
-B449: 00       brk
-B44A: 00       brk
-B44B: 00       brk
-B44C: 00       brk
-B44D: 00       brk
-B44E: 00       brk
-B44F: 00       brk
-B450: 00       brk
-B451: 00       brk
-B452: 01 00    ora ($00, x)
-B454: 01 00    ora ($00, x)
-B456: 01 00    ora ($00, x)
-B458: 01 00    ora ($00, x)
-B45A: 81 00    sta ($00, x)
-B45C: 01 00    ora ($00, x)
-B45E: 01 00    ora ($00, x)
-B460: 81 00    sta ($00, x)
-B462: 00       brk
-B463: 00       brk
-B464: 00       brk
-B465: 00       brk
-B466: 00       brk
-B467: 00       brk
-B468: 01 00    ora ($00, x)
-B46A: 81 00    sta ($00, x)
-B46C: 81 00    sta ($00, x)
-B46E: 01 00    ora ($00, x)
-B470: 01 00    ora ($00, x)
-B472: 00       brk
-B473: 00       brk
-B474: 00       brk
-B475: 00       brk
-B476: 00       brk
-B477: 00       brk
-B478: 00       brk
-B479: 00       brk
-B47A: 01 00    ora ($00, x)
-B47C: 81 00    sta ($00, x)
-B47E: 00       brk
-B47F: 00       brk
-B480: 00       brk
-B481: 00       brk
-B482: 00       brk
-B483: 00       brk
-B484: 00       brk
-B485: 00       brk
-B486: 00       brk
-B487: 00       brk
-B488: 01 00    ora ($00, x)
-B48A: 01 00    ora ($00, x)
-B48C: 00       brk
-B48D: 00       brk
-B48E: 00       brk
-B48F: 00       brk
-B490: 00       brk
-B491: 00       brk
-B492: 01 00    ora ($00, x)
-B494: 81 00    sta ($00, x)
-B496: 01 00    ora ($00, x)
-B498: 00       brk
-B499: 00       brk
-B49A: 00       brk
-B49B: 00       brk
-B49C: 00       brk
-B49D: 00       brk
-B49E: 01 00    ora ($00, x)
-B4A0: 01 00    ora ($00, x)
-B4A2: 01 00    ora ($00, x)
-B4A4: 01 00    ora ($00, x)
-B4A6: 00       brk
-B4A7: 00       brk
-B4A8: 05 05    ora $05
-B4AA: 06 09    asl $09
-B4AC: 04 09    nop $09
-B4AE: 07 09    slo $09
-B4B0: 08       php
-B4B1: 02       kil
-B4B2: 00       brk
-B4B3: 00       brk
-B4B4: 00       brk
-B4B5: 00       brk
-B4B6: 00       brk
-B4B7: 00       brk
-B4B8: 00       brk
-B4B9: 0A       asl a
-B4BA: 14 20    nop $20, x
-B4BC: 32       kil
-B4BD: 3A       nop
-B4BE: 4C 5A 6C jmp $6c5a
-B4C1: 7C 00 00 nop $0000, x
-B4C4: 00       brk
-B4C5: FF 00 FF isb $ff00, x
-B4C8: 00       brk
-B4C9: 01 FF    ora ($ff, x)
-B4CB: FF 00 01 isb $0100, x
-B4CE: FF FF 00 isb $00ff, x
-B4D1: 00       brk
-B4D2: 00       brk
-B4D3: 80 FF    nop #$ff
-B4D5: 80 FF    nop #$ff
-B4D7: 00       brk
-B4D8: 00       brk
-B4D9: FF 00 00 isb $0000, x
-B4DC: 00       brk
-B4DD: 80 FF    nop #$ff
-B4DF: 80 FF    nop #$ff
-B4E1: FF 00 FF isb $ff00, x
-B4E4: 00       brk
-B4E5: 00       brk
-B4E6: 00       brk
-B4E7: 01 FF    ora ($ff, x)
-B4E9: 00       brk
-B4EA: 00       brk
-B4EB: FF 00 00 isb $0000, x
-B4EE: 00       brk
-B4EF: 01 FF    ora ($ff, x)
-B4F1: 00       brk
-B4F2: 00       brk
-B4F3: FF 00 FF isb $ff00, x
-B4F6: 00       brk
-B4F7: 01 FF    ora ($ff, x)
-B4F9: FF 00 C0 isb $c000, x
-B4FC: FF 40 FF isb $ff40, x
-B4FF: 00       brk
-B500: 00       brk
-B501: FF 00 00 isb $0000, x
-B504: 00       brk
-B505: 01 FF    ora ($ff, x)
-B507: FF 00 00 isb $0000, x
-B50A: 00       brk
-B50B: 01 FF    ora ($ff, x)
-B50D: FF 00 01 isb $0100, x
-B510: FF 00 00 isb $0000, x
-B513: FF 00 FF isb $ff00, x
-B516: 00       brk
-B517: 00       brk
-B518: 00       brk
-B519: 01 FF    ora ($ff, x)
-B51B: 00       brk
-B51C: 00       brk
-B51D: FF 00 FF isb $ff00, x
-B520: 00       brk
-B521: 00       brk
-B522: 00       brk
-B523: 80 FF    nop #$ff
-B525: 80 FF    nop #$ff
-B527: 00       brk
-B528: 00       brk
-B529: FF 00 40 isb $4000, x
-B52C: 00       brk
-B52D: C0 00    cpy #$00
-B52F: 00       brk
-B530: 00       brk
-B531: 40       rti
-B532: FF C0 FF isb $ffc0, x
-B535: 00       brk
-B536: 00       brk
-B537: FF 00 FF isb $ff00, x
-B53A: 00       brk
-B53B: 00       brk
-B53C: 00       brk
-B53D: 01 FF    ora ($ff, x)
-B53F: 00       brk
-B540: 00       brk
-B541: FF 00 FF isb $ff00, x
-B544: 00       brk
-B545: 00       brk
-B546: 00       brk
-B547: C0 FF    cpy #$ff
-B549: 40       rti
-B54A: FF 00 00 isb $0000, x
-B54D: FF 00 FF isb $ff00, x
-B550: 00       brk
-B551: 01 FF    ora ($ff, x)
-B553: C0 00    cpy #$00
-B555: 40       rti
-B556: 00       brk
-B557: 00       brk
-B558: 00       brk
-B559: 01 FF    ora ($ff, x)
-B55B: FF 00 00 isb $0000, x
-B55E: 00       brk
-B55F: 40       rti
-B560: FF C0 FF isb $ffc0, x
-B563: 00       brk
-B564: 00       brk
-B565: FF 00 FF isb $ff00, x
-B568: 00       brk
-B569: 00       brk
-B56A: 00       brk
-B56B: 80 FF    nop #$ff
-B56D: 80 FF    nop #$ff
-B56F: 00       brk
-B570: 00       brk
-B571: 80 00    nop #$00
-B573: 80 00    nop #$00
-B575: 00       brk
-B576: 00       brk
-B577: 01 FF    ora ($ff, x)
-B579: FF 00 01 isb $0100, x
-B57C: FF 40 00 isb $0040, x
-B57F: C0 FF    cpy #$ff
-B581: 00       brk
-B582: 00       brk
-B583: 80 00    nop #$00
-B585: 80 00    nop #$00
-B587: 00       brk
-B588: 00       brk
-B589: 01 FF    ora ($ff, x)
-B58B: E0 00    cpx #$00
-B58D: A0 FF    ldy #$ff
-B58F: 80 FF    nop #$ff
-B591: 00       brk
-B592: 00       brk
-B593: FF 00 00 isb $0000, x
-B596: 00       brk
-B597: 00       brk
-B598: FF 00 02 isb $0200, x
-B59B: 00       brk
-B59C: 00       brk
-B59D: 00       brk
-B59E: FF 00 00 isb $0000, x
-B5A1: 80 00    nop #$00
-B5A3: 00       brk
-B5A4: 00       brk
-B5A5: 80 FF    nop #$ff
-B5A7: 00       brk
-B5A8: 01 60    ora ($60, x)
-B5AA: 00       brk
-B5AB: 20 01 80 jsr $8001
-B5AE: FF 00 00 isb $0000, x
-B5B1: 00       brk
-B5B2: 01 00    ora ($00, x)
-B5B4: 00       brk
-B5B5: 80 00    nop #$00
-B5B7: 00       brk
-B5B8: 00       brk
-B5B9: E0 00    cpx #$00
-B5BB: A0 FF    ldy #$ff
-B5BD: 80 00    nop #$00
-B5BF: 00       brk
-B5C0: 01 80    ora ($80, x)
-B5C2: 00       brk
-B5C3: 00       brk
-B5C4: 00       brk
-B5C5: 00       brk
-B5C6: 00       brk
-B5C7: 80 00    nop #$00
-B5C9: E0 00    cpx #$00
-B5CB: 40       rti
-B5CC: 00       brk
-B5CD: 60       rts
-B5CE: FF 80 00 isb $0080, x
-B5D1: 00       brk
-B5D2: 01 80    ora ($80, x)
-B5D4: 00       brk
-B5D5: 00       brk
-B5D6: 00       brk
-B5D7: 00       brk
-B5D8: 00       brk
-B5D9: 80 00    nop #$00
-B5DB: 00       brk
-B5DC: 00       brk
-B5DD: 00       brk
-B5DE: 01 00    ora ($00, x)
-B5E0: 01 80    ora ($80, x)
-B5E2: 00       brk
-B5E3: 00       brk
-B5E4: 00       brk
-B5E5: C0 00    cpy #$00
-B5E7: C0 00    cpy #$00
-B5E9: 00       brk
-B5EA: FF 80 02 isb $0280, x
-B5ED: 00       brk
-B5EE: 00       brk
-B5EF: 00       brk
-B5F0: 00       brk
-B5F1: C0 00    cpy #$00
-B5F3: 80 00    nop #$00
-B5F5: 80 FF    nop #$ff
-B5F7: 80 01    nop #$01
-B5F9: 00       brk
-B5FA: 00       brk
-B5FB: 00       brk
-B5FC: 00       brk
-B5FD: C0 00    cpy #$00
-B5FF: C0 00    cpy #$00
-B601: 40       rti
-B602: FF 00 00 isb $0000, x
-B605: 80 01    nop #$01
-B607: 00       brk
-B608: 00       brk
-B609: 00       brk
-B60A: 00       brk
-B60B: C0 00    cpy #$00
-B60D: 00       brk
-B60E: 00       brk
-B60F: C0 00    cpy #$00
-B611: 00       brk
-B612: 00       brk
-B613: 00       brk
-B614: FF 00 01 isb $0100, x
-B617: 00       brk
-B618: 00       brk
-B619: C0 00    cpy #$00
-B61B: C0 00    cpy #$00
-B61D: 00       brk
-B61E: 00       brk
-B61F: 00       brk
-B620: 00       brk
-B621: 00       brk
-B622: 01 C0    ora ($c0, x)
-B624: 00       brk
-B625: 00       brk
-B626: 00       brk
-B627: C0 00    cpy #$00
-B629: 00       brk
-B62A: 00       brk
-B62B: 00       brk
-B62C: 00       brk
-B62D: 00       brk
-B62E: 01 C0    ora ($c0, x)
-B630: 00       brk
-B631: 00       brk
-B632: 00       brk
-B633: C0 00    cpy #$00
-B635: 00       brk
-B636: 00       brk
-B637: 00       brk
-B638: 01 40    ora ($40, x)
-B63A: 00       brk
-B63B: 80 FF    nop #$ff
-B63D: 80 00    nop #$00
-B63F: 00       brk
-B640: 01 80    ora ($80, x)
-B642: FF 80 00 isb $0080, x
-B645: 80 01    nop #$01
-B647: 00       brk
-B648: 00       brk
-B649: 00       brk
-B64A: 01 80    ora ($80, x)
-B64C: FF 40 00 isb $0040, x
-B64F: 00       brk
-B650: 00       brk
-B651: 00       brk
-B652: 01 80    ora ($80, x)
-B654: 00       brk
-B655: 80 FF    nop #$ff
-B657: 80 01    nop #$01
-B659: 00       brk
-B65A: 00       brk
-B65B: E0 00    cpx #$00
-B65D: 60       rts
-B65E: 00       brk
-B65F: 80 FF    nop #$ff
-B661: 80 01    nop #$01
-B663: 00       brk
-B664: 00       brk
-B665: 00       brk
-B666: 00       brk
-B667: 00       brk
-B668: 81 00    sta ($00, x)
-B66A: 01 00    ora ($00, x)
-B66C: 00       brk
-B66D: 00       brk
-B66E: 81 00    sta ($00, x)
-B670: 00       brk
-B671: 00       brk
-B672: 00       brk
-B673: 00       brk
-B674: 00       brk
-B675: 00       brk
-B676: 81 00    sta ($00, x)
-B678: 00       brk
-B679: 55 00    eor $00, x
-B67B: 55 80    eor $80, x
-B67D: 00       brk
-B67E: 81 00    sta ($00, x)
-B680: 00       brk
-B681: 00       brk
-B682: 01 00    ora ($00, x)
-B684: 00       brk
-B685: 00       brk
-B686: 00       brk
-B687: 00       brk
-B688: 00       brk
-B689: 00       brk
-B68A: 00       brk
-B68B: 55 80    eor $80, x
-B68D: 55 00    eor $00, x
-B68F: 00       brk
-B690: 01 00    ora ($00, x)
-B692: 81 00    sta ($00, x)
-B694: 00       brk
-B695: 00       brk
-B696: 00       brk
-B697: 00       brk
-B698: 00       brk
-B699: E0 00    cpx #$00
-B69B: 00       brk
-B69C: 01 D2    ora ($d2, x)
-B69E: 80 D2    nop #$d2
-B6A0: 00       brk
-B6A1: 00       brk
-B6A2: 01 00    ora ($00, x)
-B6A4: 81 00    sta ($00, x)
-B6A6: 00       brk
-B6A7: 00       brk
-B6A8: 00       brk
-B6A9: 00       brk
-B6AA: 00       brk
-B6AB: 00       brk
-B6AC: 00       brk
-B6AD: 00       brk
-B6AE: 01 00    ora ($00, x)
-B6B0: 01 00    ora ($00, x)
-B6B2: 81 00    sta ($00, x)
-B6B4: 00       brk
-B6B5: C0 00    cpy #$00
-B6B7: C0 80    cpy #$80
-B6B9: 00       brk
-B6BA: 81 00    sta ($00, x)
-B6BC: 01 00    ora ($00, x)
-B6BE: 00       brk
-B6BF: 00       brk
-B6C0: 00       brk
-B6C1: 00       brk
-B6C2: 00       brk
-B6C3: 00       brk
-B6C4: 01 00    ora ($00, x)
-B6C6: 81 00    sta ($00, x)
-B6C8: 01 00    ora ($00, x)
-B6CA: 00       brk
-B6CB: 00       brk
-B6CC: 00       brk
-B6CD: 00       brk
-B6CE: 01 00    ora ($00, x)
-B6D0: 81 00    sta ($00, x)
-B6D2: 81 00    sta ($00, x)
-B6D4: 00       brk
-B6D5: 00       brk
-B6D6: 00       brk
-B6D7: 00       brk
-B6D8: 00       brk
-B6D9: 00       brk
-B6DA: 00       brk
-B6DB: 00       brk
-B6DC: 00       brk
-B6DD: 00       brk
-B6DE: 00       brk
-B6DF: 00       brk
-B6E0: 00       brk
-B6E1: 00       brk
-B6E2: 00       brk
-B6E3: 00       brk
-B6E4: 81 00    sta ($00, x)
-B6E6: 01 00    ora ($00, x)
-B6E8: 00       brk
-B6E9: 00       brk
-B6EA: 01 00    ora ($00, x)
-B6EC: 81 00    sta ($00, x)
-B6EE: 00       brk
-B6EF: 00       brk
-B6F0: 00       brk
-B6F1: 00       brk
-B6F2: 00       brk
-B6F3: 00       brk
-B6F4: 01 00    ora ($00, x)
-B6F6: 00       brk
-B6F7: 00       brk
-B6F8: 00       brk
-B6F9: 00       brk
-B6FA: 00       brk
-B6FB: 00       brk
-B6FC: 00       brk
-B6FD: 00       brk
-B6FE: 00       brk
-B6FF: 00       brk
-B700: 01 00    ora ($00, x)
-B702: 00       brk
-B703: 00       brk
-B704: 00       brk
-B705: 00       brk
-B706: 00       brk
-B707: 00       brk
-B708: 01 00    ora ($00, x)
-B70A: 81 00    sta ($00, x)
-B70C: 81 00    sta ($00, x)
-B70E: 01 00    ora ($00, x)
-B710: 81 00    sta ($00, x)
-B712: 81 00    sta ($00, x)
-B714: 01 00    ora ($00, x)
-B716: 81 00    sta ($00, x)
-B718: 00       brk
-B719: 00       brk
-B71A: 01 00    ora ($00, x)
-B71C: 81 00    sta ($00, x)
-B71E: 01 00    ora ($00, x)
-B720: 00       brk
-B721: 00       brk
-B722: 00       brk
-B723: 00       brk
-B724: 01 00    ora ($00, x)
-B726: 81 00    sta ($00, x)
-B728: 01 00    ora ($00, x)
-B72A: 00       brk
-B72B: 00       brk
-B72C: 01 00    ora ($00, x)
-B72E: 01 00    ora ($00, x)
-B730: 81 00    sta ($00, x)
-B732: 01 00    ora ($00, x)
-B734: 00       brk
-B735: 01 04    ora ($04, x)
-B737: 0A       asl a
-B738: 09 09    ora #$09
-B73A: 07 05    slo $05
-B73C: 06 07    asl $07
-B73E: 05 06    ora $06
-B740: 06 06    asl $06
-B742: 09 09    ora #$09
-B744: 05 00    ora $00
-B746: 02       kil
-B747: 0A       asl a
-B748: 1E 30 42 asl $4230, x
-B74B: 50 5A    bvc $b7a7
-B74D: 66 74    ror $74
-B74F: 7E 8A 96 ror $968a, x
-B752: A2 B4    ldx #$b4
-B754: C6 FF    dec $ff
-B756: 00       brk
-B757: 00       brk
-B758: 00       brk
-B759: 01 FF    ora ($ff, x)
-B75B: FF 00 01 isb $0100, x
-B75E: FF FF 00 isb $00ff, x
-B761: FF 00 00 isb $0000, x
-B764: 00       brk
-B765: 01 FF    ora ($ff, x)
-B767: 00       brk
-B768: 00       brk
-B769: FF 00 01 isb $0100, x
-B76C: FF FF 00 isb $00ff, x
-B76F: FF 00 80 isb $8000, x
-B772: FF 80 00 isb $0080, x
-B775: 01 FF    ora ($ff, x)
-B777: FF 00 01 isb $0100, x
-B77A: FF FF 00 isb $00ff, x
-B77D: 01 FF    ora ($ff, x)
-B77F: FF 00 00 isb $0000, x
-B782: 00       brk
-B783: 01 FF    ora ($ff, x)
-B785: FF 00 01 isb $0100, x
-B788: FF FF 00 isb $00ff, x
-B78B: 01 FF    ora ($ff, x)
-B78D: FF 00 01 isb $0100, x
-B790: FF FF 00 isb $00ff, x
-B793: 00       brk
-B794: 00       brk
-B795: 01 FF    ora ($ff, x)
-B797: FF 00 01 isb $0100, x
-B79A: FF 80 00 isb $0080, x
-B79D: 80 FF    nop #$ff
-B79F: FF 00 01 isb $0100, x
-B7A2: FF FF 00 isb $00ff, x
-B7A5: 01 FF    ora ($ff, x)
-B7A7: FF 00 80 isb $8000, x
-B7AA: FF 80 00 isb $0080, x
-B7AD: FF 00 00 isb $0000, x
-B7B0: 00       brk
-B7B1: 01 FF    ora ($ff, x)
-B7B3: FF 00 01 isb $0100, x
-B7B6: FF FF 00 isb $00ff, x
-B7B9: 80 00    nop #$00
-B7BB: 80 FF    nop #$ff
-B7BD: FF 00 00 isb $0000, x
-B7C0: 00       brk
-B7C1: 01 FF    ora ($ff, x)
-B7C3: FF 00 01 isb $0100, x
-B7C6: FF FF 00 isb $00ff, x
-B7C9: 01 FF    ora ($ff, x)
-B7CB: 00       brk
-B7CC: 00       brk
-B7CD: FF 00 FF isb $ff00, x
-B7D0: 00       brk
-B7D1: 01 FF    ora ($ff, x)
-B7D3: FF 00 01 isb $0100, x
-B7D6: FF FF 00 isb $00ff, x
-B7D9: 00       brk
-B7DA: 00       brk
-B7DB: 01 FF    ora ($ff, x)
-B7DD: FF 00 01 isb $0100, x
-B7E0: FF 00 00 isb $0000, x
-B7E3: FF 00 01 isb $0100, x
-B7E6: FF 00 FF isb $ff00, x
-B7E9: 00       brk
-B7EA: 03 00    slo ($00, x)
-B7EC: FE 00 03 inc $0300, x
-B7EF: 00       brk
-B7F0: 01 00    ora ($00, x)
-B7F2: 01 00    ora ($00, x)
-B7F4: FF 00 02 isb $0200, x
-B7F7: 00       brk
-B7F8: 02       kil
-B7F9: 00       brk
-B7FA: 01 80    ora ($80, x)
-B7FC: FF 80 02 isb $0280, x
-B7FF: 00       brk
-B800: 01 00    ora ($00, x)
-B802: 00       brk
-B803: 00       brk
-B804: 01 00    ora ($00, x)
-B806: 00       brk
-B807: 00       brk
-B808: 01 00    ora ($00, x)
-B80A: 02       kil
-B80B: 80 00    nop #$00
-B80D: 80 01    nop #$01
-B80F: 00       brk
-B810: 00       brk
-B811: 00       brk
-B812: 01 00    ora ($00, x)
-B814: 01 00    ora ($00, x)
-B816: 00       brk
-B817: 00       brk
-B818: 00       brk
-B819: 00       brk
-B81A: 05 00    ora $00
-B81C: 01 00    ora ($00, x)
-B81E: 00       brk
-B81F: 00       brk
-B820: 01 00    ora ($00, x)
-B822: 00       brk
-B823: 00       brk
-B824: FF 00 05 isb $0500, x
-B827: 00       brk
-B828: FF 00 FF isb $ff00, x
-B82B: 00       brk
-B82C: 04 00    nop $00
-B82E: 01 00    ora ($00, x)
-B830: 01 00    ora ($00, x)
-B832: 01 00    ora ($00, x)
-B834: 02       kil
-B835: 00       brk
-B836: 01 00    ora ($00, x)
-B838: 01 00    ora ($00, x)
-B83A: 02       kil
-B83B: 00       brk
-B83C: 01 00    ora ($00, x)
-B83E: 01 00    ora ($00, x)
-B840: 00       brk
-B841: 00       brk
-B842: 05 00    ora $00
-B844: 01 00    ora ($00, x)
-B846: 00       brk
-B847: 00       brk
-B848: 01 00    ora ($00, x)
-B84A: 00       brk
-B84B: 00       brk
-B84C: 00       brk
-B84D: 00       brk
-B84E: FF 00 00 isb $0000, x
-B851: 00       brk
-B852: 02       kil
-B853: 00       brk
-B854: 02       kil
-B855: 80 00    nop #$00
-B857: 80 01    nop #$01
-B859: 00       brk
-B85A: 00       brk
-B85B: 00       brk
-B85C: 01 00    ora ($00, x)
-B85E: 01 00    ora ($00, x)
-B860: 00       brk
-B861: 00       brk
-B862: 01 00    ora ($00, x)
-B864: 01 00    ora ($00, x)
-B866: 02       kil
-B867: 80 00    nop #$00
-B869: 80 00    nop #$00
-B86B: 00       brk
-B86C: 02       kil
-B86D: 00       brk
-B86E: 01 00    ora ($00, x)
-B870: 01 00    ora ($00, x)
-B872: 02       kil
-B873: 00       brk
-B874: 01 00    ora ($00, x)
-B876: 01 00    ora ($00, x)
-B878: 01 00    ora ($00, x)
-B87A: 81 00    sta ($00, x)
-B87C: 00       brk
-B87D: 00       brk
-B87E: 82 00    nop #$00
-B880: 03 00    slo ($00, x)
-B882: 01 00    ora ($00, x)
-B884: 01 00    ora ($00, x)
-B886: 81 00    sta ($00, x)
-B888: 00       brk
-B889: 00       brk
-B88A: 02       kil
-B88B: 00       brk
-B88C: 00       brk
-B88D: 80 80    nop #$80
-B88F: 80 00    nop #$00
-B891: 00       brk
-B892: 01 00    ora ($00, x)
-B894: 00       brk
-B895: 00       brk
-B896: 02       kil
-B897: 00       brk
-B898: 00       brk
-B899: 00       brk
-B89A: 84 00    sty $00
-B89C: 02       kil
-B89D: 80 00    nop #$00
-B89F: 80 80    nop #$80
-B8A1: 00       brk
-B8A2: 00       brk
-B8A3: 00       brk
-B8A4: 01 00    ora ($00, x)
-B8A6: 81 00    sta ($00, x)
-B8A8: 00       brk
-B8A9: 00       brk
-B8AA: 00       brk
-B8AB: 00       brk
-B8AC: 00       brk
-B8AD: 00       brk
-B8AE: 01 00    ora ($00, x)
-B8B0: 00       brk
-B8B1: 00       brk
-B8B2: 01 00    ora ($00, x)
-B8B4: 00       brk
-B8B5: 00       brk
-B8B6: 81 00    sta ($00, x)
-B8B8: 00       brk
-B8B9: 00       brk
-B8BA: 81 00    sta ($00, x)
-B8BC: 81 00    sta ($00, x)
-B8BE: 01 00    ora ($00, x)
-B8C0: 02       kil
-B8C1: 00       brk
-B8C2: 02       kil
-B8C3: 00       brk
-B8C4: 01 00    ora ($00, x)
-B8C6: 81 00    sta ($00, x)
-B8C8: 01 00    ora ($00, x)
-B8CA: 01 00    ora ($00, x)
-B8CC: 81 00    sta ($00, x)
-B8CE: 02       kil
-B8CF: 00       brk
-B8D0: 02       kil
-B8D1: 00       brk
-B8D2: 00       brk
-B8D3: 00       brk
-B8D4: 00       brk
-B8D5: 00       brk
-B8D6: 01 00    ora ($00, x)
-B8D8: 00       brk
-B8D9: 00       brk
-B8DA: 01 00    ora ($00, x)
-B8DC: 00       brk
-B8DD: 00       brk
-B8DE: 00       brk
-B8DF: 00       brk
-B8E0: 82 00    nop #$00
-B8E2: 00       brk
-B8E3: 00       brk
-B8E4: 00       brk
-B8E5: 00       brk
-B8E6: 02       kil
-B8E7: 80 00    nop #$00
-B8E9: 80 80    nop #$80
-B8EB: 00       brk
-B8EC: 00       brk
-B8ED: 00       brk
-B8EE: 01 00    ora ($00, x)
-B8F0: 81 00    sta ($00, x)
-B8F2: 00       brk
-B8F3: 00       brk
-B8F4: 01 00    ora ($00, x)
-B8F6: 81 00    sta ($00, x)
-B8F8: 02       kil
-B8F9: 80 00    nop #$00
-B8FB: 80 00    nop #$00
-B8FD: 80 80    nop #$80
-B8FF: 00       brk
-B900: 01 00    ora ($00, x)
-B902: 01 00    ora ($00, x)
-B904: 02       kil
-B905: 00       brk
-B906: 00       brk
-B907: 00       brk
-B908: 01 00    ora ($00, x)
-B90A: 01 00    ora ($00, x)
-B90C: 00       brk
-B90D: 00       brk
-B90E: 06 07    asl $07
-B910: 0B 06    anc #$06
-B912: 07 07    slo $07
-B914: 06 0B    asl $0b
-B916: 07 05    slo $05
-B918: 00       brk
-B919: 00       brk
-B91A: 00       brk
-B91B: 00       brk
-B91C: 00       brk
-B91D: 00       brk
-B91E: 00       brk
-B91F: 0C 1A 30 nop $301a
-B922: 3C 4A 58 nop $584a, x
-B925: 64 7A    nop $7a
-B927: 88       dey
-B928: 00       brk
-B929: 00       brk
-B92A: 00       brk
-B92B: FF 00 A0 isb $a000, x
-B92E: FF 60 FF isb $ff60, x
-B931: FF 00 FF isb $ff00, x
-B934: 00       brk
-B935: 01 FF    ora ($ff, x)
-B937: FF 00 60 isb $6000, x
-B93A: FF A0 FF isb $ffa0, x
-B93D: FF 00 01 isb $0100, x
-B940: FF FF 00 isb $00ff, x
-B943: A0 FF    ldy #$ff
-B945: E0 FF    cpx #$ff
-B947: E0 FF    cpx #$ff
-B949: A0 FF    ldy #$ff
-B94B: FF 00 A0 isb $a000, x
-B94E: FF 60 FF isb $ff60, x
-B951: FF 00 FF isb $ff00, x
-B954: 00       brk
-B955: 01 FF    ora ($ff, x)
-B957: FF 00 60 isb $6000, x
-B95A: FF A0 FF isb $ffa0, x
-B95D: FF 00 E0 isb $e000, x
-B960: FF A0 FF isb $ffa0, x
-B963: 80 00    nop #$00
-B965: 00       brk
-B966: 00       brk
-B967: 01 FF    ora ($ff, x)
-B969: 60       rts
-B96A: 00       brk
-B96B: 20 00 20 jsr $2000
-B96E: 00       brk
-B96F: 60       rts
-B970: 00       brk
-B971: FF 00 01 isb $0100, x
-B974: FF 80 00 isb $0080, x
-B977: A0 FF    ldy #$ff
-B979: E0 FF    cpx #$ff
-B97B: FF 00 00 isb $0000, x
-B97E: 00       brk
-B97F: 01 FF    ora ($ff, x)
-B981: 60       rts
-B982: 00       brk
-B983: 20 00 20 jsr $2000
-B986: 00       brk
-B987: 60       rts
-B988: 00       brk
-B989: 00       brk
-B98A: 00       brk
-B98B: A0 FF    ldy #$ff
-B98D: 60       rts
-B98E: FF FF 00 isb $00ff, x
-B991: FF 00 01 isb $0100, x
-B994: FF 60 00 isb $0060, x
-B997: A0 00    ldy #$00
-B999: 01 FF    ora ($ff, x)
-B99B: FF 00 FF isb $ff00, x
-B99E: 00       brk
-B99F: 00       brk
-B9A0: 00       brk
-B9A1: 01 FF    ora ($ff, x)
-B9A3: 60       rts
-B9A4: 00       brk
-B9A5: 20 00 20 jsr $2000
-B9A8: 00       brk
-B9A9: 60       rts
-B9AA: 00       brk
-B9AB: FF 00 00 isb $0000, x
-B9AE: 00       brk
-B9AF: 01 FF    ora ($ff, x)
-B9B1: 60       rts
-B9B2: 00       brk
-B9B3: 20 00 20 jsr $2000
-B9B6: 00       brk
-B9B7: 60       rts
-B9B8: 00       brk
-B9B9: FF 00 FF isb $ff00, x
-B9BC: 00       brk
-B9BD: 00       brk
-B9BE: 00       brk
-B9BF: A0 FF    ldy #$ff
-B9C1: 60       rts
-B9C2: FF FF 00 isb $00ff, x
-B9C5: FF 00 00 isb $0000, x
-B9C8: 00       brk
-B9C9: 01 FF    ora ($ff, x)
-B9CB: 60       rts
-B9CC: 00       brk
-B9CD: 20 00 20 jsr $2000
-B9D0: 00       brk
-B9D1: 60       rts
-B9D2: 00       brk
-B9D3: 01 FF    ora ($ff, x)
-B9D5: 60       rts
-B9D6: 00       brk
-B9D7: A0 00    ldy #$00
-B9D9: 01 FF    ora ($ff, x)
-B9DB: FF 00 00 isb $0000, x
-B9DE: 00       brk
-B9DF: C0 00    cpy #$00
-B9E1: A0 00    ldy #$00
-B9E3: 00       brk
-B9E4: 00       brk
-B9E5: 00       brk
-B9E6: 00       brk
-B9E7: 60       rts
-B9E8: 01 00    ora ($00, x)
-B9EA: 00       brk
-B9EB: 60       rts
-B9EC: FF 40 FF isb $ff40, x
-B9EF: 00       brk
-B9F0: 00       brk
-B9F1: 00       brk
-B9F2: 02       kil
-B9F3: 00       brk
-B9F4: 00       brk
-B9F5: A0 FF    ldy #$ff
-B9F7: C0 FF    cpy #$ff
-B9F9: 40       rti
-B9FA: 00       brk
-B9FB: 60       rts
-B9FC: 00       brk
-B9FD: 00       brk
-B9FE: 00       brk
-B9FF: C0 00    cpy #$00
-BA01: A0 00    ldy #$00
-BA03: 00       brk
-BA04: 00       brk
-BA05: 00       brk
-BA06: 00       brk
-BA07: 60       rts
-BA08: 01 00    ora ($00, x)
-BA0A: 00       brk
-BA0B: 60       rts
-BA0C: FF 40 FF isb $ff40, x
-BA0F: 00       brk
-BA10: 00       brk
-BA11: 40       rti
-BA12: 00       brk
-BA13: 60       rts
-BA14: 00       brk
-BA15: 00       brk
-BA16: 00       brk
-BA17: 60       rts
-BA18: 02       kil
-BA19: 00       brk
-BA1A: 00       brk
-BA1B: A0 FF    ldy #$ff
-BA1D: C0 FF    cpy #$ff
-BA1F: 40       rti
-BA20: 00       brk
-BA21: 60       rts
-BA22: 00       brk
-BA23: 00       brk
-BA24: 00       brk
-BA25: A0 00    ldy #$00
-BA27: 00       brk
-BA28: 00       brk
-BA29: A0 FF    ldy #$ff
-BA2B: C0 FF    cpy #$ff
-BA2D: 00       brk
-BA2E: 00       brk
-BA2F: A0 00    ldy #$00
-BA31: 00       brk
-BA32: 00       brk
-BA33: A0 FF    ldy #$ff
-BA35: C0 FF    cpy #$ff
-BA37: 40       rti
-BA38: 00       brk
-BA39: 60       rts
-BA3A: 00       brk
-BA3B: 80 01    nop #$01
-BA3D: C0 00    cpy #$00
-BA3F: A0 00    ldy #$00
-BA41: 00       brk
-BA42: 00       brk
-BA43: 00       brk
-BA44: 00       brk
-BA45: 20 02 C0 jsr $c002
-BA48: 00       brk
-BA49: A0 00    ldy #$00
-BA4B: 00       brk
-BA4C: 00       brk
-BA4D: 00       brk
-BA4E: 00       brk
-BA4F: 00       brk
-BA50: 00       brk
-BA51: 00       brk
-BA52: 03 00    slo ($00, x)
-BA54: 00       brk
-BA55: A0 FF    ldy #$ff
-BA57: C0 FF    cpy #$ff
-BA59: 40       rti
-BA5A: 00       brk
-BA5B: 60       rts
-BA5C: 00       brk
-BA5D: 00       brk
-BA5E: 00       brk
-BA5F: A0 00    ldy #$00
-BA61: 00       brk
-BA62: 00       brk
-BA63: A0 FF    ldy #$ff
-BA65: C0 FF    cpy #$ff
-BA67: 40       rti
-BA68: 00       brk
-BA69: 60       rts
-BA6A: 00       brk
-BA6B: 00       brk
-BA6C: 00       brk
-BA6D: 00       brk
-BA6E: 00       brk
-BA6F: 00       brk
-BA70: 01 C0    ora ($c0, x)
-BA72: 00       brk
-BA73: A0 00    ldy #$00
-BA75: 00       brk
-BA76: 00       brk
-BA77: 00       brk
-BA78: 00       brk
-BA79: E0 00    cpx #$00
-BA7B: 00       brk
-BA7C: 00       brk
-BA7D: A0 FF    ldy #$ff
-BA7F: C0 FF    cpy #$ff
-BA81: 40       rti
-BA82: 00       brk
-BA83: 60       rts
-BA84: 00       brk
-BA85: 20 00 C0 jsr $c000
-BA88: 00       brk
-BA89: A0 00    ldy #$00
-BA8B: 00       brk
-BA8C: 00       brk
-BA8D: 00       brk
-BA8E: 00       brk
-BA8F: 00       brk
-BA90: 00       brk
-BA91: 00       brk
-BA92: 02       kil
-BA93: 00       brk
-BA94: 01 00    ora ($00, x)
-BA96: 00       brk
-BA97: 00       brk
-BA98: 00       brk
-BA99: 00       brk
-BA9A: 00       brk
-BA9B: 00       brk
-BA9C: 00       brk
-BA9D: 00       brk
-BA9E: 81 00    sta ($00, x)
-BAA0: 82 00    nop #$00
-BAA2: 00       brk
-BAA3: 00       brk
-BAA4: 00       brk
-BAA5: 00       brk
-BAA6: 00       brk
-BAA7: 00       brk
-BAA8: 81 00    sta ($00, x)
-BAAA: 82 00    nop #$00
-BAAC: 02       kil
-BAAD: 00       brk
-BAAE: 01 00    ora ($00, x)
-BAB0: 00       brk
-BAB1: 00       brk
-BAB2: 02       kil
-BAB3: 00       brk
-BAB4: 01 00    ora ($00, x)
-BAB6: 00       brk
-BAB7: 00       brk
-BAB8: 00       brk
-BAB9: 00       brk
-BABA: 00       brk
-BABB: 00       brk
-BABC: 00       brk
-BABD: 00       brk
-BABE: 81 00    sta ($00, x)
-BAC0: 82 00    nop #$00
-BAC2: 00       brk
-BAC3: 00       brk
-BAC4: 02       kil
-BAC5: 00       brk
-BAC6: 01 00    ora ($00, x)
-BAC8: 00       brk
-BAC9: 00       brk
-BACA: 00       brk
-BACB: 00       brk
-BACC: 00       brk
-BACD: 00       brk
-BACE: 81 00    sta ($00, x)
-BAD0: 82 00    nop #$00
-BAD2: 02       kil
-BAD3: 00       brk
-BAD4: 01 00    ora ($00, x)
-BAD6: 00       brk
-BAD7: 00       brk
-BAD8: 00       brk
-BAD9: 00       brk
-BADA: 00       brk
-BADB: 00       brk
-BADC: 81 00    sta ($00, x)
-BADE: 82 00    nop #$00
-BAE0: 00       brk
-BAE1: 00       brk
-BAE2: 00       brk
-BAE3: 00       brk
-BAE4: 00       brk
-BAE5: 00       brk
-BAE6: 81 00    sta ($00, x)
-BAE8: 82 00    nop #$00
-BAEA: 02       kil
-BAEB: 00       brk
-BAEC: 01 00    ora ($00, x)
-BAEE: 00       brk
-BAEF: 00       brk
-BAF0: 02       kil
-BAF1: 00       brk
-BAF2: 01 00    ora ($00, x)
-BAF4: 00       brk
-BAF5: 00       brk
-BAF6: 00       brk
-BAF7: 00       brk
-BAF8: 00       brk
-BAF9: 00       brk
-BAFA: 02       kil
-BAFB: 00       brk
-BAFC: 01 00    ora ($00, x)
-BAFE: 00       brk
-BAFF: 00       brk
-BB00: 00       brk
-BB01: 00       brk
-BB02: 00       brk
-BB03: 00       brk
-BB04: 00       brk
-BB05: 00       brk
-BB06: 00       brk
-BB07: 00       brk
-BB08: 81 00    sta ($00, x)
-BB0A: 82 00    nop #$00
-BB0C: 02       kil
-BB0D: 00       brk
-BB0E: 01 00    ora ($00, x)
-BB10: 00       brk
-BB11: 00       brk
-BB12: 00       brk
-BB13: 00       brk
-BB14: 00       brk
-BB15: 00       brk
-BB16: 81 00    sta ($00, x)
-BB18: 82 00    nop #$00
-BB1A: 02       kil
-BB1B: 00       brk
-BB1C: 01 00    ora ($00, x)
-BB1E: 00       brk
-BB1F: 00       brk
-BB20: 00       brk
-BB21: 00       brk
-BB22: 00       brk
-BB23: 00       brk
-BB24: 02       kil
-BB25: 00       brk
-BB26: 01 00    ora ($00, x)
-BB28: 00       brk
-BB29: 00       brk
-BB2A: 00       brk
-BB2B: 00       brk
-BB2C: 00       brk
-BB2D: 00       brk
-BB2E: 00       brk
-BB2F: 00       brk
-BB30: 81 00    sta ($00, x)
-BB32: 82 00    nop #$00
-BB34: 02       kil
-BB35: 00       brk
-BB36: 01 00    ora ($00, x)
-BB38: 00       brk
-BB39: 00       brk
-BB3A: 02       kil
-BB3B: 00       brk
-BB3C: 01 00    ora ($00, x)
-BB3E: 00       brk
-BB3F: 00       brk
-BB40: 00       brk
-BB41: 04 05    nop $05
-BB43: 07 04    slo $04
-BB45: 05 0A    ora $0a
-BB47: 05 0B    ora $0b
-BB49: 05 01    ora $01
-BB4B: 07 07    slo $07
-BB4D: 01 05    ora ($05, x)
-BB4F: 0B 01    anc #$01
-BB51: 00       brk
-BB52: 08       php
-BB53: 12       kil
-BB54: 20 28 32 jsr $3228
-BB57: 46 50    lsr $50
-BB59: 66 70    ror $70
-BB5B: 72       kil
-BB5C: 80 8E    nop #$8e
-BB5E: 90 9A    bcc $bafa
-BB60: B0 2C    bcs $bb8e
 BB62: A6 CF    ldx $cf
 BB64: BD 3C 01 lda $013c, x
 BB67: D0 20    bne $bb89
@@ -8533,28 +5277,7 @@ CBBB: 9D 36 04 sta $0436, x
 CBBE: CA       dex
 CBBF: 10 DF    bpl $cba0
 CBC1: 60       rts
-CBC2: 13 38    slo ($38), y
-CBC4: 53 72    sre ($72), y
-CBC6: 75 80    adc $80, x
-CBC8: 92       kil
-CBC9: 99 50 00 sta $0050, y
-CBCC: 50 50    bvc $cc1e
-CBCE: 00       brk
-CBCF: 00       brk
-CBD0: 50 00    bvc $cbd2
-CBD2: 02       kil
-CBD3: 0F 0A 0D slo $0d0a
-CBD6: 12       kil
-CBD7: 0D 13 01 ora $0113
-CBDA: 12       kil
-CBDB: 12       kil
-CBDC: 0F 0C 04 slo $040c
-CBDF: 05 04    ora $04
-CBE1: 03 04    slo ($04, x)
-CBE3: 12       kil
-CBE4: 05 08    ora $08
-CBE6: 01 03    ora ($03, x)
-CBE8: 0D 05 48 ora $4805
+
 CBEB: 8A       txa
 CBEC: 48       pha
 CBED: 98       tya
@@ -10987,7 +7710,7 @@ DE69: 20 56 D9 jsr $d956
 DE6C: 28       plp
 DE6D: 60       rts
 
-multiply_de6e:
+
 DE6E: A9 00    lda #$00
 DE70: 85 1B    sta resl_1b
 DE72: 85 1C    sta resh_1c
@@ -11223,206 +7946,8 @@ E274: 91 08    sta ($08), y
 E276: C8       iny
 E277: A2 00    ldx #$00
 E279: 60       rts
-E27A: 7E E2 71 ror $71e2, x
-E27D: E3 1D    isb ($1d, x)
-E27F: 25 2B    and $2b
-E281: 33 37    rla ($37), y
-E283: 3B 3F 47 rla $473f, y
-E286: 4B 57    asr #$57
-E288: 61 65    adc ($65, x)
-E28A: 6F 79 87 rra $8779
-E28D: 95 A1    sta $a1, x
-E28F: AD AD B1 lda $b1ad
-E292: B5 BB    lda $bb, x
-E294: BF C5 CD lax $cdc5, y
-E297: D7 E1    dcp $e1, x
-E299: E5 EB    sbc $eb
-E29B: A5 92    lda $92
-E29D: BD C2 BE lda $bec2, x
-E2A0: 0A       asl a
-E2A1: B6 00    ldx $00, y
-E2A3: 59 62 48 eor $4862, y
-E2A6: 66 D2    ror $d2
-E2A8: 6D 9E 70 adc $709e
-E2AB: 0C D4 0A nop $0ad4
-E2AE: B2       kil
-E2AF: 4C 00 B9 jmp $b900
-E2B2: E6 B2    inc $b2
-E2B4: 40       rti
-E2B5: 56 52    lsr $52, x
-E2B7: 80 00    nop #$00
-E2B9: 83 74    sax ($74, x)
-E2BB: 4D C0 4D eor $4dc0
-E2BE: CE 2D 12 dec $122d
-E2C1: 0E 1A 8A asl $8a1a
-E2C4: 40       rti
-E2C5: 83 64    sax ($64, x)
-E2C7: 78       sei
-E2C8: 00       brk
-E2C9: 8B 6E    ane #$6e
-E2CB: BB 66 90 las $9066, y
-E2CE: 4E 9C 68 lsr $689c
-E2D1: 82 70    nop #$70
-E2D3: 48       pha
-E2D4: 00       brk
-E2D5: BB 26 9E las $9e26, y
-E2D8: 02       kil
-E2D9: B2       kil
-E2DA: 4A       lsr a
-E2DB: 3E 26 B0 rol $b026, x
-E2DE: 00       brk
-E2DF: 34 E4    nop $e4, x
-E2E1: CD C0 83 cmp $83c0
-E2E4: 64 78    nop $78
-E2E6: 4A       lsr a
-E2E7: 3E 1A D1 rol $d11a, x
-E2EA: 70 4A    bvs $e336
-E2EC: 00       brk
-E2ED: 3C E4 5D nop $5de4, x
-E2F0: 8A       txa
-E2F1: C6 60    dec $60
-E2F3: 2E 1A 9C rol $9c1a
-E2F6: AF 4C B0 lax $b04c
-E2F9: 4D 82 EC eor $ec82
-E2FC: F2       kil
-E2FD: B0 5A    bcs $e359
-E2FF: 93 70    sha ($70), y
-E301: 69 60    adc #$60
-E303: B8       clv
-E304: 00       brk
-E305: A5 92    lda $92
-E307: BD C2 B4 lda $b4c2, x
-E30A: F0 2E    beq $e33a
-E30C: 12       kil
-E30D: 09 B2    ora #$b2
-E30F: C6 26    dec $26
-E311: 95 C0    sta $c0, x
-E313: C4 C2    cpy $c2
-E315: 3B 0A 92 rla $920a, y
-E318: D2       kil
-E319: 0C 12 C6 nop $c612
-E31C: 12       kil
-E31D: B5 C0    lda $c0, x
-E31F: C5 8A    cmp $8a
-E321: 3E 26 B0 rol $b026, x
-E324: 70 98    bvs $e2be
-E326: 6E 4C 12 ror $124c
-E329: 3E 00 54 rol $5400, x
-E32C: 32       kil
-E32D: 93 FB    sha ($fb), y
-E32F: 5E 64 92 lsr $9264, x
-E332: 6D 3C C2 adc $c23c
-E335: A3 60    lax ($60, x)
-E337: 9E 00 A3 shx $a300, y
-E33A: 60       rts
-E33B: 9E 00 29 shx $2900, y
-E33E: D2       kil
-E33F: 0D 1A 84 ora $841a
-E342: F1 7B    sbc ($7b), y
-E344: 60       rts
-E345: 82 6C    nop #$6c
-E347: 0D 1A 84 ora $841a
-E34A: F1 A4    sbc ($a4), y
-E34C: E4 C3    cpx $c3
-E34E: 72       kil
-E34F: B8       clv
-E350: 68       pla
-E351: 6C 0A C2 jmp ($c20a)
-E354: 40       rti
-E355: 5C F0 C1 nop $c1f0, x
-E358: 42       kil
-E359: 32       kil
-E35A: 42       kil
-E35B: 86 4E    stx $4e
-E35D: 7F 40 0C rra $0c40, x
-E360: 1A       nop
-E361: BE 00 A4 ldx $a400, y
-E364: 0A       asl a
-E365: EA       nop
-E366: 6C 08 00 jmp ($0008)
-E369: 6C AE 4D jmp ($4dae)
-E36C: B0 09    bcs $e377
-E36E: E6 6C    inc $6c
-E370: 80 10    nop #$10
-E372: 1A       nop
-E373: 24 2A    bit $2a
-E375: 2E 38 40 rol $4038
-E378: 48       pha
-E379: 4E 58 62 lsr $6258
-E37C: 68       pla
-E37D: 6E 7E 86 ror $867e
-E380: 8E 18 4E stx $4e18
-E383: 9B 64 08 shs $0864, y
-E386: C2 A4    nop #$a4
-E388: 0A       asl a
-E389: E8       inx
-E38A: 00       brk
-E38B: 2E 0A B3 rol $b30a
-E38E: 42       kil
-E38F: 89 E2    nop #$e2
-E391: 87 38    sax $38
-E393: E3 5B    isb ($5b, x)
-E395: 3D 92 43 and $4392, x
-E398: 70 B8    bvs $e352
-E39A: 40       rti
-E39B: 41 64    eor ($64, x)
-E39D: 5A       nop
-E39E: 6D BB 26 adc $26bb
-E3A1: 9E 02 36 shx $3602, y
-E3A4: 64 7A    nop $7a
-E3A6: 6C B8 00 jmp ($00b8)
-E3A9: C5 8A    cmp $8a
-E3AB: 3E 26 B0 rol $b026, x
-E3AE: 54 CA    nop $ca, x
-E3B0: 61 BE    adc ($be, x)
-E3B2: 68       pla
-E3B3: 4D 82 34 eor $3482
-E3B6: E4 CD    cpx $cd
-E3B8: C0 92    cpy #$92
-E3BA: 78       sei
-E3BB: C0 6E    cpy #$6e
-E3BD: 63 69    rra ($69, x)
-E3BF: 18       clc
-E3C0: 4E 9B 64 lsr $649b
-E3C3: 09 02    ora #$02
-E3C5: A4 0A    ldy $0a
-E3C7: ED C0 20 sbc $20c0
-E3CA: 4E 9B 64 lsr $649b
-E3CD: B8       clv
-E3CE: 46 0D    lsr $0d
-E3D0: 20 2F 40 jsr $402f
-E3D3: 4D 8A BB eor $bb8a
-E3D6: 64 58    nop $58
-E3D8: 00       brk
-E3D9: 54 EC    nop $ec, x
-E3DB: 0E 12 BE asl $be12
-E3DE: 00       brk
-E3DF: A5 92    lda $92
-E3E1: BD C2 BE lda $bec2, x
-E3E4: 0A       asl a
-E3E5: B6 02    ldx $02, y
-E3E7: 18       clc
-E3E8: 4A       lsr a
-E3E9: 92       kil
-E3EA: 02       kil
-E3EB: 53 6C    sre ($6c), y
-E3ED: 48       pha
-E3EE: 00       brk
-E3EF: 3C 12 2D nop $2d12, x
-E3F2: 82 B9    nop #$b9
-E3F4: E6 B2    inc $b2
-E3F6: 6F 3C 12 rra $123c
-E3F9: 2D 82 C3 and $c382
-E3FC: 62       kil
-E3FD: 4D C0 3C eor $3cc0
-E400: 12       kil
-E401: 2D 82 C3 and $c382
-E404: 62       kil
-E405: 4D C2 2C eor $2cc2
-E408: 90 0D    bcc $e417
-E40A: CE 9D 92 dec $929d
-E40D: B8       clv
-E40E: 00       brk
+
+
 E40F: A9 C0    lda #$c0
 E411: D0 05    bne $e418
 E413: 20 66 E4 jsr $e466
@@ -11531,16 +8056,7 @@ E4C3: C8       iny
 E4C4: 91 08    sta ($08), y
 E4C6: D0 AA    bne $e472
 E4C8: 00       brk
-E4C9: 09 0A    ora #$0a
-E4CB: 13 14    slo ($14), y
-E4CD: 24 63    bit $63
-E4CF: 04 5A    nop $5a
-E4D1: 04 50    nop $50
-E4D3: 04 A9    nop $a9
-E4D5: 04 D0    nop $d0
-E4D7: 06 A9    asl $a9
-E4D9: 03 D0    slo ($d0, x)
-E4DB: 02       kil
+
 E4DC: A9 07    lda #$07
 E4DE: A0 FF    ldy #$ff
 E4E0: D0 08    bne $e4ea
@@ -11850,10 +8366,9 @@ E7D7: C0 03    cpy #$03
 E7D9: D0 0C    bne $e7e7
 E7DB: E6 D2    inc $d2
 E7DD: D0 08    bne $e7e7
-E7DF: 7F 02 04 rra $0402, x
-E7E2: 04 05    nop $05
-E7E4: 03 7F    slo ($7f, x)
-E7E6: 7F A5 DF rra $dfa5, x
+; unreached!
+
+E7E7: A5 DF    lda $df                                             
 E7E9: 29 03    and #$03
 E7EB: A8       tay
 E7EC: F0 1A    beq $e808
@@ -12287,18 +8802,9 @@ EB5E: 20 7F E4 jsr $e47f
 EB61: A2 90    ldx #$90
 EB63: A9 4A    lda #$4a
 EB65: 4C 53 E4 jmp $e453
-EB68: 16 00    asl $00, x
-EB6A: 10 02    bpl $eb6e
-EB6C: 12       kil
-EB6D: 04 14    nop $14
-EB6F: 06 16    asl $16
-EB71: 00       brk
-EB72: 10 10    bpl $eb84
-EB74: 40       rti
-EB75: 40       rti
-EB76: 90 90    bcc $eb08
-EB78: FF FF A2 isb $a2ff, x
-EB7B: 8E A9 4A stx $4aa9
+EB7A: A2 8E    ldx #$8e                                            
+EB7C: A9 4A    lda #$4a                                            
+
 EB7E: 20 53 E4 jsr $e453
 EB81: A0 06    ldy #$06
 EB83: 84 23    sty $23
@@ -12326,20 +8832,7 @@ EBB3: A2 3C    ldx #$3c
 EBB5: A9 4B    lda #$4b
 EBB7: 20 53 E4 jsr $e453
 EBBA: 60       rts
-EBBB: DE 9D 1F dec $1f9d, x
-EBBE: 9D DE 1F sta $1fde, x
-EBC1: DE F4 D8 dec $d8f4, x
-EBC4: D8       cld
-EBC5: 10 D8    bpl $eb9f
-EBC7: 10 10    bpl $ebd9
-EBC9: 38       sec
-EBCA: 34 36    nop $36, x
-EBCC: 1E 20 66 asl $6620, x
-EBCF: E4 A9    cpx $a9
-EBD1: 01 20    ora ($20, x)
-EBD3: 7D E4 A2 adc $a2e4, x
-EBD6: 06 86    asl $86
-EBD8: 22       kil
+
 EBD9: A4 22    ldy $22
 EBDB: A9 98    lda #$98
 EBDD: BE 1C EC ldx $ec1c, y
@@ -12370,15 +8863,7 @@ EC14: 4C 1B EC jmp $ec1b
 EC17: A9 20    lda #$20
 EC19: 85 21    sta $21
 EC1B: 60       rts
-EC1C: B8       clv
-EC1D: D0 E8    bne $ec07
-EC1F: 00       brk
-EC20: 18       clc
-EC21: 30 48    bmi $ec6b
-EC23: B2       kil
-EC24: CC E6 00 cpy $00e6
-EC27: 1A       nop
-EC28: 34 4E    nop $4e, x
+
 EC2A: A2 CE    ldx #$ce
 EC2C: A9 4B    lda #$4b
 EC2E: 20 53 E4 jsr $e453
@@ -12843,141 +9328,7 @@ EFE9: A5 F8    lda $f8
 EFEB: 49 C0    eor #$c0
 EFED: 85 F8    sta $f8
 EFEF: 60       rts
-EFF0: 02       kil
-EFF1: 03 04    slo ($04, x)
-EFF3: 05 00    ora $00
-EFF5: 00       brk
-EFF6: 00       brk
-EFF7: 00       brk
-EFF8: 00       brk
-EFF9: 00       brk
-EFFA: 3A       nop
-EFFB: E8       inx
-EFFC: 3A       nop
-EFFD: E8       inx
-EFFE: EA       nop
-EFFF: CB 0F    sbx #$0f
-F001: 00       brk
-F002: 00       brk
-F003: A0 01    ldy #$01
-F005: FE 08 A0 inc $a008, x
-F008: 01 FE    ora ($fe, x)
-F00A: 04 98    nop $98
-F00C: 10 04    bpl $f012
-F00E: 10 00    bpl $f010
-F010: 00       brk
-F011: 82 02    nop #$02
-F013: 01 04    ora ($04, x)
-F015: 8C 08 FF sty $ff08
-F018: 03 80    slo ($80, x)
-F01A: 04 00    nop $00
-F01C: 01 8C    ora ($8c, x)
-F01E: 20 FF 01 jsr $01ff
-F021: 86 40    stx $40
-F023: FF 01 82 isb $8201, x
-F026: 40       rti
-F027: FF 01 81 isb $8101, x
-F02A: 40       rti
-F02B: FF 01 00 isb $0001, x
-F02E: 00       brk
-F02F: C0 10    cpy #$10
-F031: 04 10    nop $10
-F033: 00       brk
-F034: 00       brk
-F035: 86 50    stx $50
-F037: FE 03 00 inc $0003, x
-F03A: 00       brk
-F03B: 98       tya
-F03C: 07 00    slo $00
-F03E: 01 00    ora ($00, x)
-F040: 00       brk
-F041: 84 07    sty $07
-F043: 00       brk
-F044: 01 00    ora ($00, x)
-F046: 00       brk
-F047: A1 11    lda ($11, x)
-F049: 01 03    ora ($03, x)
-F04B: A3 11    lax ($11, x)
-F04D: FF 01 66 isb $6601, x
-F050: 00       brk
-F051: FF 08 00 isb $0008, x
-F054: 05 6B    ora $6b
-F056: 00       brk
-F057: A1 08    lda ($08, x)
-F059: 01 03    ora ($03, x)
-F05B: A3 08    lax ($08, x)
-F05D: FF 01 6E isb $6e01, x
-F060: 00       brk
-F061: FF 08 00 isb $0008, x
-F064: 05 73    ora $73
-F066: 00       brk
-F067: A2 10    ldx #$10
-F069: 00       brk
-F06A: 16 00    asl $00, x
-F06C: 00       brk
-F06D: F6 10    inc $10, x
-F06F: F7 0A    isb $0a, x
-F071: 93 10    sha ($10), y
-F073: 09 0B    ora #$0b
-F075: 00       brk
-F076: 00       brk
-F077: A7 A1    lax $a1
-F079: 00       brk
-F07A: 03 00    slo ($00, x)
-F07C: 00       brk
-F07D: FF A1 00 isb $00a1, x
-F080: 03 00    slo ($00, x)
-F082: 00       brk
-F083: A7 A1    lax $a1
-F085: 00       brk
-F086: 03 00    slo ($00, x)
-F088: 00       brk
-F089: FD A1 00 sbc $00a1, x
-F08C: 03 00    slo ($00, x)
-F08E: 00       brk
-F08F: A4 11    ldy $11
-F091: 00       brk
-F092: 05 8A    ora $8a
-F094: 00       brk
-F095: FF 11 F8 isb $f811, x
-F098: 05 8D    ora $8d
-F09A: 00       brk
-F09B: A4 11    ldy $11
-F09D: 00       brk
-F09E: 05 90    ora $90
-F0A0: 00       brk
-F0A1: FE 11 F8 inc $f811, x
-F0A4: 05 93    ora $93
-F0A6: 00       brk
-F0A7: F6 08    inc $08, x
-F0A9: F7 0A    isb $0a, x
-F0AB: 93 08    sha ($08), y
-F0AD: 09 0B    ora #$0b
-F0AF: 96 00    stx $00, y
-F0B1: A2 08    ldx #$08
-F0B3: 00       brk
-F0B4: 15 9B    ora $9b, x
-F0B6: 00       brk
-F0B7: 80 08    nop #$08
-F0B9: F8       sed
-F0BA: 03 70    slo ($70, x)
-F0BC: 08       php
-F0BD: F8       sed
-F0BE: 03 60    slo ($60, x)
-F0C0: 08       php
-F0C1: F8       sed
-F0C2: 03 50    slo ($50, x)
-F0C4: 08       php
-F0C5: F8       sed
-F0C6: 03 40    slo ($40, x)
-F0C8: 08       php
-F0C9: F8       sed
-F0CA: 03 00    slo ($00, x)
-F0CC: 00       brk
-F0CD: A4 08    ldy $08
-F0CF: 00       brk
-F0D0: 14 00    nop $00, x
-F0D2: 00       brk
+
 F0D3: A9 8F    lda #$8f
 F0D5: D0 38    bne $f10f
 F0D7: A9 BF    lda #$bf
@@ -13217,182 +9568,7 @@ F2A8: 6D 9E 70 adc $709e
 F2AB: 0C D4 0A nop $0ad4
 F2AE: B2       kil
 F2AF: 4C 00 B9 jmp $b900
-F2B2: E6 B2    inc $b2
-F2B4: 40       rti
-F2B5: 56 52    lsr $52, x
-F2B7: 80 00    nop #$00
-F2B9: 83 74    sax ($74, x)
-F2BB: 4D C0 4D eor $4dc0
-F2BE: CE 2D 12 dec $122d
-F2C1: 0E 1A 8A asl $8a1a
-F2C4: 40       rti
-F2C5: 83 64    sax ($64, x)
-F2C7: 78       sei
-F2C8: 00       brk
-F2C9: 8B 6E    ane #$6e
-F2CB: BB 66 90 las $9066, y
-F2CE: 4E 9C 68 lsr $689c
-F2D1: 82 70    nop #$70
-F2D3: 48       pha
-F2D4: 00       brk
-F2D5: BB 26 9E las $9e26, y
-F2D8: 02       kil
-F2D9: B2       kil
-F2DA: 4A       lsr a
-F2DB: 3E 26 B0 rol $b026, x
-F2DE: 00       brk
-F2DF: 34 E4    nop $e4, x
-F2E1: CD C0 83 cmp $83c0
-F2E4: 64 78    nop $78
-F2E6: 4A       lsr a
-F2E7: 3E 1A D1 rol $d11a, x
-F2EA: 70 4A    bvs $f336
-F2EC: 00       brk
-F2ED: 3C E4 5D nop $5de4, x
-F2F0: 8A       txa
-F2F1: C6 60    dec $60
-F2F3: 2E 1A 9C rol $9c1a
-F2F6: AF 4C B0 lax $b04c
-F2F9: 4D 82 EC eor $ec82
-F2FC: F2       kil
-F2FD: B0 5A    bcs $f359
-F2FF: 93 70    sha ($70), y
-F301: 69 60    adc #$60
-F303: B8       clv
-F304: 00       brk
-F305: A5 92    lda $92
-F307: BD C2 B4 lda $b4c2, x
-F30A: F0 2E    beq $f33a
-F30C: 12       kil
-F30D: 09 B2    ora #$b2
-F30F: C6 26    dec $26
-F311: 95 C0    sta $c0, x
-F313: C4 C2    cpy $c2
-F315: 3B 0A 92 rla $920a, y
-F318: D2       kil
-F319: 0C 12 C6 nop $c612
-F31C: 12       kil
-F31D: B5 C0    lda $c0, x
-F31F: C5 8A    cmp $8a
-F321: 3E 26 B0 rol $b026, x
-F324: 70 98    bvs $f2be
-F326: 6E 4C 12 ror $124c
-F329: 3E 00 54 rol $5400, x
-F32C: 32       kil
-F32D: 93 FB    sha ($fb), y
-F32F: 5E 64 92 lsr $9264, x
-F332: 6D 3C C2 adc $c23c
-F335: A3 60    lax ($60, x)
-F337: 9E 00 A3 shx $a300, y
-F33A: 60       rts
-F33B: 9E 00 29 shx $2900, y
-F33E: D2       kil
-F33F: 0D 1A 84 ora $841a
-F342: F1 7B    sbc ($7b), y
-F344: 60       rts
-F345: 82 6C    nop #$6c
-F347: 0D 1A 84 ora $841a
-F34A: F1 A4    sbc ($a4), y
-F34C: E4 C3    cpx $c3
-F34E: 72       kil
-F34F: B8       clv
-F350: 68       pla
-F351: 6C 0A C2 jmp ($c20a)
-F354: 40       rti
-F355: 5C F0 C1 nop $c1f0, x
-F358: 42       kil
-F359: 32       kil
-F35A: 42       kil
-F35B: 86 4E    stx $4e
-F35D: 7F 40 0C rra $0c40, x
-F360: 1A       nop
-F361: BE 00 A4 ldx $a400, y
-F364: 0A       asl a
-F365: EA       nop
-F366: 6C 08 00 jmp ($0008)
-F369: 6C AE 4D jmp ($4dae)
-F36C: B0 09    bcs $f377
-F36E: E6 6C    inc $6c
-F370: 80 10    nop #$10
-F372: 1A       nop
-F373: 24 2A    bit $2a
-F375: 2E 38 40 rol $4038
-F378: 48       pha
-F379: 4E 58 62 lsr $6258
-F37C: 68       pla
-F37D: 6E 7E 86 ror $867e
-F380: 8E 18 4E stx $4e18
-F383: 9B 64 08 shs $0864, y
-F386: C2 A4    nop #$a4
-F388: 0A       asl a
-F389: E8       inx
-F38A: 00       brk
-F38B: 2E 0A B3 rol $b30a
-F38E: 42       kil
-F38F: 89 E2    nop #$e2
-F391: 87 38    sax $38
-F393: E3 5B    isb ($5b, x)
-F395: 3D 92 43 and $4392, x
-F398: 70 B8    bvs $f352
-F39A: 40       rti
-F39B: 41 64    eor ($64, x)
-F39D: 5A       nop
-F39E: 6D BB 26 adc $26bb
-F3A1: 9E 02 36 shx $3602, y
-F3A4: 64 7A    nop $7a
-F3A6: 6C B8 00 jmp ($00b8)
-F3A9: C5 8A    cmp $8a
-F3AB: 3E 26 B0 rol $b026, x
-F3AE: 54 CA    nop $ca, x
-F3B0: 61 BE    adc ($be, x)
-F3B2: 68       pla
-F3B3: 4D 82 34 eor $3482
-F3B6: E4 CD    cpx $cd
-F3B8: C0 92    cpy #$92
-F3BA: 78       sei
-F3BB: C0 6E    cpy #$6e
-F3BD: 63 69    rra ($69, x)
-F3BF: 18       clc
-F3C0: 4E 9B 64 lsr $649b
-F3C3: 09 02    ora #$02
-F3C5: A4 0A    ldy $0a
-F3C7: ED C0 20 sbc $20c0
-F3CA: 4E 9B 64 lsr $649b
-F3CD: B8       clv
-F3CE: 46 0D    lsr $0d
-F3D0: 20 2F 40 jsr $402f
-F3D3: 4D 8A BB eor $bb8a
-F3D6: 64 58    nop $58
-F3D8: 00       brk
-F3D9: 54 EC    nop $ec, x
-F3DB: 0E 12 BE asl $be12
-F3DE: 00       brk
-F3DF: A5 92    lda $92
-F3E1: BD C2 BE lda $bec2, x
-F3E4: 0A       asl a
-F3E5: B6 02    ldx $02, y
-F3E7: 18       clc
-F3E8: 4A       lsr a
-F3E9: 92       kil
-F3EA: 02       kil
-F3EB: 53 6C    sre ($6c), y
-F3ED: 48       pha
-F3EE: 00       brk
-F3EF: 3C 12 2D nop $2d12, x
-F3F2: 82 B9    nop #$b9
-F3F4: E6 B2    inc $b2
-F3F6: 6F 3C 12 rra $123c
-F3F9: 2D 82 C3 and $c382
-F3FC: 62       kil
-F3FD: 4D C0 3C eor $3cc0
-F400: 12       kil
-F401: 2D 82 C3 and $c382
-F404: 62       kil
-F405: 4D C2 2C eor $2cc2
-F408: 90 0D    bcc $f417
-F40A: CE 9D 92 dec $929d
-F40D: B8       clv
-F40E: 00       brk
+
 F40F: A9 C0    lda #$c0
 F411: D0 05    bne $f418
 F413: 20 66 E4 jsr $e466
@@ -13500,17 +9676,7 @@ F4C1: 45 0A    eor $0a
 F4C3: C8       iny
 F4C4: 91 08    sta ($08), y
 F4C6: D0 AA    bne $f472
-F4C8: 00       brk
-F4C9: 09 0A    ora #$0a
-F4CB: 13 14    slo ($14), y
-F4CD: 24 63    bit $63
-F4CF: 04 5A    nop $5a
-F4D1: 04 50    nop $50
-F4D3: 04 A9    nop $a9
-F4D5: 04 D0    nop $d0
-F4D7: 06 A9    asl $a9
-F4D9: 03 D0    slo ($d0, x)
-F4DB: 02       kil
+
 F4DC: A9 07    lda #$07
 F4DE: A0 FF    ldy #$ff
 F4E0: D0 08    bne $f4ea
@@ -13717,76 +9883,8 @@ F69D: A9 80    lda #$80
 F69F: 8D FE 26 sta $26fe
 F6A2: 8D FE 27 sta $27fe
 F6A5: 4C 4E E6 jmp $e64e
-F6A8: 01 01    ora ($01, x)
-F6AA: 15 2B    ora $2b, x
-F6AC: 45 71    eor $71
-F6AE: 01 01    ora ($01, x)
-F6B0: 01 01    ora ($01, x)
-F6B2: 13 15    slo ($15), y
-F6B4: 19 2B 01 ora $012b, y
-F6B7: 01 00    ora ($00, x)
-F6B9: 20 40 80 jsr $8040
-F6BC: 00       brk
-F6BD: 71 80    adc ($80), y
-F6BF: 01 00    ora ($00, x)
-F6C1: 22       kil
-F6C2: 40       rti
-F6C3: 80 00    nop #$00
-F6C5: 60       rts
-F6C6: 80 1E    nop #$1e
-F6C8: 00       brk
-F6C9: 3E 40 80 rol $8040, x
-F6CC: 00       brk
-F6CD: 20 40 80 jsr $8040
-F6D0: 00       brk
-F6D1: 71 80    adc ($80), y
-F6D3: 01 00    ora ($00, x)
-F6D5: 22       kil
-F6D6: 07 E0    slo $e0
-F6D8: 00       brk
-F6D9: 20 40 80 jsr $8040
-F6DC: 80 1E    nop #$1e
-F6DE: 00       brk
-F6DF: 3E 40 80 rol $8040, x
-F6E2: 00       brk
-F6E3: 20 40 80 jsr $8040
-F6E6: 00       brk
-F6E7: 71 80    adc ($80), y
-F6E9: 01 00    ora ($00, x)
-F6EB: 22       kil
-F6EC: 07 E0    slo $e0
-F6EE: 00       brk
-F6EF: 20 40 80 jsr $8040
-F6F2: 80 1E    nop #$1e
-F6F4: 00       brk
-F6F5: 3E 40 80 rol $8040, x
-F6F8: 2F 51 40 rla $4051
-F6FB: 80 00    nop #$00
-F6FD: 20 40 80 jsr $8040
-F700: 00       brk
-F701: 71 80    adc ($80), y
-F703: 01 00    ora ($00, x)
-F705: 22       kil
-F706: 07 E0    slo $e0
-F708: 00       brk
-F709: 20 40 80 jsr $8040
-F70C: 80 1E    nop #$1e
-F70E: 00       brk
-F70F: 3E 40 80 rol $8040, x
-F712: 2F 51 40 rla $4051
-F715: 80 11    nop #$11
-F717: A0 20    ldy #$20
-F719: 51 40    eor ($40), y
-F71B: 80 00    nop #$00
-F71D: 20 13 A0 jsr $a013
-F720: 00       brk
-F721: C0 15    cpy #$15
-F723: A0 00    ldy #$00
-F725: C0 2F    cpy #$2f
-F727: 40       rti
-F728: 00       brk
-F729: C0 A2    cpy #$a2
-F72B: 02       kil
+
+
 F72C: AD 00 78 lda $7800
 F72F: E0 01    cpx #$01
 F731: F0 03    beq $f736
@@ -14362,20 +10460,7 @@ FBB3: A2 3C    ldx #$3c
 FBB5: A9 4B    lda #$4b
 FBB7: 20 53 E4 jsr $e453
 FBBA: 60       rts
-FBBB: DE 9D 1F dec $1f9d, x
-FBBE: 9D DE 1F sta $1fde, x
-FBC1: DE F4 D8 dec $d8f4, x
-FBC4: D8       cld
-FBC5: 10 D8    bpl $fb9f
-FBC7: 10 10    bpl $fbd9
-FBC9: 38       sec
-FBCA: 34 36    nop $36, x
-FBCC: 1E 20 66 asl $6620, x
-FBCF: E4 A9    cpx $a9
-FBD1: 01 20    ora ($20, x)
-FBD3: 7D E4 A2 adc $a2e4, x
-FBD6: 06 86    asl $86
-FBD8: 22       kil
+
 FBD9: A4 22    ldy $22
 FBDB: A9 98    lda #$98
 FBDD: BE 1C EC ldx $ec1c, y
@@ -14406,15 +10491,7 @@ FC14: 4C 1B EC jmp $ec1b
 FC17: A9 20    lda #$20
 FC19: 85 21    sta $21
 FC1B: 60       rts
-FC1C: B8       clv
-FC1D: D0 E8    bne $fc07
-FC1F: 00       brk
-FC20: 18       clc
-FC21: 30 48    bmi $fc6b
-FC23: B2       kil
-FC24: CC E6 00 cpy $00e6
-FC27: 1A       nop
-FC28: 34 4E    nop $4e, x
+
 FC2A: A2 CE    ldx #$ce
 FC2C: A9 4B    lda #$4b
 FC2E: 20 53 E4 jsr $e453
@@ -14567,15 +10644,7 @@ FD60: 29 10    and #$10
 FD62: D0 03    bne $fd67
 FD64: 4C D7 EC jmp $ecd7
 FD67: 4C 3A E8 jmp $e83a
-FD6A: 93 EA    sha ($ea), y
-FD6C: A8       tay
-FD6D: EA       nop
-FD6E: 1B EB 22 slo $22eb, y
-FD71: EB 29    sbc #$29
-FD73: EC 79 EB cpx $eb79
-FD76: CC EB A6 cpy $a6eb
-FD79: 69 E0    adc #$e0
-FD7B: 0E 90 04 asl $0490
+
 FD7E: A2 02    ldx #$02
 FD80: 86 69    stx $69
 FD82: BD 6B ED lda $ed6b, x
