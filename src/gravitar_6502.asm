@@ -9,7 +9,7 @@
 	;	*FUNCTION:LOONY STATE HANDLER	*
 	;	*				*
 	;	*********************************
-
+    ; source name: LOONYM.MAC
 
 
 9000: A9 16    lda #$16			;SET ATTRACT MODE
@@ -34,8 +34,8 @@
 902E: 29 10    and #$10
 9030: D0 EC    bne $901e
 9032: 4C 8B ED jmp $ed8b
-9036: 
-9037: CF B5 00 dcp $00b5
+9036: A6 CF    ldx $cf
+9038: B5 00    lda $00, x
 903A: AA       tax
 903B: A5 FA    lda $fa
 903D: 10 0B    bpl $904a
@@ -49,41 +49,46 @@
 904E: BD 53 90 lda $9053, x
 9051: 48       pha
 9052: 60       rts
-9053: 51 50    eor ($50), y
-9055: FF 4F 91 isb $914f, x
-9058: 53 BD    sre ($bd), y
-905A: 57 D3    sre $d3, x
-905C: 93 ED    sha ($ed), y
-905E: 50 58    bvc $90b8
-9060: 51 06    eor ($06), y
-9062: 52       kil
-9063: A2 92    ldx #$92
-9065: B4 92    ldy $92, x
-9067: 7B 93 5A rra $5a93, y
-906A: 55 F2    eor $f2, x
-906C: 91 0B    sta ($0b), y
-906E: 93 4A    sha ($4a), y
-9070: 92       kil
-9071: 13 CB    slo ($cb), y
-9073: 34 94    nop $94, x
-9075: A8       tay
-9076: 94 01    sty $01, x
-9078: 95 51    sta $51, x
-907A: 50 FF    bvc $907b
-907C: 4F 91 53 sre $5391
-907F: BD 57 21 lda $2157, x
-9082: 91 ED    sta ($ed), y
-9084: 50 58    bvc $90de
-9086: 51 06    eor ($06), y
-9088: 52       kil
-9089: A2 92    ldx #$92
-908B: B4 92    ldy $92, x
-908D: 7B 93 5A rra $5a93, y
-9090: 55 75    eor $75, x
-9092: 91 0B    sta ($0b), y
-9094: 93 B5    sha ($b5), y
-9096: 91 A6    sta ($a6), y
-9098: CF E6 4F dcp $4fe6
+
+TODO create table with values minus 1!
+    .word	$50FF 
+    .word	$4F91 
+    .word	$53BD 
+    .word	$57D3 
+    .word	$93ED 
+    .word	$5058 
+    .word	$5106 
+    .word	$52A2
+    .word	$92B4 
+    .word	$927B 
+    .word	$935A 
+    .word	$55F2 
+    .word	$910B 
+    .word	$934A 
+    .word	$9213 
+    .word	$CB34
+    .word	$94A8
+    .word	$9401 
+    .word	$9551 
+     
+    .word	$50FF 
+    .word	$4F91 
+    .word	$53BD 
+    .word	$5721 
+    .word	$91ED
+    .word	$5058 
+    .word	$5106 
+    .word	$52A2 
+    .word	$92B4 
+    .word	$927B 
+    .word	$935A 
+    .word	$5575 
+    .word	$910B
+    .word	$93B5 
+
+  
+9097: A6 CF    ldx $cf
+9099: E6 4F    inc $4f
 909B: A5 D0    lda $d0
 909D: D0 3B    bne $90da
 909F: A5 F1    lda $f1
