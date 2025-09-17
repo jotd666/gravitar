@@ -355,56 +355,22 @@
 52F1: 85 4B    sta $4b
 52F3: 85 4C    sta $4c
 52F5: 60       rts
-52F6: A0 A0    ldy #$a0
-52F8: 60       rts
-52F9: 60       rts
-52FA: A0 00    ldy #$00
-52FC: A0 00    ldy #$00
-52FE: 60       rts
-52FF: 60       rts
-5300: A0 A0    ldy #$a0
-5302: 60       rts
-5303: 60       rts
-5304: A0 FF    ldy #$ff
-5306: FF 00 00 isb $0000, x
-5309: 00       brk
-530A: 00       brk
-530B: FF 00 00 isb $0000, x
-530E: FF FF FF isb $ffff, x
-5311: 00       brk
-5312: 00       brk
-5313: 00       brk
-5314: A0 60    ldy #$60
-5316: 60       rts
-5317: A0 00    ldy #$00
-5319: A0 00    ldy #$00
-531B: 60       rts
-531C: 00       brk
-531D: 60       rts
-531E: A0 60    ldy #$60
-5320: 60       rts
-5321: A0 00    ldy #$00
-5323: FF 00 00 isb $0000, x
-5326: FF 00 FF isb $ff00, x
-5329: 00       brk
-532A: 00       brk
-532B: 00       brk
-532C: FF FF 00 isb $00ff, x
-532F: 00       brk
-5330: FF 00 28 isb $2800, x
-5333: 38       sec
-5334: 08       php
-5335: 18       clc
-5336: 10 20    bpl $5358
-5338: 30 00    bmi $533a
-533A: 10 28    bpl $5364
-533C: 28       plp
-533D: 38       sec
-533E: 08       php
-533F: 18       clc
-5340: 10 BD    bpl $52ff
-5342: ED C0 85 sbc $85c0
-5345: 38       sec
+52F6: .BYTE -60,-60,60,60,$A0,0,-60,0
+	.BYTE 60,-$A0,-60,-60,60,60,$A0
+5305:
+      .BYTE -1,-1,0,0,0,0,-1,0
+	.BYTE 0,-1,-1,-1,0,0,0
+
+5314:
+	.BYTE -60,60,60,-60,0,-60,0,60
+	.BYTE 0,-$0A0,-60,60,60,-60,0	
+
+5323:
+     .BYTE -1,0,0,-1,0,-1,0,0
+	.BYTE 0,-1,-1,0,0,-1,0
+5332:
+	.BYTE 28,38,8,18,10,20,30,0
+	.BYTE 10,28,28,38,8,18,10
 5346: BD DC C0 lda $c0dc, x
 5349: 85 39    sta $39
 534B: BD FE C0 lda $c0fe, x
@@ -540,8 +506,8 @@
 545E: AD E5 C0 lda $c0e5
 5461: 9D 0C 01 sta $010c, x
 5464: 60       rts
-5465: 10 18    bpl $547f
-5467: A0 0E    ldy #$0e
+5465: .BYTE 10,18
+5467: A0 0E    ldy #$0e		;ASHOTS+PSHOTS+1
 5469: A9 00    lda #$00
 546B: 99 EC 02 sta $02ec, y
 546E: 88       dey
@@ -700,15 +666,20 @@
 5593: A9 08    lda #$08
 5595: 85 EB    sta $eb
 5597: 60       rts
-
-55BA: 08       php
+5598: .BYTE 2,9,4,9,6,9,8,9,9,9
+	.BYTE 9,9,9,9,9,9,9,9,9,9
+	.BYTE 9,9,9,9,9,9,9,9,9,9
+	
+55B6: A9 FF    lda #$ff
+55B8: 18       clc
+55B9: 69 08    adc #$08
 55BB: CA       dex
 55BC: 10 FA    bpl $55b8
 55BE: A8       tay
 55BF: A2 07    ldx #$07
 55C1: B9 DE 55 lda $55de, y
-55C4: 9D 17 02 sta $0217, x
-55C7: B9 56 56 lda $5656, y
+55C4: 9D 17 02 sta $0217, x    ;TAKE INITIAL BASE COORDS
+55C7: B9 56 56 lda $5656, y    ;FROM ROM AND STORE INTO RAM
 55CA: 9D 00 02 sta $0200, x
 55CD: B9 CE 56 lda $56ce, y
 55D0: 9D 5C 02 sta $025c, x
@@ -718,64 +689,17 @@
 55DA: CA       dex
 55DB: 10 E4    bpl $55c1
 55DD: 60       rts
-55DE: 60       rts
-55DF: E0 40    cpx #$40
-55E1: 60       rts
-55E2: 60       rts
-55E3: 40       rti
-55E4: 60       rts
-55E5: E0 90    cpx #$90
-55E7: 30 30    bmi $5619
-55E9: B0 70    bcs $565b
-55EB: D0 30    bne $561d
-55ED: 30 20    bmi $560f
-55EF: 60       rts
-55F0: 20 60 20 jsr $2060
+
+55F0: 20 60 20 jsr $2060    ; THIS IS BAD - NO  ITS KINKY BAD
 55F3: 60       rts
-55F4: 20 C0 40 jsr $40c0
-55F7: 80 E0    nop #$e0
-55F9: C0 60    cpy #$60
-55FB: 20 A0 C0 jsr $c0a0
-55FE: C0 80    cpy #$80
-5600: A0 40    ldy #$40
-5602: 40       rti
-5603: C0 20    cpy #$20
-5605: 40       rti
-5606: A0 E0    ldy #$e0
-5608: E0 E0    cpx #$e0
-560A: 00       brk
-560B: C0 00    cpy #$00
-560D: 60       rts
-560E: A0 E0    ldy #$e0
-5610: E0 A0    cpx #$a0
-5612: E0 80    cpx #$80
-5614: 60       rts
-5615: 60       rts
-5616: 00       brk
-5617: A0 20    ldy #$20
-5619: 60       rts
-561A: C0 E0    cpy #$e0
-561C: C0 E0    cpy #$e0
-561E: C0 60    cpy #$60
-5620: A0 E0    ldy #$e0
-5622: 60       rts
-5623: C0 E0    cpy #$e0
-5625: 80 C0    nop #$c0
-5627: 80 A0    nop #$a0
-5629: 40       rti
-562A: 40       rti
-562B: C0 20    cpy #$20
-562D: 40       rti
-562E: 60       rts
-562F: 70 3B    bvs $566c
-5631: B6 40    ldx $40, y
-5633: 71 53    adc ($53), y
-5635: FB A0 A0 isb $a0a0, y
-5638: E0 60    cpx #$60
-563A: 00       brk
-563B: A0 40    ldy #$40
-563D: 00       brk
-563E: 60       rts
+;INPUTS:NONE
+;
+;
+;OUTPUTS:LANDER POSITIONING INITIALIZED
+;	 LANDER VELOCITIES INITIALIZED
+;	 GRAVITY INITIALIZED
+;	 A, X, BLITZED
+
 57BE: A9 00    lda #$00                                            
 57C0: A2 0D    ldx #$0d
 57C2: 95 0B    sta $0b, x
@@ -816,7 +740,7 @@
 5810: B9 BE 59 lda $59be, y
 5813: 4C 19 58 jmp $5819
 5816: B9 C8 59 lda $59c8, y
-5819: 85 18    sta $18
+5819: 85 18    sta $18		;INITIALIZE GRAVITY
 581B: B9 A5 59 lda $59a5, y
 581E: 95 E5    sta $e5, x
 5820: A9 10    lda #$10
@@ -1018,9 +942,9 @@
 5B33: B5 4D    lda $4d, x
 5B35: 0A       asl a
 5B36: 18       clc
-5B37: 69 96    adc #$96
+5B37: 69 96    adc #$96    ; SIXPTR-XDPNTR
 5B39: 85 22    sta $22
-5B3B: A9 0A    lda #$0a
+5B3B: A9 0A    lda #$0a		; SGTBIX-XDELTA
 5B3D: 85 23    sta $23
 5B3F: A4 22    ldy $22
 5B41: B9 72 5B lda $5b72, y
@@ -1038,7 +962,7 @@
 5B5F: 95 6F    sta $6f, x
 5B61: A5 22    lda $22
 5B63: 38       sec
-5B64: E9 1E    sbc #$1e
+5B64: E9 1E    sbc #$1e   ; YDPNTR-XDPNTR
 5B66: 85 22    sta $22
 5B68: A5 23    lda $23
 5B6A: 38       sec
@@ -1048,7 +972,7 @@
 5B71: 60       rts
 
 
-	; ADAPTATION,DISTRIBUTION,PERFORMANCEOR DISPLAY OF
+	; ADAPTATION,DISTRIBUTION,PERFORMANCE OR DISPLAY OF
 	; THIS COMPUTER PROGRAM OR THE ASSOCIATED AUDIOVISUAL
 	; WORK IS STRICTLY PROHIBITED!!!!!!!
 	;	*********************************
@@ -1581,7 +1505,7 @@
 94BE: 20 33 9B jsr $9b33
 94C1: 20 D5 C3 jsr $c3d5
 94C4: 20 82 95 jsr $9582
-94C7: A9 14    lda #$14
+94C7: A9 14    lda #$14  ; MDANGR!MATARI
 94C9: 20 63 95 jsr $9563
 94CC: 85 F4    sta $f4
 94CE: A9 80    lda #$80
@@ -1600,15 +1524,10 @@
 94EB: 8D 7C 01 sta $017c
 94EE: 8C 7E 01 sty $017e
 94F1: 60       rts
-94F2: 08       php
-94F3: 01 04    ora ($04, x)
-94F5: 00       brk
-94F6: 02       kil
-94F7: 08       php
-94F8: 01 00    ora ($00, x)
-94FA: 04 02    nop $02
-94FC: 20 20 36 jsr $3620
-94FF: 0E 01 FF asl $ff01
+
+;COMAND: .BYTE 8,1,4,0,2,8,1,0
+;FRACNT: .BYTE 4,2,20,20,36,0E,1,0FF
+
 9502: 20 07 C7 jsr $c707
 9505: A5 88    lda $88
 9507: F0 3C    beq $9545
@@ -1765,16 +1684,8 @@
 964E: A9 00    lda #$00
 9650: 85 12    sta $12
 9652: 4C D3 96 jmp $96d3
-9655: 00       brk
-9656: 00       brk
-9657: FF FF FF isb $ffff, x
-965A: FF 00 00 isb $0000, x
-965D: 00       brk
-965E: 00       brk
-965F: 00       brk
-9660: 00       brk
-9661: FF FF FF isb $ffff, x
-9664: FF A9 00 isb $00a9, x
+
+9665: A9 00    lda #$00
 9667: 85 4C    sta $4c
 9669: AD 7D 01 lda $017d
 966C: 29 02    and #$02
@@ -1824,6 +1735,12 @@
 96CE: A9 00    lda #$00
 96D0: 85 48    sta $48
 96D2: 60       rts
+
+;INPUTS:LAVEV,LAVEH=SHIP VELOCITIES
+;
+;
+;OUTPUTS:
+
 96D3: A0 00    ldy #$00
 96D5: AE 38 01 ldx $0138
 96D8: A5 16    lda $16
@@ -1851,6 +1768,13 @@
 970C: 86 13    stx $13
 970E: 84 14    sty $14
 9710: 60       rts
+
+;INPUTS:SWITCHS:STATE OF SWITCHES
+;	LANGLE:CURRENT LANDER ANGLE
+;	QUADRANT:CURRENT LANDER QUADRANT
+;OUTPUTS:LANGLE,QUADRANT UPDATED
+;	   A DESTROYED
+
 9711: A6 CF    ldx $cf
 9713: BD 68 01 lda $0168, x
 9716: 1D 6A 01 ora $016a, x
@@ -1860,7 +1784,7 @@
 9720: 29 04    and #$04
 9722: F0 08    beq $972c
 9724: E6 27    inc $27
-9726: A5 27    lda $27
+9726: A5 27    lda $27          ;YES CHANGE ANGLE
 9728: 29 3F    and #$3f
 972A: 85 11    sta $11
 972C: A5 1D    lda $1d
@@ -1870,29 +1794,15 @@
 9734: A5 27    lda $27
 9736: 29 3F    and #$3f
 9738: 85 11    sta $11
-973A: A5 11    lda $11
+973A: A5 11    lda $11   ;SET QUADRANT
 973C: 4A       lsr a
-973D: 4A       lsr a
+973D: 4A       lsr a     ;D1 & D2 DEFINE QUADRANT
 973E: 4A       lsr a
 973F: 29 06    and #$06
 9741: 85 1E    sta $1e
 9743: 60       rts
-9744: 00       brk
-9745: 19 32 4A ora $4a32, y
-9748: 62       kil
-9749: 79 8E A2 adc $a28e, y
-974C: B5 C6    lda $c6, x
-974E: D5 E2    cmp $e2, x
-9750: ED F5 FB sbc $fbf5
-9753: FF FF FB isb $fbff, x
-9756: F5 ED    sbc $ed, x
-9758: E2 D5    nop #$d5
-975A: C6 B5    dec $b5
-975C: A2 8E    ldx #$8e
-975E: 79 62 4A adc $4a62, y
-9761: 32       kil
-9762: 19 00 A6 ora $a600, y
-9765: CF B5 4D dcp $4db5
+9764: A6 CF    ldx $cf
+9766: B5 4D    lda $4d, x
 9768: AA       tax
 9769: BD 31 C1 lda $c131, x
 976C: 29 10    and #$10
@@ -2039,6 +1949,16 @@
 987A: CA       dex
 987B: 10 E5    bpl $9862
 987D: 60       rts
+
+;INPUTS:DRGCNT:TIMER FOR ADDING INDRAG
+;	LAVEXX:LANDER VELOCITIES
+;	STICKY:DRAG CONSTANT
+;
+;
+;OUTPUTS:DRGCNT UPDATED
+;	LAVEXX UPDATED
+;	A,X UPDATED
+
 987E: A6 CF    ldx $cf
 9880: B5 4D    lda $4d, x
 9882: AA       tax
@@ -2077,14 +1997,13 @@
 98C3: CA       dex
 98C4: 10 C8    bpl $988e
 98C6: 60       rts
-98C7: 03 03    slo ($03, x)
-98C9: 03 03    slo ($03, x)
-98CB: 02       kil
-98CC: 02       kil
-98CD: 02       kil
-98CE: 02       kil
-98CF: 02       kil
-98D0: 02       kil
+;INPUTS:LACPV,LACPH,SHIP CORRDINATES
+;	LAVEV,LAVEH SHIP VELOCITY
+;
+;
+;OUTPUTS:POSITION ARRAY UPDATED
+;	 ACC DESTROYED
+
 98D1: A6 CF    ldx $cf
 98D3: B5 88    lda $88, x
 98D5: D0 01    bne $98d8
@@ -2208,9 +2127,9 @@
 99C4: C9 10    cmp #$10
 99C6: 90 0B    bcc $99d3
 99C8: 20 C8 9A jsr $9ac8
-99CB: 20 A5 9A jsr $9aa5
-99CE: 68       pla
-99CF: 68       pla
+99CB: 20 A5 9A jsr $9aa5    ;GET HERE IF TRAVELLING LEFT
+99CE: 68       pla          ;AND AT LEFT LIMIT
+99CF: 68       pla          ;SO GO SCROLL TERRAIN INSTEAD
 99D0: 4C 5F 99 jmp $995f
 99D3: A5 12    lda $12
 99D5: 30 22    bmi $99f9
@@ -2230,64 +2149,19 @@
 99F4: 68       pla
 99F5: 68       pla
 99F6: 4C 5F 99 jmp $995f
-99F9: 60       rts
-99FA: 00       brk
-99FB: 00       brk
-99FC: 00       brk
-99FD: FA       nop
-99FE: F8       sed
-99FF: 00       brk
-9A00: 00       brk
-9A01: 00       brk
-9A02: 00       brk
-9A03: 00       brk
-9A04: F8       sed
-9A05: 00       brk
-9A06: 00       brk
-9A07: FA       nop
-9A08: 00       brk
-9A09: F8       sed
-9A0A: 00       brk
-9A0B: 00       brk
-9A0C: 00       brk
-9A0D: 06 03    asl $03
-9A0F: 00       brk
-9A10: 00       brk
-9A11: 00       brk
-9A12: 04 03    nop $03
-9A14: 00       brk
-9A15: 00       brk
-9A16: 06 00    asl $00
-9A18: 08       php
-9A19: 00       brk
-9A1A: 00       brk
-9A1B: 00       brk
-9A1C: 06 08    asl $08
-9A1E: 00       brk
-9A1F: 00       brk
-9A20: 00       brk
-9A21: 08       php
-9A22: 08       php
-9A23: 00       brk
-9A24: 00       brk
-9A25: 08       php
-9A26: 00       brk
-9A27: 08       php
-9A28: 00       brk
-9A29: 00       brk
-9A2A: 00       brk
-9A2B: FA       nop
-9A2C: F8       sed
-9A2D: 00       brk
-9A2E: 00       brk
-9A2F: 00       brk
-9A30: 00       brk
-9A31: F8       sed
-9A32: 00       brk
-9A33: 00       brk
-9A34: F8       sed
-9A35: 00       brk
-9A36: F8       sed
+99fa:	
+.BYTE 0,0,0,0FA,0F8,0,0,0,
+	.BYTE 0,0F8,0,0,-6,0,-8
+9a0a:	
+  .BYTE 0,0,0,6,3,0,0,0
+	.BYTE 4,3,0,0,6,0,8
+9a19:
+  .BYTE 0,0,0,6,8,0,0,0
+	.BYTE 8,8,0,0,8,0,8
+9a28:
+   .BYTE 0,0,0,0FA,0F8,0,0,0
+	.BYTE 0,-8,0,0,-8,0,-8
+	
 9A37: A9 00    lda #$00
 9A39: 85 7A    sta $7a
 9A3B: A5 0E    lda $0e
@@ -2323,6 +2197,13 @@
 9A79: A9 00    lda #$00
 9A7B: 85 0F    sta $0f
 9A7D: 60       rts
+
+;INPUTS:	OVRSCN = AMOUNT OF SCAN PAST LEFT
+;		HDIR = AMOUNT TO BUMP OVERSCAN
+;		SECTOR = RESIDENT SECTOR OF LANDER
+;		LFTSCT = LEFTMOST SECTOR #
+;OUTPUTS:	OVRSCN,SECTOR,LFTSCT,A UPDATED
+
 9A7E: A5 7A    lda $7a
 9A80: D0 22    bne $9aa4
 9A82: 18       clc
@@ -2343,6 +2224,8 @@
 9AA0: 29 0F    and #$0f
 9AA2: 85 2A    sta $2a
 9AA4: 60       rts
+
+
 9AA5: A5 2C    lda $2c
 9AA7: 18       clc
 9AA8: 65 14    adc $14
@@ -2361,8 +2244,8 @@
 9AC3: 29 0F    and #$0f
 9AC5: 85 2B    sta $2b
 9AC7: 60       rts
-9AC8: A2 16    ldx #$16
-9ACA: BD 73 02 lda $0273, x
+9AC8: A2 16    ldx #$16      ; ASHOTS+PSHOTS+NBASES+1
+9ACA: BD 73 02 lda $0273, x   	;ADD IN H VELOCITY TO POSITIONS
 9ACD: 38       sec
 9ACE: E5 14    sbc $14
 9AD0: 9D 73 02 sta $0273, x
@@ -2534,10 +2417,8 @@
 9C56: A9 07    lda #$07
 9C58: 95 E3    sta $e3, x
 9C5A: 60       rts
-9C5B: 01 02    ora ($02, x)
-9C5D: 03 04    slo ($04, x)
-9C5F: 05 06    ora $06
-9C61: 07 08    slo $08
+9c5b:
+	.BYTE 1,2,3,4,5,6,7,8
 9C63: A2 01    ldx #$01
 9C65: 20 04 9D jsr $9d04
 9C68: CA       dex
@@ -2561,23 +2442,14 @@
 9C8E: C6 21    dec $21
 9C90: 10 F8    bpl $9c8a
 9C92: 60       rts
-9C93: 03 03    slo ($03, x)
-9C95: 03 00    slo ($00, x)
-9C97: 00       brk
-9C98: 04 03    nop $03
-9C9A: 03 03    slo ($03, x)
-9C9C: 03 03    slo ($03, x)
-9C9E: 03 03    slo ($03, x)
-9CA0: 03 03    slo ($03, x)
-9CA2: FF FF FF isb $ffff, x
-9CA5: FF 00 03 isb $0300, x
-9CA8: 01 FF    ora ($ff, x)
-9CAA: 00       brk
-9CAB: 00       brk
-9CAC: 01 00    ora ($00, x)
-9CAE: 00       brk
-9CAF: 00       brk
-9CB0: 00       brk
+9C93: 
+;  .BYTE 3,3,3,0,0,4,3,3
+;	.BYTE 3,3,3,3,3,3,3
+
+9ca2:
+; .BYTE -1,-1,-1,-1,0,3,1,-1
+;	.BYTE 0,0,1,0,0,0,0
+
 9CB1: A5 37    lda $37
 9CB3: D0 4E    bne $9d03
 9CB5: A6 CF    ldx $cf
@@ -2725,11 +2597,21 @@
 9E00: A9 40    lda #$40
 9E02: 85 37    sta $37
 9E04: 60       rts
+; FUNCTION:	UPDATE LINEAR SCALE TO ZOOM IN OR
+;		OUT PICTURE
+; INPUTS:	LACPVH: LANDER V POSITION HI BYTE
+;		LSCALE: CURRENT LINEAR SCALE FACTOR
+;		ZUMIN:	V COORD TO START ZOOMING IN
+;		ZUMOUT:	V COORD TO START ZOOMING OUT
+; OUTPUTS:	LSCALE:	UPDATED
+;		ZOOMST:	UPDATED (IF NECESSARY)
+;		LANDER COORDS: UPDATED (IF NECESSARY)
+
 9E05: 24 37    bit $37
 9E07: 10 26    bpl $9e2f
-9E09: A5 30    lda $30
+9E09: A5 30    lda $30   ;IF CURRENTLY ZOOMING IN
 9E0B: F0 20    beq $9e2d
-9E0D: 38       sec
+9E0D: 38       sec     ;IF NOT ZOOMED ALL THE WAY IN
 9E0E: E9 04    sbc #$04
 9E10: 85 30    sta $30
 9E12: 20 5C 9E jsr $9e5c
@@ -2737,30 +2619,30 @@
 9E17: 10 0A    bpl $9e23
 9E19: C9 FF    cmp #$ff
 9E1B: B0 03    bcs $9e20
-9E1D: 20 AD 9E jsr $9ead
-9E20: 4C 2A 9E jmp $9e2a
+9E1D: 20 AD 9E jsr $9ead   ;IF HPOS PAST READJUST LIMITS
+9E20: 4C 2A 9E jmp $9e2a   ;GO READJUST
 9E23: C9 01    cmp #$01
 9E25: 90 03    bcc $9e2a
 9E27: 20 8E 9E jsr $9e8e
 9E2A: 4C 2F 9E jmp $9e2f
-9E2D: 85 37    sta $37
+9E2D: 85 37    sta $37     ;SET ZOOM STATUS INACTIVE
 9E2F: 24 37    bit $37
 9E31: 50 28    bvc $9e5b
-9E33: A5 30    lda $30
+9E33: A5 30    lda $30    ;IF ZOOMING OUT
 9E35: 30 20    bmi $9e57
-9E37: 18       clc
+9E37: 18       clc      ; IF NOT AT ZOOM OUT LIMIT
 9E38: 69 04    adc #$04
 9E3A: 85 30    sta $30
-9E3C: 20 75 9E jsr $9e75
+9E3C: 20 75 9E jsr $9e75  ;ADJUST VCOORD
 9E3F: A5 0E    lda $0e
 9E41: 10 0A    bpl $9e4d
 9E43: C9 FF    cmp #$ff
 9E45: B0 03    bcs $9e4a
-9E47: 20 8E 9E jsr $9e8e
+9E47: 20 8E 9E jsr $9e8e  ;IF PAST NEGATIVE ADJUST LIMIT
 9E4A: 4C 54 9E jmp $9e54
 9E4D: C9 01    cmp #$01
 9E4F: 90 03    bcc $9e54
-9E51: 20 AD 9E jsr $9ead
+9E51: 20 AD 9E jsr $9ead    ;IF PAST POSITIVE ADJUST LIMIT
 9E54: 4C 5B 9E jmp $9e5b
 9E57: A9 00    lda #$00
 9E59: 85 37    sta $37
@@ -2857,7 +2739,7 @@
 9F12: CA       dex
 9F13: 10 DE    bpl $9ef3
 9F15: 60       rts
-9F16: A2 16    ldx #$16
+9F16: A2 16    ldx #$16     ; ASHOTS+PSHOTS+NBASES+1
 9F18: BD 5C 02 lda $025c, x
 9F1B: 18       clc
 9F1C: 69 09    adc #$09
@@ -7387,17 +7269,7 @@ DBDF: 60       rts
 DBE0: 80 80    nop #$80
 DBE2: 60       rts
 DBE3: 60       rts
-DBE4: E0 E0    cpx #$e0
-DBE6: 00       brk
-DBE7: 00       brk
-DBE8: A0 A0    ldy #$a0
-DBEA: E0 E0    cpx #$e0
-DBEC: FF FF 10 isb $10ff, x
-DBEF: 10 E0    bpl $dbd1
-DBF1: E0 08    cpx #$08
-DBF3: 12       kil
-DBF4: 1C A0 1F nop $1fa0, x
-DBF7: 84 23    sty $23
+
 DBF9: A5 F2    lda $f2
 DBFB: 85 38    sta $38
 DBFD: A5 F3    lda $f3
@@ -7422,55 +7294,7 @@ DC24: 20 FC E1 jsr $e1fc
 DC27: C6 23    dec $23
 DC29: 10 DE    bpl $dc09
 DC2B: 60       rts
-DC2C: 00       brk
-DC2D: 00       brk
-DC2E: C0 C0    cpy #$c0
-DC30: C0 60    cpy #$60
-DC32: 5C 1C 50 nop $501c, x
-DC35: 44 38    nop $38
-DC37: 2C 20 14 bit $1420
-DC3A: 00       brk
-DC3B: 5C 34 28 nop $2834, x
-DC3E: C8       iny
-DC3F: 28       plp
-DC40: 14 F0    nop $f0, x
-DC42: F0 F0    beq $dc34
-DC44: 10 5C    bpl $dca2
-DC46: 28       plp
-DC47: 28       plp
-DC48: 00       brk
-DC49: 00       brk
-DC4A: D0 D0    bne $dc1c
-DC4C: D0 6C    bne $dcba
-DC4E: D0 91    bne $dbe1
-DC50: D6 CA    dec $ca, x
-DC52: C7 D0    dcp $d0
-DC54: D0 D9    bne $dc2f
-DC56: 18       clc
-DC57: EC E0 DA cpx $dae0
-DC5A: D0 E0    bne $dc3c
-DC5C: 08       php
-DC5D: 30 C0    bmi $dc1f
-DC5F: B8       clv
-DC60: F0 D6    beq $dc38
-DC62: D8       cld
-DC63: D8       cld
-DC64: 00       brk
-DC65: 00       brk
-DC66: 0B 09    anc #$09
-DC68: 09 0A    ora #$0a
-DC6A: 08       php
-DC6B: 07 0C    slo $0c
-DC6D: 0D 0E 0F ora $0f0e
-DC70: 10 11    bpl $dc83
-DC72: 1A       nop
-DC73: 1B 1C 1D slo $1d1c, y
-DC76: 1E 1F 20 asl $201f, x
-DC79: 21 22    and ($22, x)
-DC7B: 06 23    asl $23
-DC7D: 24 25    bit $25
-DC7F: 26 AD    rol $ad
-DC81: 35 04    and $04, x
+
 DC83: A0 07    ldy #$07
 DC85: 0A       asl a
 DC86: B0 03    bcs $dc8b
@@ -7567,9 +7391,7 @@ DD4F: A5 F4    lda $f4
 DD51: 09 02    ora #$02
 DD53: 85 F4    sta $f4
 DD55: 60       rts
-DD56: 00       brk
-DD57: 04 00    nop $00
-DD59: 08       php
+
 DD5A: A5 F5    lda $f5
 DD5C: 29 F3    and #$f3
 DD5E: 85 F5    sta $f5

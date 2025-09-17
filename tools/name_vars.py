@@ -1,6 +1,6 @@
 # todo:
 # create inc file with equates
-# insert function names at proper offsets
+# $$DE6E multiply not replaced WTF
 
 import re
 
@@ -33,7 +33,7 @@ with open("dict.txt") as f:
             for i in range(count):
                 haddress = f"{address+i:0{sz}x}"
 
-                sre = fr"(\s)\${haddress}\b"
+                sre = fr"([\s\(])\${haddress}\b"
 
                 radd = f"{r}_{address:0{sz}x}"
                 if i > 0:
