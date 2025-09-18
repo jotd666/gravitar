@@ -2,7 +2,8 @@
 # create inc file with equates
 # $$DE6E multiply not replaced WTF
 
-import re
+
+import re,json
 
 address2symbol = dict()
 
@@ -28,24 +29,27 @@ with open("dict.txt") as f:
                 val = s
 
             address = int(val.strip("#$"),16)
-            sz = 4 if address > 0xFF else 2
+            asz = 4 if address > 0xFF else 2
 
             for i in range(count):
-                haddress = f"{address+i:0{sz}x}"
+                for sz in {asz,4}:  # consider all 0 gaps
+                    haddress = f"{address+i:0{sz}x}"
 
-                sre = fr"([\s\(])\${haddress}\b"
+                    sre = fr"([\s\(])\${haddress}\b"
 
-                radd = f"{r}_{address:0{sz}x}"
-                if i > 0:
-                    radd += f"+{i}"
+                    radd = f"{r}_{address:0{sz}x}"
+                    if i > 0:
+                        radd += f"+{i}"
 
-                if val.startswith("#"):
-                    radd = "#"+radd
-                else:
-                    address2symbol[address+i] = radd
-                radd = r"\1"+radd
-                rep.append((sre,radd))
+                    if val.startswith("#"):
+                        radd = "#"+radd
+                    else:
+                        address2symbol[address+i] = radd
+                    radd = r"\1"+radd
+                    rep.append((sre,radd))
 
+with open("dict.json","w") as fr:
+    json.dump(rep,fr,indent=2)
 
 with open("../src/gravitar_6502.asm") as fr:
     contents = fr.read()
@@ -58,11 +62,11 @@ for i,line in enumerate(contents.splitlines()):
         address2line[int(m.group(1),16)] = i
 
 for s,r in rep:
-    contents = re.sub(s,r,contents)
+    contents = re.sub(s,r,contents,flags=re.I)
 
 lines = contents.splitlines(True)
 
-unresolved = set()
+unresolved = dict()
 
 # collect the unresolved symbols
 # add blank after line containing "rts" or "jmp"
@@ -72,11 +76,11 @@ for i,line in enumerate(lines):
         last = toks[-1]
         if last.startswith("$"):
             prev = toks[-2]
-            if prev.startswith("b") and len(prev)==3 and prev != "bit":
-                # branch: ignore
+            if prev.startswith("b") and len(prev)==3 and prev != "bit" and prev != "jmp":
+                # branch (including jmp): ignore
                 pass
             else:
-                unresolved.add(last)
+                unresolved[i] = last
         if ("jmp" in toks and "else" not in toks[-1]) or "rts" in toks:
             lines[i] += "\n"
 
@@ -93,4 +97,9 @@ with open("gravitar_6502.asm","w") as fw:
     # and save
     fw.write(contents)
 
-print(f"nb unresolved symbols: {len(unresolved)}")
+nb_unresolved = set(unresolved.values())
+print(f"nb unresolved symbols: {len(nb_unresolved)}")
+if nb_unresolved:
+    ful = min(unresolved)
+    first_unresolved = unresolved[ful]
+    print("first unresolved: {} at line {}".format(first_unresolved,ful+1))

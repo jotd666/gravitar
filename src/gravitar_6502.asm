@@ -2705,7 +2705,7 @@
 9EC5: 29 0F    and #$0f
 9EC7: 85 2B    sta $2b
 9EC9: 4C 16 9F jmp $9f16
-9ECC: A2 16    ldx #$16
+9ECC: A2 16    ldx #$16   ; ASHOTS+PSHOTS+NBASES+1
 9ECE: BD 17 02 lda $0217, x
 9ED1: 18       clc
 9ED2: 69 10    adc #$10
@@ -2739,7 +2739,7 @@
 9F12: CA       dex
 9F13: 10 DE    bpl $9ef3
 9F15: 60       rts
-9F16: A2 16    ldx #$16     ; ASHOTS+PSHOTS+NBASES+1
+9F16: A2 16    ldx #$16
 9F18: BD 5C 02 lda $025c, x
 9F1B: 18       clc
 9F1C: 69 09    adc #$09
