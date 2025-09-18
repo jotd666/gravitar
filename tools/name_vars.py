@@ -14,7 +14,7 @@ address2symbol = dict()
 #$10  MSTEST
 """
 
-rep = []
+
 with open("dict.txt") as f:
     for line in f:
         toks = line.split()
@@ -32,24 +32,18 @@ with open("dict.txt") as f:
             asz = 4 if address > 0xFF else 2
 
             for i in range(count):
-                for sz in {asz,4}:  # consider all 0 gaps
-                    haddress = f"{address+i:0{sz}x}"
+                radd = f"{r}_{address:0{asz}x}"
+                if i > 0:
+                    radd += f"+{i}"
 
-                    sre = fr"([\s\(])\${haddress}\b"
+                if val.startswith("#"):
+                    radd = "#"+radd
+                else:
+                    address2symbol[address+i] = radd
 
-                    radd = f"{r}_{address:0{sz}x}"
-                    if i > 0:
-                        radd += f"+{i}"
-
-                    if val.startswith("#"):
-                        radd = "#"+radd
-                    else:
-                        address2symbol[address+i] = radd
-                    radd = r"\1"+radd
-                    rep.append((sre,radd))
 
 with open("dict.json","w") as fr:
-    json.dump(rep,fr,indent=2)
+    json.dump(address2symbol,fr,indent=2)
 
 with open("../src/gravitar_6502.asm") as fr:
     contents = fr.read()
@@ -61,8 +55,16 @@ for i,line in enumerate(contents.splitlines()):
     if m:
         address2line[int(m.group(1),16)] = i
 
-for s,r in rep:
-    contents = re.sub(s,r,contents,flags=re.I)
+def repfunc(m):
+    start,address = m.groups()
+    address = int(address,16)
+    sym = address2symbol.get(address)
+    if sym:
+        return f"{start}{sym}"
+    else:
+        return m.group(0)  # no changes
+
+contents = re.sub(r"([\s\(])\$([0-9A-F]{2,4})",repfunc,contents,flags=re.I)
 
 lines = contents.splitlines(True)
 
@@ -76,7 +78,7 @@ for i,line in enumerate(lines):
         last = toks[-1]
         if last.startswith("$"):
             prev = toks[-2]
-            if prev.startswith("b") and len(prev)==3 and prev != "bit" and prev != "jmp":
+            if (prev.startswith("b") and len(prev)==3 and prev != "bit") or prev == "jmp":
                 # branch (including jmp): ignore
                 pass
             else:

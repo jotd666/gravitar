@@ -1,5 +1,23 @@
 ; file LOOSEU.MAC
 
+;	map(0x0000, 0x07ff).ram();
+;	map(0x2000, 0x27ff).ram(); // vector RAM
+;	map(0x2800, 0x5fff).rom(); // vector ROM
+;	map(0x6000, 0x67ff).rw("pokey1", FUNC(pokey_device::read), FUNC(pokey_device::write));
+;	map(0x6800, 0x6fff).rw("pokey2", FUNC(pokey_device::read), FUNC(pokey_device::write));
+;	map(0x7000, 0x7000).r(FUNC(bwidow_state::earom_read));
+;	map(0x7800, 0x7800).portr("IN0");
+;	map(0x8000, 0x8000).portr("IN3");
+;	map(0x8800, 0x8800).portr("IN4");
+;	map(0x8800, 0x8800).w(FUNC(bwidow_state::bwidow_misc_w)); // coin counters, LEDs
+;	map(0x8840, 0x8840).w(m_avg, FUNC(avg_device::go_w));
+;	map(0x8880, 0x8880).w(m_avg, FUNC(avg_device::reset_w));
+;	map(0x88c0, 0x88c0).w(FUNC(bwidow_state::irq_ack_w)); // interrupt acknowledge
+;	map(0x8900, 0x8900).w(FUNC(bwidow_state::earom_control_w));
+;	map(0x8940, 0x897f).w(FUNC(bwidow_state::earom_write));
+;	map(0x8980, 0x89ed).nopw(); // watchdog clear
+;	map(0x9000, 0xffff).rom();
+
 5000: 20 9B 50 jsr $509b
 5003: C6 D6    dec $d6
 5005: C6 D6    dec $d6
@@ -690,8 +708,8 @@
 55DB: 10 E4    bpl $55c1
 55DD: 60       rts
 
-55F0: 20 60 20 jsr $2060    ; THIS IS BAD - NO  ITS KINKY BAD
-55F3: 60       rts
+;55F0: 20 60 20 jsr $2060    ; THIS IS BAD - NO  ITS KINKY BAD
+;55F3: 60       rts
 ;INPUTS:NONE
 ;
 ;
@@ -2904,7 +2922,7 @@ A05A: C6 21    dec $21
 A05C: 30 03    bmi $a061
 A05E: 4C 84 9F jmp $9f84
 A061: 60       rts
-A062: 19 10 10 ora $1010, y
+A063: 10 10    bpl $a075                                           
 A065: A5 33    lda $33
 A067: 38       sec
 A068: E5 38    sbc $38
@@ -2975,6 +2993,15 @@ A0E2: 38       sec
 A0E3: 4C E7 A0 jmp $a0e7
 A0E6: 18       clc
 A0E7: 60       rts
+; INPUTS:	LACPV,LACPH=LANDER POSITION
+;
+;		SECTOR=RESIDENT SECTOR OF LANDER
+;
+;		SECADR=TABLE OF ADDRESSES OF
+;			ROUTINES THAT DRAW A SECTOR
+;
+; OUTPUTS:
+;
 A0E8: A2 03    ldx #$03
 A0EA: B5 44    lda $44, x
 A0EC: 95 31    sta $31, x
@@ -3009,6 +3036,8 @@ A11E: A4 2A    ldy $2a
 A120: B1 5E    lda ($5e), y
 A122: D0 01    bne $a125
 A124: 60       rts
+
+
 A125: 85 21    sta $21
 A127: B1 60    lda ($60), y
 A129: A8       tay
@@ -3344,6 +3373,7 @@ BCB6: A6 21    ldx $21
 BCB8: A9 00    lda #$00
 BCBA: 9D F0 02 sta $02f0, x
 BCBD: 60       rts
+;PSVSEB
 BCBE: A9 03    lda #$03
 BCC0: 85 21    sta $21
 BCC2: A4 21    ldy $21
@@ -3368,92 +3398,7 @@ BCEB: 10 DE    bpl $bccb
 BCED: C6 21    dec $21
 BCEF: 10 D1    bpl $bcc2
 BCF1: 60       rts
-BCF2: E0 20    cpx #$20
-BCF4: E0 D0    cpx #$d0
-BCF6: E0 E0    cpx #$e0
-BCF8: 20 E0 20 jsr $20e0
-BCFB: E0 20    cpx #$20
-BCFD: 20 E0 20 jsr $20e0
-BD00: 20 20 20 jsr $2020
-BD03: E0 20    cpx #$20
-BD05: E0 20    cpx #$20
-BD07: E0 20    cpx #$20
-BD09: E0 E0    cpx #$e0
-BD0B: 20 10 20 jsr $2010
-BD0E: 10 10    bpl $bd20
-BD10: E0 20    cpx #$20
-BD12: E0 20    cpx #$20
-BD14: E0 20    cpx #$20
-BD16: E0 20    cpx #$20
-BD18: 20 20 E0 jsr $e020
-BD1B: 20 00 00 jsr $0000
-BD1E: E0 00    cpx #$00
-BD20: 20 00 00 jsr $0000
-BD23: 00       brk
-BD24: 00       brk
-BD25: 00       brk
-BD26: 00       brk
-BD27: 00       brk
-BD28: 00       brk
-BD29: 00       brk
-BD2A: 10 10    bpl $bd3c
-BD2C: F0 00    beq $bd2e
-BD2E: 20 F0 00 jsr $00f0
-BD31: F0 E0    beq $bd13
-BD33: E0 E0    cpx #$e0
-BD35: E0 E0    cpx #$e0
-BD37: E0 E0    cpx #$e0
-BD39: E0 E0    cpx #$e0
-BD3B: 00       brk
-BD3C: E0 E0    cpx #$e0
-BD3E: 20 20 E0 jsr $e020
-BD41: 00       brk
-BD42: E0 E0    cpx #$e0
-BD44: E0 20    cpx #$20
-BD46: 20 20 E0 jsr $e020
-BD49: 20 20 20 jsr $2020
-BD4C: E0 E0    cpx #$e0
-BD4E: 20 E0 E0 jsr $e0e0
-BD51: 20 20 E0 jsr $e020
-BD54: E0 20    cpx #$20
-BD56: E0 E0    cpx #$e0
-BD58: 20 20 E0 jsr $e020
-BD5B: E0 20    cpx #$20
-BD5D: 20 E0 00 jsr $00e0
-BD60: 20 E0 20 jsr $20e0
-BD63: 20 20 E0 jsr $e020
-BD66: E0 E0    cpx #$e0
-BD68: E0 E0    cpx #$e0
-BD6A: E0 E0    cpx #$e0
-BD6C: 20 E0 20 jsr $20e0
-BD6F: 20 E0 20 jsr $20e0
-BD72: F0 10    beq $bd84
-BD74: F0 F0    beq $bd66
-BD76: F0 10    beq $bd88
-BD78: 10 10    bpl $bd8a
-BD7A: F0 F0    beq $bd6c
-BD7C: F0 00    beq $bd7e
-BD7E: F0 00    beq $bd80
-BD80: 10 10    bpl $bd92
-BD82: 20 E0 20 jsr $20e0
-BD85: 20 20 20 jsr $2020
-BD88: 20 20 20 jsr $2020
-BD8B: 00       brk
-BD8C: E0 20    cpx #$20
-BD8E: E0 E0    cpx #$e0
-BD90: 20 20 20 jsr $2020
-BD93: E0 20    cpx #$20
-BD95: E0 E0    cpx #$e0
-BD97: 20 20 20 jsr $2020
-BD9A: E0 E0    cpx #$e0
-BD9C: 20 20 E0 jsr $e020
-BD9F: E0 E0    cpx #$e0
-BDA1: 20 20 20 jsr $2020
-BDA4: 20 E0 20 jsr $20e0
-BDA7: 20 E0 20 jsr $20e0
-BDAA: E0 20    cpx #$20
-BDAC: 20 20 20 jsr $2020
-BDAF: 20 E0 20 jsr $20e0
+
 BDB2: A6 CF    ldx $cf
 BDB4: B5 4D    lda $4d, x
 BDB6: AA       tax
@@ -3588,6 +3533,15 @@ BECA: 85 3A    sta $3a
 BECC: B9 4D 02 lda $024d, y
 BECF: 85 3B    sta $3b
 BED1: 60       rts
+;INPUTS: TRACTV: TASK ACTIVE FLAG
+;	 ONTIME: TIMER FOR DEPOSIT ON
+;	 OFTIME:    "   "    "     OFF
+;	 SECTOR: RESIDENT SECTOR OF LANDER
+;	 FSTAT:  DEPOSIT STATUS BYTE
+;
+;OUTPUTS:
+;
+;
 BED2: A9 00    lda #$00
 BED4: 8D 6E 04 sta $046e
 BED7: 85 4B    sta $4b
@@ -3724,33 +3678,14 @@ BFEF: A9 0E    lda #$0e
 BFF1: 99 00 00 sta $0000, y
 BFF4: 4C 25 C0 jmp $c025
 BFF7: 60       rts
-BFF8: 05 05    ora $05
-BFFA: 05 05    ora $05
-BFFC: 03 05    slo ($05, x)
-BFFE: 05 05    ora $05
-C000: 04 03    nop $03
-C002: 05 05    ora $05
-C004: 04 05    nop $05
-C006: 03 FB    slo ($fb, x)
-C008: FB FB FA isb $fafb, y
-C00B: FB FA FA isb $fafa, y
-C00E: FA       nop
-C00F: FA       nop
-C010: FA       nop
-C011: FB FB FA isb $fafb, y
-C014: FB FA 06 isb $06fa, y
-C017: 06 06    asl $06
-C019: 06 08    asl $08
-C01B: 08       php
-C01C: 08       php
-C01D: 08       php
-C01E: 08       php
-C01F: 08       php
-C020: 08       php
-C021: 08       php
-C022: 08       php
-C023: 08       php
-C024: 08       php
+;PVEXIT:	.BYTE 5,5,5,5,3,5,5,5
+;	.BYTE 4,3,5,5,4,5,3
+;NVEXIT:	.BYTE -5,-5,-5,-6,-5,-6,-6,-6
+;	.BYTE -6,-6,-5,-5,-6,-5,-6
+;HEXIT:	.BYTE 6,6,6,6,8,8,8,8
+;	.BYTE 8,8,8,8,8,8,8
+
+;AWDBON
 C025: A6 CF    ldx $cf
 C027: B5 4D    lda $4d, x
 C029: AA       tax
@@ -3797,9 +3732,8 @@ C07A: AA       tax
 C07B: 68       pla
 C07C: 9D 71 04 sta $0471, x
 C07F: 60       rts
-C080: 00       brk
-C081: 01 05    ora ($05, x)
-C083: 0B 13    anc #$13
+
+;SKPBON:	.BYTE 0,1,5,0B,13
 C085: A2 0E    ldx #$0e
 C087: A9 00    lda #$00
 C089: 1D BF 03 ora $03bf, x
@@ -3843,68 +3777,23 @@ C0D4: CA       dex
 C0D5: C6 24    dec $24
 C0D7: 10 E9    bpl $c0c2
 C0D9: 4C 45 C1 jmp $c145
-C0DC: 01 FE    ora ($fe, x)
-C0DE: FD 01 00 sbc $0001, x
-C0E1: 01 FF    ora ($ff, x)
-C0E3: FD FF 01 sbc $01ff, x
-C0E6: 01 FE    ora ($fe, x)
-C0E8: FD 01 00 sbc $0001, x
-C0EB: 00       brk
-C0EC: 00       brk
-C0ED: F4 70    nop $70, x
-C0EF: BC C2 37 ldy $37c2, x
-C0F2: C2 9C    nop #$9c
-C0F4: C0 40    cpy #$40
-C0F6: C0 F4    cpy #$f4
-C0F8: 70 BC    bvs $c0b6
-C0FA: C2 37    nop #$37
-C0FC: C8       iny
-C0FD: C8       iny
-C0FE: 40       rti
-C0FF: 66 A8    ror $a8
-C101: 60       rts
-C102: A8       tay
-C103: CE 58 14 dec $1458
-C106: D0 60    bne $c168
-C108: 40       rti
-C109: 66 A8    ror $a8
-C10B: 60       rts
-C10C: A8       tay
-C10D: 96 20    stx $20, y
-C10F: 02       kil
-C110: 02       kil
-C111: FD FE FD sbc $fdfe, x
-C114: FF 02 00 isb $0002, x
-C117: FD 02 02 sbc $0202, x
-C11A: 02       kil
-C11B: FD FE FD sbc $fdfe, x
-C11E: 00       brk
-C11F: FF 50 50 isb $5050, x
-C122: 50 50    bvc $c174
-C124: 50 50    bvc $c176
-C126: 50 50    bvc $c178
-C128: 50 50    bvc $c17a
-C12A: 50 50    bvc $c17c
-C12C: 50 50    bvc $c17e
-C12E: 50 20    bvc $c150
-C130: 20 00 00 jsr $0000
-C133: 00       brk
-C134: 98       tya
-C135: A8       tay
-C136: 08       php
-C137: 00       brk
-C138: 00       brk
-C139: 88       dey
-C13A: A8       tay
-C13B: 00       brk
-C13C: 00       brk
-C13D: 98       tya
-C13E: 00       brk
-C13F: A8       tay
-C140: 40       rti
-C141: 40       rti
-C142: 04 09    nop $09
-C144: 0E A6 CF asl $cfa6
+
+
+;PLCPVH: .BYTE 1,0FE,0FD,1,0,1,0FF,0FD
+;	.BYTE -1,1,1,-2,-3,1,0,0,0
+;PLCPVL:	.BYTE 0F4,70,0BC,0C2,37,0C2,9C,0C0
+;	.BYTE 40,0C0,0F4,070,0BC,0C2,37,0C8,0C8
+;PLCPHL:	.BYTE 40,66,0A8,60,0A8,0CE,58,14
+;	.BYTE 0D0,60,40,66,0A8,60,0A8,96,20
+;PLCPHH: .BYTE  2,2,0FD,0FE,0FD,0FF,2,0
+;	.BYTE 0FD,2,2,2,0FD,0FE,0FD,0,0FF
+;PLSIZE:	.BYTE 50,50,50,50,50,50,50,50
+;	.BYTE 50,50,50,50,50,50,50,20,20
+;PLANID:	.BYTE 0,0,0,98,0A8,8,0,0
+;	.BYTE 88,0A8,0,0,98,0,0A8,40,40
+;SSINDX:	.BYTE 4,9,0E
+
+C145: A6 CF    ldx $cf
 C147: B5 F6    lda $f6, x
 C149: 29 01    and #$01
 C14B: F0 05    beq $c152
@@ -4087,6 +3976,7 @@ C2BD: 85 0E    sta $0e
 C2BF: 49 FF    eor #$ff
 C2C1: 9D 18 01 sta $0118, x
 C2C4: 60       rts
+;RNGECK
 C2C5: A4 2A    ldy $2a
 C2C7: B9 FB 02 lda $02fb, y
 C2CA: 38       sec
@@ -4220,9 +4110,10 @@ C3CA: 18       clc
 C3CB: 79 D2 C3 adc $c3d2, y
 C3CE: 9D 16 05 sta $0516, x
 C3D1: 60       rts
-C3D2: 01 02    ora ($02, x)
-C3D4: 03 A6    slo ($a6, x)
-C3D6: CF B5 00 dcp $00b5
+;BOLEVL: .BYTE 1,2,3
+
+C3D5: A6 CF    ldx  $cf
+C3D7: B5 00    lda $00, x                                          
 C3D9: C9 08    cmp #$08
 C3DB: D0 0B    bne $c3e8
 C3DD: B5 4D    lda $4d, x
@@ -4267,9 +4158,10 @@ C432: AD 0A 60 lda $600a
 C435: 9D 14 01 sta $0114, x
 C438: 9D 08 01 sta $0108, x
 C43B: 60       rts
-C43C: 03 A6    slo ($a6, x)
-C43E: 35 A5    and $a5, x
-C440: 1D 29 02 ora $0229, x
+
+C43D: A6 35    ldx $35                                             
+C43F: A5 1D    lda $1d                                             
+C441: 29 02    and #$02                                            
 C443: 85 35    sta $35
 C445: D0 01    bne $c448
 C447: 60       rts
@@ -4427,14 +4319,11 @@ C57F: A0 07    ldy #$07
 C581: C6 21    dec $21
 C583: 10 DD    bpl $c562
 C585: 60       rts
-C586: 06 07    asl $07
-C588: 05 07    ora $07
-C58A: 00       brk
-C58B: 04 01    nop $01
-C58D: 03 A6    slo ($a6, x)
-C58F: CF BD 3C dcp $3cbd
-C592: 01 D0    ora ($d0, x)
-C594: 08       php
+
+;NIFIRX:	.BYTE 6,7,5,7,0,4,1,3
+C58E: A6 CF    ldx $cf                                             
+C590: BD 3C 01 lda $013c, x                                        
+C593: D0 08    bne $c59d                                           
 C595: A2 01    ldx #$01
 C597: 20 9E C5 jsr $c59e
 C59A: CA       dex
@@ -4457,11 +4346,10 @@ C5BD: D9 C6 C5 cmp $c5c6, y
 C5C0: B0 03    bcs $c5c5
 C5C2: 4C CE C5 jmp $c5ce
 C5C5: 60       rts
-C5C6: 08       php
-C5C7: 10 20    bpl $c5e9
-C5C9: 40       rti
-C5CA: 50 60    bvc $c62c
-C5CC: 70 80    bvs $c54e
+
+;ASHPRO: .BYTE 8,10,20,40,50,60,70,80
+
+
 C5CE: 86 21    stx $21
 C5D0: BD 08 01 lda $0108, x
 C5D3: 9D 2C 02 sta $022c, x
@@ -4542,21 +4430,18 @@ C674: B9 86 C6 lda $c686, y
 C677: 9D F9 02 sta $02f9, x
 C67A: 20 E3 E0 jsr $e0e3
 C67D: 60       rts
-C67E: 20 28 38 jsr $3828
-C681: 30 10    bmi $c693
-C683: 18       clc
-C684: 00       brk
-C685: 08       php
-C686: 28       plp
-C687: 28       plp
-C688: 1C 00 00 nop $0000, x
-C68B: 08       php
-C68C: 18       clc
-C68D: 28       plp
-C68E: 00       brk
+
+;ANGTBL: .BYTE 20,28,38,30,10,18,0,8
+;SHPRNG:	.BYTE 28,28,1C,0,0,8,18,28,0
+
+; INPUTS: X= INDEX OF SHOT SLOT
+; 	Y=     "   "  BASE
+; OUTPUTS: POSITION AND VELOCTIY ARRAYS SET UP
+
+
 C68F: A9 00    lda #$00
 C691: 9D 3A 02 sta $023a, x
-C694: 9D 7F 02 sta $027f, x
+C694: 9D 7F 02 sta $027f, x   	; ZERO FRACTIONAL PORTIONS
 C697: B9 17 02 lda $0217, y
 C69A: 9D 23 02 sta $0223, x
 C69D: B9 00 02 lda $0200, y
@@ -4581,7 +4466,7 @@ C6C7: 18       clc
 C6C8: 65 21    adc $21
 C6CA: 29 3F    and #$3f
 C6CC: A8       tay
-C6CD: B9 2F C8 lda $c82f, y
+C6CD: B9 2F C8 lda $c82f, y     	;SETUP SHT VELOCITIES
 C6D0: 9D D9 02 sta $02d9, x
 C6D3: B9 BF C7 lda $c7bf, y
 C6D6: 9D BB 02 sta $02bb, x
@@ -4608,18 +4493,27 @@ C6FF: 98       tya
 C700: 9D CA 02 sta $02ca, x
 C703: 20 E3 E0 jsr $e0e3
 C706: 60       rts
+; INPUTS:	SHVEVI,SHVEHI=SHOT V VELOCITIES
+;		SHVEHI,SHVEHF=SHOT V VELOCITIES
+;
+;		SHCPH=CURRENT SHOT POSITION
+;
+; OUTPUTS:	SHOT POSITION ARRAY UPDATED
+;		SHOT ACTIVE TIMER UPDATED
+;		DEACTIVATE SHOT IF TIME OUT
+
 C707: A2 0E    ldx #$0e
 C709: BD EC 02 lda $02ec, x
 C70C: F0 6E    beq $c77c
-C70E: BD 36 02 lda $0236, x
+C70E: BD 36 02 lda $0236, x  		;ADD IN FRACTIONAL DELTA
 C711: 18       clc
 C712: 7D A8 02 adc $02a8, x
 C715: 9D 36 02 sta $0236, x
-C718: BD 1F 02 lda $021f, x
+C718: BD 1F 02 lda $021f, x		;ADD IN LSB INTEGER
 C71B: 7D 8A 02 adc $028a, x
 C71E: 9D 1F 02 sta $021f, x
 C721: BD 08 02 lda $0208, x
-C724: 7D 99 02 adc $0299, x
+C724: 7D 99 02 adc $0299, x		;ADD IN MSB INTEGER
 C727: 9D 08 02 sta $0208, x
 C72A: 10 0C    bpl $c738
 C72C: C9 FA    cmp #$fa
@@ -4663,116 +4557,39 @@ C785: 9D 4D 02 sta $024d, x
 C788: 9D 1F 02 sta $021f, x
 C78B: 9D 64 02 sta $0264, x
 C78E: 60       rts
-C78F: 10 0F    bpl $c7a0
-C791: 0F 0E 0E slo $0e0e
-C794: 0D 0C 0B ora $0b0c
-C797: 0A       asl a
-C798: 08       php
-C799: 07 06    slo $06
-C79B: 04 03    nop $03
-C79D: 01 00    ora ($00, x)
-C79F: 00       brk
-C7A0: FE FD FB inc $fbfd, x
-C7A3: F9 F8 F7 sbc $f7f8, y
-C7A6: F5 F4    sbc $f4, x
-C7A8: F3 F2    isb ($f2), y
-C7AA: F1 F1    sbc ($f1), y
-C7AC: F0 F0    beq $c79e
-C7AE: F0 F0    beq $c7a0
-C7B0: F0 F0    beq $c7a2
-C7B2: F1 F1    sbc ($f1), y
-C7B4: F2       kil
-C7B5: F3 F4    isb ($f4), y
-C7B7: F5 F7    sbc $f7, x
-C7B9: F8       sed
-C7BA: F9 FB FD sbc $fdfb, y
-C7BD: FE FF 00 inc $00ff, x
-C7C0: 01 03    ora ($03, x)
-C7C2: 04 06    nop $06
-C7C4: 07 08    slo $08
-C7C6: 0A       asl a
-C7C7: 0B 0C    anc #$0c
-C7C9: 0D 0E 0E ora $0e0e
-C7CC: 0F 0F 0F slo $0f0f
-C7CF: 10 0F    bpl $c7e0
-C7D1: 0F 0E 0E slo $0e0e
-C7D4: 0D 0C 0B ora $0b0c
-C7D7: 0A       asl a
-C7D8: 08       php
-C7D9: 07 06    slo $06
-C7DB: 04 03    nop $03
-C7DD: 01 00    ora ($00, x)
-C7DF: 00       brk
-C7E0: FE FD FB inc $fbfd, x
-C7E3: F9 F8 F7 sbc $f7f8, y
-C7E6: F5 F4    sbc $f4, x
-C7E8: F3 F2    isb ($f2), y
-C7EA: F1 F1    sbc ($f1), y
-C7EC: F0 F0    beq $c7de
-C7EE: F0 F0    beq $c7e0
-C7F0: F0 F0    beq $c7e2
-C7F2: F1 F1    sbc ($f1), y
-C7F4: F2       kil
-C7F5: F3 F4    isb ($f4), y
-C7F7: F5 F7    sbc $f7, x
-C7F9: F8       sed
-C7FA: F9 FB FD sbc $fdfb, y
-C7FD: FE FF 00 inc $00ff, x
-C800: B0 50    bcs $c852
-C802: D0 20    bne $c824
-C804: 50 60    bvc $c866
-C806: 50 20    bvc $c828
-C808: E0 90    cpx #$90
-C80A: 20 A0 20 jsr $20a0
-C80D: 90 10    bcc $c81f
-C80F: 00       brk
-C810: 70 E0    bvs $c7f2
-C812: 60       rts
-C813: E0 70    cpx #$70
-C815: 20 E0 B0 jsr $b0e0
-C818: A0 B0    ldy #$b0
-C81A: E0 30    cpx #$30
-C81C: B0 50    bcs $c86e
-C81E: 10 00    bpl $c820
-C820: 50 B0    bvc $c7d2
-C822: 30 E0    bmi $c804
-C824: B0 A0    bcs $c7c6
-C826: B0 E0    bcs $c808
-C828: 20 70 E0 jsr $e070
-C82B: 60       rts
-C82C: E0 70    cpx #$70
-C82E: FF 00 90 isb $9000, x
-C831: 20 A0 20 jsr $20a0
-C834: 90 E0    bcc $c816
-C836: 20 50 60 jsr $6050
-C839: 50 20    bvc $c85b
-C83B: D0 50    bne $c88d
-C83D: B0 F0    bcs $c82f
-C83F: 00       brk
-C840: B0 50    bcs $c892
-C842: D0 20    bne $c864
-C844: 50 60    bvc $c8a6
-C846: 50 20    bvc $c868
-C848: E0 90    cpx #$90
-C84A: 20 A0 20 jsr $20a0
-C84D: 90 10    bcc $c85f
-C84F: 00       brk
-C850: 70 E0    bvs $c832
-C852: 60       rts
-C853: E0 70    cpx #$70
-C855: 20 E0 B0 jsr $b0e0
-C858: A0 B0    ldy #$b0
-C85A: E0 30    cpx #$30
-C85C: B0 50    bcs $c8ae
-C85E: 10 00    bpl $c860
-C860: 50 B0    bvc $c812
-C862: 30 E0    bmi $c844
-C864: B0 A0    bcs $c806
-C866: B0 E0    bcs $c848
-C868: 20 70 E0 jsr $e070
-C86B: 60       rts
-C86C: E0 70    cpx #$70
-C86E: FF A2 07 isb $07a2, x
+;		;VERTICAL SHOT VELOCITIES
+;SHVELV:	.BYTE 10,0F,0F,0E,0E,0D,0C,0B
+;	.BYTE 0A,8,7,6,4,3,1,0
+;	.BYTE 0,0FE,0FD,0FB,0F9,0F8,0F7,0F5
+;	.BYTE 0F4,0F3,0F2,0F1,0F1,0F0,0F0,0F0
+;	.BYTE 0F0,0F0,0F0,0F1,0F1,0F2,0F3,0F4
+;	.BYTE 0F5,0F7,0F8,0F9,0FB,0FD,0FE,0FF
+;SHVHL:	.BYTE 0,1,3,4,6,7,8,0A
+;	.BYTE 0B,0C,0D,0E,0E,0F,0F,0F
+;	.BYTE 10,0F,0F,0E,0E,0D,0C,0B
+;	.BYTE 0A,8,7,6,4,3,1,0
+;	.BYTE 0,0FE,0FD,0FB,0F9,0F8,0F7,0F5
+;	.BYTE 0F4,0F3,0F2,0F1,0F1,0F0,0F0,0F0
+;	.BYTE 0F0,0F0,0F0,0F1,0F1,0F2,0F3,0F4
+;	.BYTE 0F5,0F7,0F8,0F9,0FB,0FD,0FE,0FF
+;		;HORIZONTAL SHOT VELOCITIES
+;SHVEFV:	.BYTE 0,0B0,50,0D0,20,50,60,50
+;	.BYTE 20,0E0,90,20,0A0,20,90,10
+;	.BYTE 0,70,0E0,60,0E0,70,20,0E0
+;	.BYTE 0B0,0A0,0B0,0E0,30,0B0,50,10
+;	.BYTE 0,50,0B0,30,0E0,0B0,0A0,0B0
+;	.BYTE 0E0,20,70,0E0,60,0E0,70,0FF
+;SHVHF:	.BYTE 0,90,20,0A0,20,90,0E0,20
+;	.BYTE 50,60,50,20,0D0,50,0B0,0F0
+;	.BYTE 0,0B0,50,0D0,20,50,60,50
+;	.BYTE 20,0E0,90,20,0A0,20,90,10
+;	.BYTE 0,70,0E0,60,0E0,70,20,0E0
+;	.BYTE 0B0,0A0,0B0,0E0,30,0B0,50,10
+;	.BYTE 0,50,0B0,30,0E0,0B0,0A0,0B0
+;	.BYTE 0E0,20,70,0E0,60,0E0,70,0FF
+
+
+C86F: A2 07    ldx #$07		; NEXPLO*DOTS/2
 C871: A5 4F    lda $4f
 C873: 29 01    and #$01
 C875: D0 02    bne $c879
@@ -4833,8 +4650,9 @@ C8F7: C8       iny
 C8F8: C6 23    dec $23
 C8FA: 10 D7    bpl $c8d3
 C8FC: 60       rts
-C8FD: 00       brk
-C8FE: 05 0A    ora $0a
+
+;EXPIX:  .BYTE 0,5,0A
+;SHTLF
 C900: A9 F8    lda #$f8
 C902: 99 A1 03 sta $03a1, y
 C905: AD 0A 60 lda $600a
@@ -5159,7 +4977,13 @@ CBBB: 9D 36 04 sta $0436, x
 CBBE: CA       dex
 CBBF: 10 DF    bpl $cba0
 CBC1: 60       rts
+;DHISCM: .BYTE 13,38,53,72,75,80,92,99
+;DHISCL: .BYTE 50,0,50,50,0,0,50,0
+;DHIINH: .BYTE 2,0F,0A,0D,12,0D,13,1
+;DHIINM: .BYTE 12,12,0F,0C,4,5,4,3
+;DHIINL: .BYTE 4,12,5,8,1,3,0D,5
 
+CBEA: 48       pha
 CBEB: 8A       txa
 CBEC: 48       pha
 CBED: 98       tya
@@ -5214,17 +5038,17 @@ CC56: F0 28    beq $cc80
 CC58: AD 00 78 lda $7800
 CC5B: 29 40    and #$40
 CC5D: F0 1E    beq $cc7d
-CC5F: A5 03    lda $03
+CC5F: A5 03    lda $03     ; TIME TO SWAP BUFFERS?
 CC61: D0 14    bne $cc77
-CC63: 85 02    sta $02
+CC63: 85 02    sta $02    ;RESET SYNC
 CC65: AD 01 20 lda $2001
 CC68: 49 02    eor #$02
-CC6A: 8D 01 20 sta $2001
-CC6D: A0 24    ldy #$24
+CC6A: 8D 01 20 sta $2001  ;POINT TO NEW BUFFER
+CC6D: A0 24    ldy #$24   ; <VECRAM+BUFR2>/100
 CC6F: 29 02    and #$02
 CC71: F0 02    beq $cc75
 CC73: A0 20    ldy #$20
-CC75: 84 03    sty $03
+CC75: 84 03    sty $03   ;POINT TO OPEN BUFFER
 CC77: 8D 80 88 sta $8880
 CC7A: 8D 40 88 sta $8840
 CC7D: 4C 84 CC jmp $cc84
@@ -5236,6 +5060,19 @@ CC86: 68       pla
 CC87: AA       tax
 CC88: 68       pla
 CC89: 40       rti
+
+
+;INPUTS:GAMESW:ADDRESS OF ROTATE,
+;	FIRE,TRACTOR,THRUST SWITCHES
+;
+;	POTGO:CONTROL PORT FOR READING
+;	      SWITCHES
+;
+;
+;OUTPUTS:SWITCH:STATE OF SWITCHES
+;	 SAVED IN SWITCHS
+
+;READSW
 CC8A: AD 00 88 lda $8800
 CC8D: 30 04    bmi $cc93
 CC8F: A6 CF    ldx $cf
@@ -5360,15 +5197,18 @@ CD8B: 48       pha
 CD8C: BD 91 CD lda $cd91, x
 CD8F: 48       pha
 CD90: 60       rts
-CD91: A4 CD    ldy $cd
-CD93: D3 CD    dcp ($cd), y
-CD95: A4 CD    ldy $cd
-CD97: E8       inx
-CD98: CD 30 CE cmp $ce30
-CD9B: F4 CD    nop $cd, x
-CD9D: 0F CE 27 slo $27ce
-CDA0: CE F4 CD dec $cdf4
-CDA3: D3 CD    dcp ($cd), y
+CD91:
+	.word	$cda5-1    ; $cd91
+	.word	$cdd4-1    ; $cd93
+	.word	$cda5-1    ; $cd95
+	.word	$cde9-1    ; $cd97
+	.word	$ce31-1    ; $cd99
+	.word	$cdf5-1    ; $cd9b
+	.word	$ce10-1    ; $cd9d
+	.word	$ce28-1    ; $cd9f
+	.word	$cdf5-1    ; $cda1
+	.word	$cdd4-1    ; $cda3
+
 CDA5: 20 37 CE jsr $ce37
 CDA8: 20 A7 D9 jsr $d9a7
 CDAB: 20 A7 D9 jsr $d9a7
@@ -5436,7 +5276,7 @@ CE53: 68       pla
 CE54: 20 C5 DD jsr $ddc5
 CE57: 4C CC CD jmp $cdcc
 CE5A: 60       rts
-CE5B: A9 9F    lda #$9f
+CE5B: A9 9F    lda #$9f   ; MCONGR!MENTER!MPROTA!MTOCHG!MTRSEL!MPLAYR
 CE5D: 05 F3    ora $f3
 CE5F: 85 F3    sta $f3
 CE61: A9 00    lda #$00
@@ -5640,112 +5480,7 @@ D00B: 84 22    sty $22
 D00D: 20 C2 CF jsr $cfc2
 D010: C6 22    dec $22
 D012: 4C C2 CF jmp $cfc2
-D015: 58       cli
-D016: 3D 5C 3D and $3d5c, x
-D019: 64 3D    nop $3d
-D01B: 6C 3D 74 jmp ($743d)
-D01E: 3D 7C 3D and $3d7c, x
-D021: 84 3D    sty $3d
-D023: 5E 3E 62 lsr $623e, x
-D026: 3E B2 3E rol $3eb2, x
-D029: B6 3E    ldx $3e, y
-D02B: BA       tsx
-D02C: 3E BE 3E rol $3ebe, x
-D02F: 1E 3F 24 asl $243f, x
-D032: 3F EE 3F rla $3fee, x
-D035: F8       sed
-D036: 3F DA 40 rla $40da, x
-D039: DE 40 E2 dec $e240, x
-D03C: 40       rti
-D03D: 6A       ror a
-D03E: 41 6E    eor ($6e, x)
-D040: 41 72    eor ($72, x)
-D042: 41 2A    eor ($2a, x)
-D044: 42       kil
-D045: 30 42    bmi $d089
-D047: 32       kil
-D048: 42       kil
-D049: 3A       nop
-D04A: 42       kil
-D04B: D0 42    bne $d08f
-D04D: DA       nop
-D04E: 42       kil
-D04F: E4 42    cpx $42
-D051: F0 40    beq $d093
-D053: F4 40    nop $40, x
-D055: F8       sed
-D056: 40       rti
-D057: D2       kil
-D058: 43 D6    sre ($d6, x)
-D05A: 43 DC    sre ($dc, x)
-D05C: 43 E4    sre ($e4, x)
-D05E: 43 E8    sre ($e8, x)
-D060: 43 EE    sre ($ee, x)
-D062: 43 F6    sre ($f6, x)
-D064: 43 2A    sre ($2a, x)
-D066: 44 E2    nop $e2
-D068: 44 E8    nop $e8
-D06A: 44 40    nop $40
-D06C: 45 48    eor $48
-D06E: 45 52    eor $52
-D070: 45 E2    eor $e2
-D072: 3D E8 3D and $3de8, x
-D075: EE 3D F6 inc $f63d
-D078: 3D 02 3E and $3e02, x
-D07B: 0E 3E 00 asl $003e
-D07E: 01 02    ora ($02, x)
-D080: 03 04    slo ($04, x)
-D082: 05 06    ora $06
-D084: F9 07 07 sbc $0707, y
-D087: 08       php
-D088: 08       php
-D089: FC 09 0A nop $0a09, x
-D08C: 0B 0C    anc #$0c
-D08E: FC 0D 0E nop $0e0d, x
-D091: FE 0F 0F inc $0f0f, x
-D094: 10 10    bpl $d0a6
-D096: FC 11 12 nop $1211, x
-D099: 13 FD    slo ($fd), y
-D09B: 14 14    nop $14, x
-D09D: 14 15    nop $15, x
-D09F: 15 FB    ora $fb, x
-D0A1: 16 FF    asl $ff, x
-D0A3: 17 18    slo $18, x
-D0A5: 19 1A FC ora $fc1a, y
-D0A8: 1B 1C 1D slo $1d1c, y
-D0AB: FD 1E 1F sbc $1f1e, x
-D0AE: 20 FD 21 jsr $21fd
-D0B1: 22       kil
-D0B2: 23 24    rla ($24, x)
-D0B4: 25 26    and $26
-D0B6: FA       nop
-D0B7: 27 27    rla $27
-D0B9: 28       plp
-D0BA: 28       plp
-D0BB: FC 29 2A nop $2a29, x
-D0BE: FE 2B 2C inc $2c2b, x
-D0C1: 2D FD 2E and $2efd
-D0C4: 2F 30 FD rla $fd30
-D0C7: 31 32    and ($32), y
-D0C9: 33 FD    rla ($fd), y
-D0CB: 15 08    ora $08, x
-D0CD: 0D 12 1A ora $1a12
-D0D0: 2B 1E    anc #$1e
-D0D2: 26 24    rol $24
-D0D4: 2F 42 3A rla $3a42
-D0D7: 3F 33 1A rla $1a33, x
-D0DA: 00       brk
-D0DB: 46 00    lsr $00
-D0DD: 4A       lsr a
-D0DE: 01 0F    ora ($0f, x)
-D0E0: 03 0F    slo ($0f, x)
-D0E2: 07 03    slo $03
-D0E4: 0F 07 07 slo $0707
-D0E7: 03 07    slo ($07, x)
-D0E9: 05 07    ora $07
-D0EB: 07 07    slo $07
-D0ED: 03 07    slo ($07, x)
-D0EF: 01 03    ora ($03, x)
+
 D0F1: A2 0F    ldx #$0f
 D0F3: 86 21    stx $21
 D0F5: 20 66 E4 jsr $e466
@@ -7551,9 +7286,10 @@ DE89: 88       dey
 DE8A: 10 EA    bpl $de76
 DE8C: 60       rts
 
+; end of file "LOONYM.MAC"
 
-
-E0D3: A9 8F    lda #$8f
+; start of file "LOOSND.MAC" (sounds)
+E0D3: A9 8F    lda #$8f   		;FUSE, PLYR 0
 E0D5: D0 38    bne $e10f
 E0D7: A9 BF    lda #$bf
 E0D9: D0 34    bne $e10f
@@ -7690,6 +7426,7 @@ E1E5: 8D 08 60 sta $6008
 E1E8: A2 00    ldx #$00
 E1EA: 8E 08 68 stx $6808
 E1ED: 60       rts
+; end of file "LOOSND.MAC"
 E1EE: 48       pha
 E1EF: 8A       txa
 E1F0: 48       pha
