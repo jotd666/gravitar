@@ -8742,12 +8742,7 @@ EDEC: 48       pha
 EDED: BD F2 ED lda $edf2, x
 EDF0: 48       pha
 EDF1: 60       rts
-EDF2: F9 ED F9 sbc $f9ed, y
-EDF5: ED FC ED sbc $edfc
-EDF8: FF ED 4C isb $4ced, x
-EDFB: D8       cld
-EDFC: E4 4C    cpx $4c
-EDFE: D4 E4    nop $e4, x
+
 EE00: 4C DC E4 jmp $e4dc
 EE03: A5 1D    lda $1d
 EE05: 29 1F    and #$1f
@@ -8814,11 +8809,7 @@ EE8A: 20 FC E1 jsr $e1fc
 EE8D: 20 13 E4 jsr $e413
 EE90: 8D 40 88 sta $8840
 EE93: 60       rts
-EE94: 28       plp
-EE95: 2A       rol a
-EE96: 2B 2C    anc #$2c
-EE98: 30 30    bmi $eeca
-EE9A: 30 30    bmi $eecc
+
 EE9C: A5 3A    lda $3a
 EE9E: 18       clc
 EE9F: 20 47 DE jsr $de47
@@ -8920,12 +8911,7 @@ EF58: B9 60 EF lda $ef60, y
 EF5B: 18       clc
 EF5C: 20 47 DE jsr $de47
 EF5F: 60       rts
-EF60: 00       brk
-EF61: 00       brk
-EF62: 14 24    nop $24, x
-EF64: 15 13    ora $13, x
-EF66: 00       brk
-EF67: 00       brk
+
 EF68: A9 F0    lda #$f0
 EF6A: A2 60    ldx #$60
 EF6C: 20 EE E1 jsr $e1ee

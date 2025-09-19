@@ -3,9 +3,11 @@
 # $$DE6E multiply not replaced WTF
 
 
-import re,json
+import re,json,pathlib
 
 address2symbol = dict()
+
+this_dir = pathlib.Path(__file__).absolute().parent
 
 # atm removed immediates
 """
@@ -15,7 +17,7 @@ address2symbol = dict()
 """
 
 
-with open("dict.txt") as f:
+with open(this_dir / "dict.txt") as f:
     for line in f:
         toks = line.split()
         if len(toks)==2:
@@ -42,10 +44,10 @@ with open("dict.txt") as f:
                     address2symbol[address+i] = radd
 
 
-with open("dict.json","w") as fr:
+with open(this_dir / "dict.json","w") as fr:
     json.dump(address2symbol,fr,indent=2)
 
-with open("../src/gravitar_6502.asm") as fr:
+with open(this_dir / "../src/gravitar_6502.asm") as fr:
     contents = fr.read()
 
 address2line = dict()
@@ -98,7 +100,7 @@ for addr,lineno in address2line.items():
 # rebuild buffer
 contents = "".join(lines)
 
-with open("gravitar_6502.asm","w") as fw:
+with open(this_dir / "../src/gravitar_6502_syms.asm","w") as fw:
     # and save
     fw.write(contents)
 
