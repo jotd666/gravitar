@@ -1,3 +1,9 @@
+; Gravitar (aka Moon Battle) (c) Atari
+; 
+; JOTD: disassembled & merged original source info
+; the service mode/self-tests are less documented (if you need that consult the original
+; sources) because I'm going to skip those when I remake it
+
 ; file LOOSEU.MAC
 
 ;	map(0x0000, 0x07ff).ram();
@@ -4052,6 +4058,7 @@ C34B: 4C 52 C3 jmp $c352
 C34E: A5 23    lda $23
 C350: C9 88    cmp #$88
 C352: 60       rts
+;DEABAS
 C353: A9 00    lda #$00
 C355: 9D E4 02 sta $02e4, x
 C358: 99 EC 02 sta $02ec, y
@@ -5133,7 +5140,7 @@ CD05: 10 05    bpl $cd0c
 CD07: 29 F7    and #$f7
 CD09: 4C 0E CD jmp $cd0e
 CD0C: 09 08    ora #$08
-CD0E: 8D 00 88 sta $8800
+CD0E: 8D 00 88 sta $8800    ; OUT0
 CD11: 60       rts
 CD12: AD 00 78 lda $7800
 CD15: 29 10    and #$10
@@ -5740,15 +5747,15 @@ D318: C9 06    cmp #$06
 D31A: 90 2C    bcc $d348
 D31C: C9 1C    cmp #$1c
 D31E: B0 28    bcs $d348
-D320: A9 00    lda #$00
-D322: 85 0A    sta $0a
-D324: A2 03    ldx #$03
-D326: B5 31    lda $31, x
+D320: A9 00    lda #$00    ;DRAW BLANK VECTOR TO STARTING POINT OF
+D322: 85 0A    sta $0a     ;CURRENT SECTOR TO DRAW
+D324: A2 03    ldx #$03 
+D326: B5 31    lda $31, x   ;PUT COORDS INTO XCOMP - FOR VGVCTR
 D328: 95 04    sta $04, x
 D32A: CA       dex
 D32B: 10 F9    bpl $d326
 D32D: A2 04    ldx #$04
-D32F: 20 A9 E4 jsr $e4a9
+D32F: 20 A9 E4 jsr $e4a9   ;DRAW VECTOR
 D332: A4 21    ldy $21
 D334: B1 64    lda ($64), y
 D336: AA       tax
@@ -5778,445 +5785,17 @@ D360: 85 21    sta $21
 D362: C5 22    cmp $22
 D364: D0 92    bne $d2f8
 D366: 4C 62 D8 jmp $d862
-D369: 00       brk
-D36A: 00       brk
-D36B: 00       brk
-D36C: FF 00 FF isb $ff00, x
-D36F: E0 00    cpx #$00
-D371: A0 FF    ldy #$ff
-D373: C0 FE    cpy #$fe
-D375: C0 FE    cpy #$fe
-D377: 80 00    nop #$00
-D379: C0 FF    cpy #$ff
-D37B: C0 FF    cpy #$ff
-D37D: 80 00    nop #$00
-D37F: 00       brk
-D380: 00       brk
-D381: E0 FE    cpx #$fe
-D383: E0 FE    cpx #$fe
-D385: E0 FE    cpx #$fe
-D387: 00       brk
-D388: 01 00    ora ($00, x)
-D38A: 00       brk
-D38B: 80 FE    nop #$fe
-D38D: A0 FD    ldy #$fd
-D38F: A0 FD    ldy #$fd
-D391: 00       brk
-D392: FE E0 FE inc $fee0, x
-D395: C0 FD    cpy #$fd
-D397: 00       brk
-D398: FE 00 00 inc $0000, x
-D39B: 80 FE    nop #$fe
-D39D: 40       rti
-D39E: FE C0 FD inc $fdc0, x
-D3A1: 40       rti
-D3A2: FE 00 00 inc $0000, x
-D3A5: 60       rts
-D3A6: FE A0 FE inc $fea0, x
-D3A9: 00       brk
-D3AA: 00       brk
-D3AB: 80 00    nop #$00
-D3AD: 40       rti
-D3AE: 00       brk
-D3AF: 60       rts
-D3B0: 00       brk
-D3B1: 60       rts
-D3B2: 00       brk
-D3B3: 00       brk
-D3B4: 00       brk
-D3B5: 00       brk
-D3B6: 00       brk
-D3B7: 80 00    nop #$00
-D3B9: C0 00    cpy #$00
-D3BB: C0 00    cpy #$00
-D3BD: 40       rti
-D3BE: 00       brk
-D3BF: 80 00    nop #$00
-D3C1: 20 00 40 jsr $4000
-D3C4: 00       brk
-D3C5: 40       rti
-D3C6: 00       brk
-D3C7: 80 00    nop #$00
-D3C9: 00       brk
-D3CA: 00       brk
-D3CB: 00       brk
-D3CC: 00       brk
-D3CD: 00       brk
-D3CE: FF 00 FF isb $ff00, x
-D3D1: 00       brk
-D3D2: 00       brk
-D3D3: 00       brk
-D3D4: 00       brk
-D3D5: 00       brk
-D3D6: 00       brk
-D3D7: 00       brk
-D3D8: FF 00 FE isb $fe00, x
-D3DB: 00       brk
-D3DC: FE 00 FF inc $ff00, x
-D3DF: 00       brk
-D3E0: FF 00 00 isb $0000, x
-D3E3: 00       brk
-D3E4: FF 00 FF isb $ff00, x
-D3E7: 00       brk
-D3E8: 00       brk
-D3E9: 00       brk
-D3EA: 00       brk
-D3EB: 00       brk
-D3EC: FF 00 FF isb $ff00, x
-D3EF: 00       brk
-D3F0: FF 00 FF isb $ff00, x
-D3F3: 00       brk
-D3F4: FF 00 01 isb $0100, x
-D3F7: 00       brk
-D3F8: FE 00 FE inc $fe00, x
-D3FB: 00       brk
-D3FC: FF 00 00 isb $0000, x
-D3FF: 00       brk
-D400: 00       brk
-D401: 00       brk
-D402: 01 00    ora ($00, x)
-D404: 00       brk
-D405: 00       brk
-D406: 00       brk
-D407: 00       brk
-D408: 00       brk
-D409: 00       brk
-D40A: 00       brk
-D40B: 00       brk
-D40C: 00       brk
-D40D: C0 02    cpy #$02
-D40F: 80 03    nop #$03
-D411: 80 05    nop #$05
-D413: 40       rti
-D414: 01 40    ora ($40, x)
-D416: 01 80    ora ($80, x)
-D418: FF 80 FF isb $ff80, x
-D41B: 80 00    nop #$00
-D41D: 80 00    nop #$00
-D41F: 80 00    nop #$00
-D421: 80 00    nop #$00
-D423: 80 00    nop #$00
-D425: 80 00    nop #$00
-D427: 80 00    nop #$00
-D429: 00       brk
-D42A: 00       brk
-D42B: 00       brk
-D42C: FF 00 FD isb $fd00, x
-D42F: 00       brk
-D430: FD 00 FD sbc $fd00, x
-D433: 00       brk
-D434: FD 00 FD sbc $fd00, x
-D437: C0 FD    cpy #$fd
-D439: C0 FD    cpy #$fd
-D43B: 80 FE    nop #$fe
-D43D: 80 FE    nop #$fe
-D43F: 80 FD    nop #$fd
-D441: 80 FD    nop #$fd
-D443: 40       rti
-D444: FC C0 FC nop $fcc0, x
-D447: C0 FD    cpy #$fd
-D449: 58       cli
-D44A: 38       sec
-D44B: E2 39    nop #$39
-D44D: C2 39    nop #$39
-D44F: 02       kil
-D450: 39 38 3A and $3a38, y
-D453: E4 38    cpx $38
-D455: 52       kil
-D456: 3A       nop
-D457: 22       kil
-D458: 39 6A 38 and $386a, y
-D45B: F4 39    nop $39, x
-D45D: D4 39    nop $39, x
-D45F: 14 39    nop $39, x
-D461: 46 3A    lsr $3a
-D463: F4 38    nop $38, x
-D465: 64 3A    nop $3a
-D467: 34 39    nop $39, x
-D469: 82 39    nop #$39
-D46B: A2 39    ldx #$39
-D46D: 42       kil
-D46E: 39 42 39 and $3942, y
-D471: C2 39    nop #$39
-D473: 42       kil
-D474: 39 E2 39 and $39e2, y
-D477: 42       kil
-D478: 39 94 39 and $3994, y
-D47B: B4 39    ldy $39, x
-D47D: 54 39    nop $39, x
-D47F: 54 39    nop $39, x
-D481: D4 39    nop $39, x
-D483: 54 39    nop $39, x
-D485: F4 39    nop $39, x
-D487: 54 39    nop $39, x
-D489: 42       kil
-D48A: 39 62 39 and $3962, y
-D48D: 42       kil
-D48E: 39 62 39 and $3962, y
-D491: 42       kil
-D492: 39 62 39 and $3962, y
-D495: 42       kil
-D496: 39 62 39 and $3962, y
-D499: 54 39    nop $39, x
-D49B: 74 39    nop $39, x
-D49D: 54 39    nop $39, x
-D49F: 74 39    nop $39, x
-D4A1: 54 39    nop $39, x
-D4A3: 74 39    nop $39, x
-D4A5: 54 39    nop $39, x
-D4A7: 74 39    nop $39, x
-D4A9: A2 39    ldx #$39
-D4AB: E2 39    nop #$39
-D4AD: 82 39    nop #$39
-D4AF: E2 39    nop #$39
-D4B1: E2 39    nop #$39
-D4B3: 82 39    nop #$39
-D4B5: 62       kil
-D4B6: 39 82 39 and $3982, y
-D4B9: B4 39    ldy $39, x
-D4BB: F4 39    nop $39, x
-D4BD: 94 39    sty $39, x
-D4BF: F4 39    nop $39, x
-D4C1: F4 39    nop $39, x
-D4C3: 94 39    sty $39, x
-D4C5: 74 39    nop $39, x
-D4C7: 94 39    sty $39, x
-D4C9: C2 39    nop #$39
-D4CB: 82 39    nop #$39
-D4CD: C2 39    nop #$39
-D4CF: 62       kil
-D4D0: 39 C2 39 and $39c2, y
-D4D3: 42       kil
-D4D4: 39 E2 39 and $39e2, y
-D4D7: E2 39    nop #$39
-D4D9: D4 39    nop $39, x
-D4DB: 94 39    sty $39, x
-D4DD: D4 39    nop $39, x
-D4DF: 74 39    nop $39, x
-D4E1: D4 39    nop $39, x
-D4E3: 54 39    nop $39, x
-D4E5: F4 39    nop $39, x
-D4E7: F4 39    nop $39, x
-D4E9: C2 39    nop #$39
-D4EB: 62       kil
-D4EC: 39 C2 39 and $39c2, y
-D4EF: C2 39    nop #$39
-D4F1: A2 39    ldx #$39
-D4F3: A2 39    ldx #$39
-D4F5: C2 39    nop #$39
-D4F7: 62       kil
-D4F8: 39 D4 39 and $39d4, y
-D4FB: 74 39    nop $39, x
-D4FD: D4 39    nop $39, x
-D4FF: D4 39    nop $39, x
-D501: B4 39    ldy $39, x
-D503: B4 39    ldy $39, x
-D505: D4 39    nop $39, x
-D507: 74 39    nop $39, x
-D509: 82 39    nop #$39
-D50B: C2 39    nop #$39
-D50D: A2 39    ldx #$39
-D50F: E2 39    nop #$39
-D511: C2 39    nop #$39
-D513: 62       kil
-D514: 39 E2 39 and $39e2, y
-D517: 82 39    nop #$39
-D519: 94 39    sty $39, x
-D51B: D4 39    nop $39, x
-D51D: B4 39    ldy $39, x
-D51F: F4 39    nop $39, x
-D521: D4 39    nop $39, x
-D523: 74 39    nop $39, x
-D525: F4 39    nop $39, x
-D527: 94 39    sty $39, x
-D529: 78       sei
-D52A: 38       sec
-D52B: 20 3A A8 jsr $a83a
-D52E: 38       sec
-D52F: 90 38    bcc $d569
-D531: E2 39    nop #$39
-D533: 82 39    nop #$39
-D535: C2 39    nop #$39
-D537: E2 39    nop #$39
-D539: 84 38    sty $38
-D53B: 2C 3A B6 bit $b63a
-D53E: 38       sec
-D53F: 9C 38 F4 shy $f438, x
-D542: 39 94 39 and $3994, y
-D545: D4 39    nop $39, x
-D547: F4 39    nop $39, x
-D549: 82 39    nop #$39
-D54B: 82 39    nop #$39
-D54D: E2 39    nop #$39
-D54F: C2 39    nop #$39
-D551: A2 39    ldx #$39
-D553: A2 39    ldx #$39
-D555: C2 39    nop #$39
-D557: A2 39    ldx #$39
-D559: 94 39    sty $39, x
-D55B: 94 39    sty $39, x
-D55D: F4 39    nop $39, x
-D55F: D4 39    nop $39, x
-D561: B4 39    ldy $39, x
-D563: B4 39    ldy $39, x
-D565: D4 39    nop $39, x
-D567: B4 39    ldy $39, x
-D569: E2 39    nop #$39
-D56B: 62       kil
-D56C: 39 82 39 and $3982, y
-D56F: E2 39    nop #$39
-D571: 82 39    nop #$39
-D573: 82 39    nop #$39
-D575: E2 39    nop #$39
-D577: E2 39    nop #$39
-D579: F4 39    nop $39, x
-D57B: 74 39    nop $39, x
-D57D: 94 39    sty $39, x
-D57F: F4 39    nop $39, x
-D581: 94 39    sty $39, x
-D583: 94 39    sty $39, x
-D585: F4 39    nop $39, x
-D587: F4 39    nop $39, x
-D589: C4 38    cpy $38
-D58B: C2 39    nop #$39
-D58D: 02       kil
-D58E: 3A       nop
-D58F: A2 39    ldx #$39
-D591: C2 39    nop #$39
-D593: C4 38    cpy $38
-D595: C4 38    cpy $38
-D597: E2 39    nop #$39
-D599: D6 38    dec $38, x
-D59B: D4 39    nop $39, x
-D59D: 12       kil
-D59E: 3A       nop
-D59F: B4 39    ldy $39, x
-D5A1: D4 39    nop $39, x
-D5A3: D6 38    dec $38, x
-D5A5: D6 38    dec $38, x
-D5A7: F4 39    nop $39, x
-D5A9: 82 39    nop #$39
-D5AB: E2 39    nop #$39
-D5AD: E2 39    nop #$39
-D5AF: A2 39    ldx #$39
-D5B1: E2 39    nop #$39
-D5B3: E2 39    nop #$39
-D5B5: C2 39    nop #$39
-D5B7: E2 39    nop #$39
-D5B9: 94 39    sty $39, x
-D5BB: F4 39    nop $39, x
-D5BD: F4 39    nop $39, x
-D5BF: B4 39    ldy $39, x
-D5C1: F4 39    nop $39, x
-D5C3: F4 39    nop $39, x
-D5C5: D4 39    nop $39, x
-D5C7: F4 39    nop $39, x
-D5C9: 00       brk
-D5CA: 01 02    ora ($02, x)
-D5CC: 03 04    slo ($04, x)
-D5CE: 00       brk
-D5CF: 05 00    ora $00
-D5D1: 00       brk
-D5D2: 06 00    asl $00
-D5D4: 00       brk
-D5D5: 07 00    slo $00
-D5D7: 08       php
-D5D8: 00       brk
-D5D9: 01 00    ora ($00, x)
-D5DB: 00       brk
-D5DC: 02       kil
-D5DD: 03 00    slo ($00, x)
-D5DF: 04 00    nop $00
-D5E1: 00       brk
-D5E2: 00       brk
-D5E3: 05 06    ora $06
-D5E5: 07 00    slo $00
-D5E7: 08       php
-D5E8: 00       brk
-D5E9: 00       brk
-D5EA: 01 00    ora ($00, x)
-D5EC: 02       kil
-D5ED: 00       brk
-D5EE: 03 00    slo ($00, x)
-D5F0: 04 00    nop $00
-D5F2: 05 00    ora $00
-D5F4: 06 00    asl $00
-D5F6: 07 00    slo $00
-D5F8: 08       php
-D5F9: 00       brk
-D5FA: 00       brk
-D5FB: 00       brk
-D5FC: 00       brk
-D5FD: 01 02    ora ($02, x)
-D5FF: 03 04    slo ($04, x)
-D601: 05 06    ora $06
-D603: 07 08    slo $08
-D605: 00       brk
-D606: 00       brk
-D607: 00       brk
-D608: 00       brk
-D609: 00       brk
-D60A: 01 00    ora ($00, x)
-D60C: 00       brk
-D60D: 02       kil
-D60E: 00       brk
-D60F: 03 04    slo ($04, x)
-D611: 00       brk
-D612: 05 00    ora $00
-D614: 06 07    asl $07
-D616: 00       brk
-D617: 00       brk
-D618: 08       php
-D619: 00       brk
-D61A: 01 02    ora ($02, x)
-D61C: 00       brk
-D61D: 03 04    slo ($04, x)
-D61F: 05 06    ora $06
-D621: 00       brk
-D622: 00       brk
-D623: 00       brk
-D624: 07 00    slo $00
-D626: 08       php
-D627: 00       brk
-D628: 00       brk
-D629: 00       brk
-D62A: 01 02    ora ($02, x)
-D62C: 00       brk
-D62D: 03 04    slo ($04, x)
-D62F: 00       brk
-D630: 00       brk
-D631: 05 00    ora $00
-D633: 06 07    asl $07
-D635: 08       php
-D636: 00       brk
-D637: 00       brk
-D638: 00       brk
-D639: 00       brk
-D63A: 00       brk
-D63B: 00       brk
-D63C: 01 02    ora ($02, x)
-D63E: 03 04    slo ($04, x)
-D640: 00       brk
-D641: 05 06    ora $06
-D643: 07 08    slo $08
-D645: 00       brk
-D646: 00       brk
-D647: 00       brk
-D648: 00       brk
-D649: 00       brk
-D64A: 00       brk
-D64B: 00       brk
-D64C: 01 02    ora ($02, x)
-D64E: 03 04    slo ($04, x)
-D650: 05 06    ora $06
-D652: 00       brk
-D653: 07 00    slo $00
-D655: 08       php
-D656: 00       brk
-D657: 00       brk
-D658: 00       brk
-D659: 7A       nop
-D65A: 20 66 E4 jsr $e466
+
+; INPUTS:	TEMP1: SECTOR POINTER
+;		*2
+;		BASTAT: CURRENT STATUS OF BASES
+;		XACCL,XACCH=POINTER TO LEFT MOST POINT OF
+;		SECTOR HORIZONTAL
+;		YACCL,YACCH=SAME POINTER FOR VERTICAL
+;
+; OUTPUTS:	BASES DRAWN
+;DBASE
+D65A: 20 66 E4 jsr $e466		;CENTER BEAM
 D65D: A5 21    lda $21
 D65F: 4A       lsr a
 D660: A8       tay
@@ -6298,7 +5877,7 @@ D6F4: A5 34    lda $34
 D6F6: 65 39    adc $39
 D6F8: 85 07    sta $07
 D6FA: A9 00    lda #$00
-D6FC: 85 0A    sta $0a
+D6FC: 85 0A    sta $0a    		;DRAW BLANK VECTOR THERE
 D6FE: A2 04    ldx #$04
 D700: 20 A9 E4 jsr $e4a9
 D703: A6 CF    ldx $cf
@@ -6312,267 +5891,95 @@ D712: AE AC 3A ldx $3aac
 D715: 4C 1E D7 jmp $d71e
 D718: AE AA 3A ldx $3aaa
 D71B: AD AB 3A lda $3aab
-D71E: 20 53 E4 jsr $e453
+D71E: 20 53 E4 jsr $e453   ;PUT JSRL INTO OPEN BUFFER
 D721: 60       rts
-D722: 20 80 80 jsr $8080
-D725: A0 20    ldy #$20
-D727: 60       rts
-D728: 00       brk
-D729: 00       brk
-D72A: 60       rts
-D72B: 00       brk
-D72C: 00       brk
-D72D: 00       brk
-D72E: 60       rts
-D72F: 60       rts
-D730: 00       brk
-D731: C0 00    cpy #$00
-D733: 00       brk
-D734: 24 EC    bit $ec
-D736: 1A       nop
-D737: 00       brk
-D738: 00       brk
-D739: 00       brk
-D73A: 00       brk
-D73B: 00       brk
-D73C: 00       brk
-D73D: 00       brk
-D73E: 00       brk
-D73F: 24 00    bit $00
-D741: F0 00    beq $d743
-D743: 00       brk
-D744: 00       brk
-D745: 00       brk
-D746: 0A       asl a
-D747: EE 04 00 inc $0004
-D74A: 00       brk
-D74B: 00       brk
-D74C: F8       sed
-D74D: 08       php
-D74E: 08       php
-D74F: 00       brk
-D750: 00       brk
-D751: 00       brk
-D752: 00       brk
-D753: 00       brk
-D754: C0 40    cpy #$40
-D756: 60       rts
-D757: C0 80    cpy #$80
-D759: 00       brk
-D75A: 00       brk
-D75B: 00       brk
-D75C: C0 A0    cpy #$a0
-D75E: 80 00    nop #$00
-D760: 40       rti
-D761: 40       rti
-D762: 00       brk
-D763: 00       brk
-D764: 02       kil
-D765: 00       brk
-D766: 00       brk
-D767: 08       php
-D768: 08       php
-D769: 00       brk
-D76A: 00       brk
-D76B: 00       brk
-D76C: 00       brk
-D76D: 00       brk
-D76E: 00       brk
-D76F: 04 04    nop $04
-D771: 00       brk
-D772: 00       brk
-D773: 20 60 00 jsr $0060
-D776: 00       brk
-D777: 20 40 00 jsr $0040
-D77A: 20 A0 20 jsr $20a0
-D77D: 00       brk
-D77E: 00       brk
-D77F: 40       rti
-D780: 80 00    nop #$00
-D782: 00       brk
-D783: 00       brk
-D784: 00       brk
-D785: 00       brk
-D786: 00       brk
-D787: 22       kil
-D788: F0 00    beq $d78a
-D78A: 30 30    bmi $d7bc
-D78C: 04 00    nop $00
-D78E: 00       brk
-D78F: 00       brk
-D790: 00       brk
-D791: 00       brk
-D792: 00       brk
-D793: 00       brk
-D794: 00       brk
-D795: 00       brk
-D796: 40       rti
-D797: C0 40    cpy #$40
-D799: 60       rts
-D79A: 20 C0 60 jsr $60c0
-D79D: 40       rti
-D79E: 00       brk
-D79F: 00       brk
-D7A0: 00       brk
-D7A1: 00       brk
-D7A2: A0 00    ldy #$00
-D7A4: 80 00    nop #$00
-D7A6: 80 60    nop #$60
-D7A8: 00       brk
-D7A9: 00       brk
-D7AA: 80 00    nop #$00
-D7AC: 80 00    nop #$00
-D7AE: 00       brk
-D7AF: 80 00    nop #$00
-D7B1: 60       rts
-D7B2: 00       brk
-D7B3: 00       brk
-D7B4: 00       brk
-D7B5: 00       brk
-D7B6: 00       brk
-D7B7: 00       brk
-D7B8: 00       brk
-D7B9: 00       brk
-D7BA: 20 00 00 jsr $0000
-D7BD: 00       brk
-D7BE: 00       brk
-D7BF: 00       brk
-D7C0: 00       brk
-D7C1: 00       brk
-D7C2: 00       brk
-D7C3: A0 60    ldy #$60
-D7C5: 60       rts
-D7C6: 80 40    nop #$40
-D7C8: 00       brk
-D7C9: 80 60    nop #$60
-D7CB: 00       brk
-D7CC: 60       rts
-D7CD: 00       brk
-D7CE: 60       rts
-D7CF: 00       brk
-D7D0: 60       rts
-D7D1: 00       brk
-D7D2: 60       rts
-D7D3: 00       brk
-D7D4: 20 00 00 jsr $0000
-D7D7: 60       rts
-D7D8: 00       brk
-D7D9: 60       rts
-D7DA: 40       rti
-D7DB: 40       rti
-D7DC: 40       rti
-D7DD: 60       rts
-D7DE: 60       rts
-D7DF: 60       rts
-D7E0: 00       brk
-D7E1: 00       brk
-D7E2: 00       brk
-D7E3: 00       brk
-D7E4: 00       brk
-D7E5: 00       brk
-D7E6: 00       brk
-D7E7: 00       brk
-D7E8: 00       brk
-D7E9: 00       brk
-D7EA: 2C 2C 12 bit $122c
-D7ED: 12       kil
-D7EE: 24 00    bit $00
-D7F0: 00       brk
-D7F1: 00       brk
-D7F2: 00       brk
-D7F3: 00       brk
-D7F4: 00       brk
-D7F5: A0 A0    ldy #$a0
-D7F7: 60       rts
-D7F8: 60       rts
-D7F9: 00       brk
-D7FA: 00       brk
-D7FB: 60       rts
-D7FC: 40       rti
-D7FD: 80 00    nop #$00
-D7FF: 00       brk
-D800: 00       brk
-D801: 00       brk
-D802: 00       brk
-D803: 00       brk
-D804: 00       brk
-D805: 10 40    bpl $d847
-D807: 00       brk
-D808: 20 00 00 jsr $0000
-D80B: 00       brk
-D80C: 00       brk
-D80D: 20 00 00 jsr $0000
-D810: 00       brk
-D811: 00       brk
-D812: 00       brk
-D813: 00       brk
-D814: 00       brk
-D815: 00       brk
-D816: 00       brk
-D817: 60       rts
-D818: 40       rti
-D819: 00       brk
-D81A: 00       brk
-D81B: A0 80    ldy #$80
-D81D: 00       brk
-D81E: 00       brk
-D81F: 00       brk
-D820: 00       brk
-D821: 00       brk
-D822: 00       brk
-D823: 00       brk
-D824: 00       brk
-D825: 00       brk
-D826: 00       brk
-D827: 00       brk
-D828: 00       brk
-D829: 00       brk
-D82A: 00       brk
-D82B: 00       brk
-D82C: F0 00    beq $d82e
-D82E: 00       brk
-D82F: 00       brk
-D830: 00       brk
-D831: 00       brk
-D832: 00       brk
-D833: 00       brk
-D834: 00       brk
-D835: 00       brk
-D836: 00       brk
-D837: 00       brk
-D838: 00       brk
-D839: 00       brk
-D83A: 20 80 00 jsr $0080
-D83D: 60       rts
-D83E: 60       rts
-D83F: 00       brk
-D840: 00       brk
-D841: 00       brk
-D842: C0 00    cpy #$00
-D844: 00       brk
-D845: 00       brk
-D846: A0 00    ldy #$00
-D848: 00       brk
-D849: 80 00    nop #$00
-D84B: 00       brk
-D84C: 00       brk
-D84D: 60       rts
-D84E: 00       brk
-D84F: A0 00    ldy #$00
-D851: 00       brk
-D852: 16 00    asl $00, x
-D854: 00       brk
-D855: 00       brk
-D856: 16 00    asl $00, x
-D858: 00       brk
-D859: 0A       asl a
-D85A: 00       brk
-D85B: 00       brk
-D85C: 00       brk
-D85D: 0A       asl a
-D85E: 00       brk
-D85F: 26 00    rol $00
-D861: 00       brk
+;SIFHOS:	.BYTE 32.,128.,128.,160.
+;	.BYTE 32.,96.,0,0
+;	.BYTE 96.,0,0,0
+;	.BYTE 96.,96.,0,192.
+;SIFVOS:	.BYTE 0,0,24,0EC
+;	.BYTE 1A,0,0,0
+;	.BYTE 0,0,0,0
+;	.BYTE 0,24,0,0F0
+;
+;DUFVOS: .BYTE 0,0,0,0
+;	.BYTE 0A,0EE,4,0
+;	.BYTE 0,0,0F8,8
+
+
+
+;CTFVOS: .BYTE 0,0,2,0
+;	.BYTE 0,8,8,0
+;	.BYTE 0,0,0,0
+;	.BYTE 0,4,4,0
+;
+;CTFHOS: .BYTE 0,20,60,0
+;	.BYTE 0,20,40,0
+;	.BYTE 20,0A0,20,0
+;	.BYTE 0,40,80,0
+;
+;
+;NIFVOS: .BYTE 0,0,0,0
+;	 .BYTE 0,22,0F0,0
+;	.BYTE 30,30,4,0
+;	.BYTE 0,0,0,0
+;
+;NIFHOS: .BYTE 0,0,0,0
+;	 .BYTE 40,0C0,40,60
+;	.BYTE 20,0C0,60,40
+;	.BYTE 0,0,0,0
+;
+;EAFHOS:	.BYTE 0A0,0,80,0,80,60,0,0
+;	.BYTE 80,0,80,0,0,80,0,60
+;	DFFVOS=VDDUCA
+;	NOFID=VDDUCA
+;	EAFVOS=VDDUCA
+;
+;BZFVOS: .BYTE 0,0,0,0
+;	.BYTE 0,0,0,0
+;	.BYTE 20,0,0,0
+;	.BYTE 0,0,0,0
+;
+;BZFHOS: .BYTE 0,0A0,60,60
+;	.BYTE 80,40,0,80
+;	.BYTE 60,0,60,0
+;	.BYTE 60,0,60,0
+;ERFHOS:	.BYTE 60,0,20,0
+;	.BYTE 0,60,0,60
+;	.BYTE 40,40,40,60
+;	.BYTE 60,60,0,0
+;ERFVOS:	.BYTE 0,0,0,0
+;	.BYTE 0,0,0,0
+;	.BYTE 2C,2C,12,12
+;	.BYTE 24,0,0,0
+;VLFHOS:	.BYTE 0,0,0,0A0
+;	.BYTE 0A0,60,60,0
+;	.BYTE 0,60,40,80
+;	.BYTE 0,0,0,0
+;VLFVOS:	.BYTE 0,0,0,10
+;	.BYTE 40,0,20,0
+;	.BYTE 0,0,0,20
+;	.BYTE 0,0,0,0
+;SUFHOS:	.BYTE 0,0,0,0,0,60,40,0
+;	.BYTE 0,0A0,80,0,0,0,0,0
+;SUFVOS:	.BYTE 0,0,0,0,0,0,0,0
+;	.BYTE 0,0,0F0,0,0,0,0,0
+;DFFHOS:	.BYTE 0,0,0,0,0,0,0,0
+;	.BYTE 20,80,0,60,60,0,0,0
+;DCFVOS:
+;DCFHOS:
+;FLFHOS:	.BYTE 0C0,0,0,0,0A0,0,0,80
+;	.BYTE 0,0,0,60,0,0A0,0,0
+;FLFVOS:	.BYTE 16,0,0,0,16,0,0,0A
+;	.BYTE 0,0,0,0A,0,26,0,0
+;	.BYTE 8,0,0,0
+;
+;DUFHOS: .BYTE 0,0,0C0,40
+;	.BYTE 60,0C0,80,0
+;	.BYTE 0,0,0C0,0A0
+;	.BYTE 80,0,40,40
+
+
 D862: A6 CF    ldx $cf
 D864: B5 4D    lda $4d, x
 D866: AA       tax
@@ -6590,11 +5997,11 @@ D880: 20 53 E4 jsr $e453
 D883: 60       rts
 D884: A6 CF    ldx $cf
 D886: B5 00    lda $00, x
-D888: C9 22    cmp #$22
+D888: C9 22    cmp #$22		; CATRM1
 D88A: F0 0B    beq $d897
-D88C: C9 24    cmp #$24
+D88C: C9 24    cmp #$24		; CATRM2
 D88E: F0 04    beq $d894
-D890: C9 08    cmp #$08
+D890: C9 08    cmp #$08		; CPLAY
 D892: D0 03    bne $d897
 D894: 4C B1 D8 jmp $d8b1
 D897: BC 3C 01 ldy $013c, x
@@ -6684,6 +6091,9 @@ D94B: 10 F2    bpl $d93f
 D94D: C6 24    dec $24
 D94F: 10 B7    bpl $d908
 D951: 4C 99 D9 jmp $d999
+
+;SCPHH:  .BYTE -2,0
+
 D954: FE 00 A0 inc $a000, x
 D957: 01 91    ora ($91, x)
 D959: 08       php
@@ -6798,12 +6208,14 @@ DA3E: C6 21    dec $21
 DA40: A6 21    ldx $21
 DA42: 10 C6    bpl $da0a
 DA44: 60       rts
-DA45: 74 74    nop $74, x
-DA47: A0 58    ldy #$58
-DA49: F8       sed
-DA4A: 08       php
-DA4B: FB FB A6 isb $a6fb, y
-DA4E: CF B5 00 dcp $00b5
+
+;LIVCOV: .BYTE 74,74
+;LIVCOH: .BYTE 0A0,58
+;LIVOSV: .BYTE 0F8,8
+;LIVOSH: .BYTE 0FB,0FB
+
+DA4D: A6 CF    ldx $cf                                             
+DA4F: B5 00    lda $00, x                                          B5 00
 DA51: C9 08    cmp #$08
 DA53: D0 33    bne $da88
 DA55: B5 4D    lda $4d, x
@@ -6867,10 +6279,10 @@ DACD: A9 00    lda #$00
 DACF: 18       clc
 DAD0: 20 47 DE jsr $de47
 DAD3: 60       rts
-DAD4: 00       brk
-DAD5: 02       kil
-DAD6: 06 12    asl $12
-DAD8: 20 A6 CF jsr $cfa6
+
+;SUBONS: .BYTE 0,2,6,12,20
+
+DAD9: A6 CF    ldx $cf
 DADB: B5 00    lda $00, x
 DADD: C9 08    cmp #$08
 DADF: D0 22    bne $db03
@@ -6963,48 +6375,25 @@ DB9B: C6 24    dec $24
 DB9D: C6 23    dec $23
 DB9F: 10 BB    bpl $db5c
 DBA1: 60       rts
-DBA2: 02       kil
-DBA3: 02       kil
-DBA4: FE FE FD inc $fdfe, x
-DBA7: FD 02 02 sbc $0202, x
-DBAA: 00       brk
-DBAB: 00       brk
-DBAC: 02       kil
-DBAD: 02       kil
-DBAE: FF FF FD isb $fdff, x
-DBB1: FD FF FF sbc $ffff, x
-DBB4: 02       kil
-DBB5: 02       kil
-DBB6: 20 20 00 jsr $0020
-DBB9: 00       brk
-DBBA: 60       rts
-DBBB: 60       rts
-DBBC: 00       brk
-DBBD: 00       brk
-DBBE: 00       brk
-DBBF: 00       brk
-DBC0: 00       brk
-DBC1: 00       brk
-DBC2: 90 90    bcc $db54
-DBC4: 80 80    nop #$80
-DBC6: 30 30    bmi $dbf8
-DBC8: 10 10    bpl $dbda
-DBCA: 02       kil
-DBCB: 02       kil
-DBCC: 02       kil
-DBCD: 02       kil
-DBCE: FD FD FD sbc $fdfd, x
-DBD1: FD FD FD sbc $fdfd, x
-DBD4: FF FF 02 isb $02ff, x
-DBD7: 02       kil
-DBD8: FF FF FD isb $fdff, x
-DBDB: FD 02 02 sbc $0202, x
-DBDE: 60       rts
-DBDF: 60       rts
-DBE0: 80 80    nop #$80
-DBE2: 60       rts
-DBE3: 60       rts
 
+MPOSVH: .BYTE 2,2,0FE,0FE,0FD,0FD,2,2,0,0
+	.BYTE 2,2,0FF,0FF,0FD,0FD,0FF,0FF,2,2
+
+MPOSVL: .BYTE 20,20,0,0,60,60,0,0,0,0
+
+	.BYTE 0,0,90,90,80,80,30,30,10,10
+
+MPOSHH: .BYTE 2,2,2,2,0FD,0FD,0FD,0FD,0FD,0FD
+	.BYTE -1,-1,2,2,-1,-1,-3,-3,2,2
+
+MPOSHL: .BYTE 60,60,80,80,60,60,0E0,0E0,0,0
+	.BYTE 0A0,0A0,0E0,0E0,-1,-1,10,10,0E0,0E0
+BOINDX: .BYTE 8,12,1C
+
+
+
+DBF5: A0 1F    ldy #$1f                                            
+DBF7: 84 23    sty $23                                             
 DBF9: A5 F2    lda $f2
 DBFB: 85 38    sta $38
 DBFD: A5 F3    lda $f3
@@ -7030,6 +6419,23 @@ DC27: C6 23    dec $23
 DC29: 10 DE    bpl $dc09
 DC2B: 60       rts
 
+;MSGCOV: .BYTE 0,0,0C0,0C0,0C0,60,5C,1C
+;	.BYTE 50,44,38,2C,20,14,00,5C
+;	.BYTE 34,28,0C8,28,14,0F0,0F0,0F0
+;	.BYTE 10,5C,28,28
+;
+;MSGCOH: .BYTE 0,0,0D0,0D0,0D0,6C,0D0,91
+;	.BYTE 0D6,0CA,0C7,0D0,0D0,0D9,18,0EC
+;	.BYTE 0E0,0DA,0D0,0E0,8,30,0C0,0B8
+;	.BYTE 0F0,0D6,0D8,0D8
+;
+;MSGNUM:	.BYTE 0,0,0B,9,9,0A,8,7
+;	.BYTE 0C,0D,0E,0F,10,11,1A,1B
+;	.BYTE 1C,1D,1E,1F,20,21,22,6
+;	.BYTE 23,24,25,26
+
+;DRANK
+DC80: AD 35 04 lda $0435                                          
 DC83: A0 07    ldy #$07
 DC85: 0A       asl a
 DC86: B0 03    bcs $dc8b
@@ -7046,14 +6452,13 @@ DC9B: 20 FC E1 jsr $e1fc
 DC9E: A0 1A    ldy #$1a
 DCA0: 20 FC E1 jsr $e1fc
 DCA3: 60       rts
-DCA4: E6 E6    inc $e6
-DCA6: E0 E8    cpx #$e8
-DCA8: DC D4 CC nop $ccd4, x
-DCAB: D0 12    bne $dcbf
-DCAD: 13 14    slo ($14), y
-DCAF: 15 16    ora $16, x
-DCB1: 17 18    slo $18, x
-DCB3: 19 A6 CF ora $cfa6, y
+
+;RANKH:	.BYTE 0E6,0E6,0E0,0E8,0DC,0D4,0CC,0D0
+
+;RANKNO: .BYTE 12,13,14,15,16,17,18,19
+
+	
+DCB4: A6 CF    ldx $cf                                             
 DCB6: B5 00    lda $00, x
 DCB8: C9 12    cmp #$12
 DCBA: F0 39    beq $dcf5
@@ -7427,6 +6832,34 @@ E1E8: A2 00    ldx #$00
 E1EA: 8E 08 68 stx $6808
 E1ED: 60       rts
 ; end of file "LOOSND.MAC"
+; start of file "LOOMSG.MAC"
+
+
+;********************************
+;*
+;*THIS PROGRAM HANDLES ALL MESSAGES FOR THE GAME OF LUNAR BATTLE.
+;*
+;********************************
+;	.SBTTL ******************
+;	.SBTTL *
+;	.SBTTL *PROGRAMMER: OWEN RUBIN
+;	.SBTTL * IMPROVER: RICH ADAM
+;	.SBTTL * MODELLED AFTER ED LOGG'S
+;	.SBTTL * DISK 77 & B49
+;	.SBTTL ******************
+;
+;ENTRY POINTS
+	.GLOBL VGMSG	;MESSAGE PROCESSOR
+	.GLOBL MESGPOS
+;
+
+;
+;
+; PASS XPOS=A, YPOS=X
+; WILL DO A CENTER THEN A CLEAR VECTOR TO POSITION
+;
+
+
 E1EE: 48       pha
 E1EF: 8A       txa
 E1F0: 48       pha
@@ -7436,6 +6869,12 @@ E1F5: AA       tax
 E1F6: 68       pla
 E1F7: A0 00    ldy #$00
 E1F9: 4C 8A E4 jmp $e48a
+;VGMSG-VECTOR GENERATOR MESSAGE PROCESSOR
+;
+;ENTRY	(Y)=MESSAGE NUMBER (0,1,2,...)
+;(X)=BRIGHTNESS
+;USES	A,X,Y(POINTR,POINTR+1),TEMP2,(VGLIST,VGLIST+1)
+
 E1FC: 84 22    sty $22
 E1FE: A9 00    lda #$00
 E200: A0 03    ldy #$03
@@ -7443,33 +6882,34 @@ E202: 20 5F E4 jsr $e45f
 E205: A4 22    ldy $22
 E207: A9 00    lda #$00
 E209: 0A       asl a
+;MESSAGES MAY OVERFLOW ONE PAGE
 E20A: 0A       asl a
 E20B: C0 1D    cpy #$1d
-E20D: 90 0A    bcc $e219
-E20F: 69 01    adc #$01
+E20D: 90 0A    bcc $e219   ;NO OVERFLOW
+E20F: 69 01    adc #$01    ;ADD TWO
 E211: AA       tax
 E212: 98       tya
 E213: 38       sec
-E214: E9 1D    sbc #$1d
+E214: E9 1D    sbc #$1d      ;REDUCE RELATIVE MESSAGE NUMBER
 E216: A8       tay
 E217: 10 01    bpl $e21a
-E219: AA       tax
+E219: AA       tax         ;4*LANGUAGE (0,4,8,OR 12.)
 E21A: BD 7B E2 lda $e27b, x
 E21D: 85 20    sta $20
-E21F: BD 7A E2 lda $e27a, x
-E222: 85 1F    sta $1f
+E21F: BD 7A E2 lda $e27a, x   ;CARRY IS CLEAR FROM ASL ABOVE
+E222: 85 1F    sta $1f        ;POINTR SETUP NOW
 E224: 18       clc
-E225: 71 1F    adc ($1f), y
+E225: 71 1F    adc ($1f), y   ;RELATIVE ADDRESS TO START OF MESSAGE
 E227: 85 1F    sta $1f
-E229: 90 02    bcc $e22d
+E229: 90 02    bcc $e22d      ;NO OVERFLOW
 E22B: E6 20    inc $20
-E22D: A0 00    ldy #$00
+E22D: A0 00    ldy #$00      ;Y DOUBLES AS INDEX FOR VGLIST AND POINTR
 E22F: A2 00    ldx #$00
 E231: A1 1F    lda ($1f, x)
 E233: 85 22    sta $22
 E235: 4A       lsr a
-E236: 4A       lsr a
-E237: 20 56 E2 jsr $e256
+E236: 4A       lsr a     ;2*INDEX
+E237: 20 56 E2 jsr $e256   ;PUT OUT CHARACTER AND UPDATE POINTR
 E23A: A1 1F    lda ($1f, x)
 E23C: 2A       rol a
 E23D: 26 22    rol $22
@@ -7477,28 +6917,28 @@ E23F: 2A       rol a
 E240: A5 22    lda $22
 E242: 2A       rol a
 E243: 0A       asl a
-E244: 20 5C E2 jsr $e25c
+E244: 20 5C E2 jsr $e25c		;PUT OUT CHARACTER
 E247: A1 1F    lda ($1f, x)
 E249: 85 22    sta $22
-E24B: 20 56 E2 jsr $e256
+E24B: 20 56 E2 jsr $e256		;PUT OUT CHARACTER AND UPDATE POINTR
 E24E: 46 22    lsr $22
-E250: 90 DF    bcc $e231
+E250: 90 DF    bcc $e231       ;NOT END OF LIST
 E252: 88       dey
-E253: 4C 72 E4 jmp $e472
-E256: E6 1F    inc $1f
-E258: D0 02    bne $e25c
+E253: 4C 72 E4 jmp $e472         ;UPDATE VGLIST POINTER
+E256: E6 1F    inc $1f      ;UPDATE INDIRECT POINTER TO CHARACTERS
+E258: D0 02    bne $e25c    ;NO OVERFLOW
 E25A: E6 20    inc $20
 E25C: 29 3E    and #$3e
-E25E: D0 04    bne $e264
+E25E: D0 04    bne $e264      ;NOT END OF LIST
 E260: 68       pla
-E261: 68       pla
-E262: D0 EE    bne $e252
+E261: 68       pla    ;PURGE RTS
+E262: D0 EE    bne $e252   ;RETURN
 E264: C9 0A    cmp #$0a
 E266: 90 02    bcc $e26a
 E268: 69 0D    adc #$0d
 E26A: AA       tax
-E26B: BD 46 4D lda $4d46, x
-E26E: 91 08    sta ($08), y
+E26B: BD 46 4D lda $4d46, x   ;VGMSGA-2 10. FOR A, 12. FOR B, ....
+E26E: 91 08    sta ($08), y		;PUT JSRL INTO VECTOR LIST
 E270: C8       iny
 E271: BD 47 4D lda $4d47, x
 E274: 91 08    sta ($08), y
@@ -7506,32 +6946,236 @@ E276: C8       iny
 E277: A2 00    ldx #$00
 E279: 60       rts
 
+;VGMSGT:	.WORD L0		;LANGUAGE TABLE POINTERS (SEE OPTSW 1)
+;	.WORD L02
+	
+;L0:	.BYTE 10$-L0,11$-L0,12$-L0,13$-L0
+;	.BYTE 14$-L0,15$-L0,16$-L0,17$-L0
+;	.BYTE 18$-L0,19$-L0,20$-L0,21$-L0
+;	.BYTE 22$-L0,23$-L0,24$-L0,25$-L0
+;	.BYTE 26$-L0,27$-L0,28$-L0,29$-L0
+;	.BYTE 30$-L0,31$-L0,32$-L0,33$-L0
+;	.BYTE 34$-L0,35$-L0,36$-L0,37$-L0
+;	.BYTE 38$-L0
+;
+;
+;10$:	ASCIN	^/PRESS START/
+;11$:	ASCIN	^/GAME OVER/
+;12$:	ASCIN	^/OUT OF FUEL/
+;13$:	ASCIN	^/SCORE/
+;14$:	ASCIN	^/FUEL/
+;15$:	ASCIN	^/LIVES/
+;16$:	ASCIN	^/ESCAPE TIME/
+;17$:	ASCIN	^/LINK/
+;18$:	ASCIN 	^/MISSION COMPLETE/
+;19$:	ASCIN	^/SHOOT REACTOR/
+;20$:	ASCIN	^/BONUS/
+;21$:	ASCIN	^/LINK ACTIVATED/
+;22$:	ASCIN	^/CONGRATULATIONS/
+;23$: 	ASCIN 	^/ENTER YOUR INITIALS/
+;24$: 	ASCIN	^/PRESS ROTATE BUTTONS/
+;25$:	ASCIN	^/TO CHANGE LETTERS/
+;26$:	ASCIN	^/TRACTOR TO SELECT/
+;27$:
+;28$:	ASCIN	^/FLUNKY/
+;29$:	ASCIN	^/GUNNER/
+;30$:	ASCIN	^/CO PILOT/
+;31$:	ASCIN	^/PILOT/
+;32$:	ASCIN	^/ACE PILOT/
+;33$:	ASCIN	^/KILLER PILOT/
+;34$:	ASCIN	^/PONTIUS PILATE/
+;35$:	ASCIN	^/GOTTA BE LUCKY/
+;36$:	ASCIN	^/ LIST/
+;37$:	ASCIN	^/PLAYER /
+;38$:	ASCIN	^/INSERT COIN/
+;L02:	.BYTE 39$-L02,40$-L02,41$-L02
+;	.BYTE 42$-L02,43$-L02,44$-L02,45$-L02
+;	.BYTE 46$-L02,47$-L02,48$-L02,49$-L02
+;	.BYTE 50$-L02,51$-L02,52$-L02,53$-L02
+;	.BYTE 54$-L02
+;39$:	ASCIN	^/1 COIN 1 PLAY/
+;40$:	ASCIN	^/ATARI MCMLXXXII/
+;41$:	ASCIN	^/CREDITS /
+;42$:	ASCIN	^/DANGER/
+;43$:	ASCIN	^/SHOOT BUNKERS/
+;44$:	ASCIN	^/TRACTOR FUEL/
+;45$:	ASCIN	^/SUPER BONUS/
+;46$:	ASCIN	^/NEXT SHIP/
+;47$: 	ASCIN	^/1 COIN 2 PLAYS/
+;48$:	ASCIN	^/2 COINS 1 PLAY/
+;49$:	ASCIN	^/ERASING/
+;50$:	ASCIN	^/FOR TEST/
+;51$:	ASCIN	^/PRESS START 1 AND FIRE/
+;52$:	ASCIN	^/CLEAR SCORES/
+;53$:	ASCIN	^/CLEAR TIMES/
+;54$:	ASCIN	^/CLEAR TIMES AND SCORES/
 
+; end of file 
+; start of file "VGUT.MAC"
+; VGUT-VECTOR GENERATOR UTILITIES
+
+;
+;DATE INITIATED:	10-OCT-79
+;PROJECT CHARGE #:	23803
+;
+;DISK #:	 	105, B46
+;
+;HARWARE REQUIREMENTS:	ANALOG AUTO-NORMALIZING VECTOR GENERATOR
+;
+;MEMORY REQUIREMENTS:	
+;	NOT APPLICABLE - SUBROUTINE
+;
+;INTERRUPT REQUIREMENTS:
+;	NOT APPLICABLE - SUBROUTINE
+;
+;ASSEMBLY COMMAND STRING:
+;	R MAC65
+;	DX1:VGUT,DK1:VGUT=DX1:VGUT/C
+;
+;LINK COMMAND STRING:
+;	NOT APPLICABLE - SUBROUTINE
+;
+;PROGRAM DESCRIPTION:
+;	A SET OF UTILITY ROUTINES FOR GENERATING
+;	VECTORS USING THE ANALOG AUTO-NORMALIZING VECTOR GENERATOR.
+;ZERO PAGE GLOBALS REQUIRED:
+;
+;	VGLIST:	THIS 2 BYTE VARIABLE CONTAINS THE CURRENT VECTOR GENERATOR RAM
+;		ADDRESS USED TO BUILD INSTRUCTIONS FOR THE VECTOR GENERATOR.
+;		IT SHOULD BE INITIALIZED BEFORE CALLING ANY OF THESE ROUTINES.
+;
+;	XCOMP:	THIS 4 BYTE VARIABLE IS USED TO CONTAIN THE X (LSB,MSB) COMPONENT
+;		AND Y (LSB,MSB) COMPONENT USED IN SEVERAL OF THE VECTOR INSTRUC-
+;		TIONS.  FOR THE VGVCTR ROUTINE THESE FIELDS ARE SIGNED 2'S
+;		COMPLEMENT NUMBERS.
+;
+;	VGBRIT: THIS VARIABLE IS USED BY VGVCTR AND VGSTAT TO GENERATE VECTORS
+;		WITH THE GIVEN BRIGHTNESS. IT'S VALUES ARE 0,10,20,30,
+;		40,...F0 WHERE 0 IS OFF AND F0 IS MAX BRIGHTNESS.
+;		IN THE VECTOR INSTRUCTIONS ONLY THE UPPER 3 BITS IS USED
+;		IF Z=1 IN THE VECTOR INSTRUCTIONS THEN THE LAST NON-ZERO
+;		Z IS USED.
+;
+;
+;EXTERNAL ENTRY POINTS REQUIRED:
+;
+;	VGMSGA:	THIS ENTRY POINT PROVIDES JSRL INSTRUCTIONS TO THE CHAR.X
+;		ROUTINES.  THIS ENTRY POINT IS PROVIDED BY VECAN.MAC.
+;
+;THESE ROUTINES WERE WRITTEN TO PROVIDE PROGRAMMERS USING LYLE RAIN'S VECTOR
+;GENERATOR A MEANS OF:
+;	1)	DYNAMICALLY GENERATING VECTORS JUST AS VECMAC ALLOWS STATIC
+;		GENERATION OF VECTORS.
+;	2)	DISPLAY NUMBERS WITH OR WITHOUT ZERO SUPPRESSION.
+;
+;EXAMPLE 1:
+;
+;	LDA I,VECRAM&0FF	;INITIALIZE VECTOR RAM POINTER
+;	STA VGLIST
+;	LDA I,VECRAM/100
+;	STA VGLIST+1
+;	JSR CENTER		;CENTER BEAM IN MIDDLE OF SCREEN.
+;	LDA I,256./4		;POSITION BEAM AT (256,256)
+;	LDX I,256./4
+;	JSR VGSVTR
+;	ETC....
+;
+;
+;EXAMPLE 2:
+;
+;	LDA PLAYER		;DISPLAY PLAYER NUMBER
+;	JSR VGHEX		;REMEMBER BEAM MUST BE POSITIONED CORRECTLY
+;	LDA SCORE1		;MSB OF SCORE
+;	LSR
+;	LSR
+;	LSR
+;	LSR
+;	SEC
+;	JSR VGHEXZ		;DISPLAY UPPER DIGIT WITH ZERO SUPPRESSION
+;	LDA SCORE1
+;	JSR VGHEXZ		;DISPLAY SECOND DIGIT WITH ZERO SUPPRESSION
+;	LDA SCORE0		;LSB OF SCORE
+;	PHP			;SAVE ZERO SUPPRESSION FLAG
+;	LSR
+;	LSR
+;	LSR
+;	LSR
+;	PLP
+;	JSR VGHEXZ		;DISPLAY THIRD DIGIT WITH ZERO SUPPRESSION
+;	LDA SCORE0
+;	JSR VGHEX		;DISPLAY LAST DIGIT
+;	ETC....
+
+;VGRTSL - ADD RTSL TO VECTOR LIST
+;
+;ENTRY	(VGLIST,VGLIST+1) = VECTOR LIST ADDRESS
+;EXIT	(VGLIST,VGLIST+1) = NEW VECTOR LIST ADDRESS
+;USES	A,Y,(VGLIST,VGLIST+1)
+
+;VGRTSL
 E40F: A9 C0    lda #$c0
 E411: D0 05    bne $e418
-E413: 20 66 E4 jsr $e466
-E416: A9 20    lda #$20
+;
+;ENTRY	(VGLIST,VGLIST+1) = VECTOR LIST ADDRESS
+;EXIT	(VGLIST,VGLIST+1) = NEW VECTOR LIST ADDRESS
+;USES	A,X,Y,(VGLIST,VGLIST+1)
+;VGHALT
+E413: 20 66 E4 jsr $e466   ;CENTER FIRST
+E416: A9 20    lda #$20    ;BXXX IS HALT
 E418: A0 00    ldy #$00
 E41A: 91 08    sta ($08), y
-E41C: 4C C3 E4 jmp $e4c3
-E41F: 90 04    bcc $e425
+E41C: 4C C3 E4 jmp $e4c3    ;ADD LAST BYTE
+
+;VGHEXZ - DISPLAY DIGIT WITH ZERO SUPPRESSION
+;
+;THIS ROUTINE WILL DISPLAY A DIGIT USING THE DEFAULT CHARACTER SIZE.
+;NO ATTEMPT IS MADE TO USE THE VARIABLE VGSIZE.
+;
+;ENTRY	(A) = LOWER 4 BITS TO BE DISPLAYED
+;	(C) = CARRY CLEAR IF NO ZERO SUPPRESSION
+;EXIT	(C) = CARRY CLEARED IF NON-ZERO DIGIT DISPLAYED
+;USES	A,X,Y,(VGLIST,VGLIST+1)
+
+;VGHEXZ
+E41F: 90 04    bcc $e425    ;IF NO ZERO SUPPRESSION
 E421: 29 0F    and #$0f
-E423: F0 05    beq $e42a
+E423: F0 05    beq $e42a    ;LEAVE C SET
+
+;VGHEX - DISPLAY DIGIT
+;
+;THIS ROUTINE WILL DISPLAY A DIGIT USING THE DEFAULT CHARACTER SIZE.
+;NO ATTEMPT IS MADE TO USE THE VARIABLE VGSIZE.
+;
+;ENTRY	(VGLIST,VGLIST+1) = VECTOR LIST ADDRESS
+;	(A) = LOWER 4 BITS TO BE DISPLAYED
+;EXIT	(VGLIST,VGLIST+1) = NEW VECTOR LIST ADDRESS
+;	(C) = CARRY IS CLEAR
+;USES	A,X,Y,(VGLIST,VGLIST+1)
+;VGHEX
 E425: 29 0F    and #$0f
 E427: 18       clc
-E428: 69 01    adc #$01
-E42A: 08       php
+E428: 69 01    adc #$01  ;CLEARS C BIT
+E42A: 08       php      ;SAVE C FLAG
 E42B: 0A       asl a
 E42C: A0 00    ldy #$00
 E42E: AA       tax
 E42F: BD 48 4D lda $4d48, x
 E432: 91 08    sta ($08), y
-E434: BD 49 4D lda $4d49, x
+E434: BD 49 4D lda $4d49, x   ;COPY JSRL TO CHARACTER ROUTINE
 E437: C8       iny
 E438: 91 08    sta ($08), y
-E43A: 20 72 E4 jsr $e472
-E43D: 28       plp
+E43A: 20 72 E4 jsr $e472    ;UPDATE VECTOR LIST POINTER
+E43D: 28       plp    ;RESTORE C FLAG
 E43E: 60       rts
+
+;VGJMPL - ADD JMPL TO VECTOR LIST
+;
+;ENTRY	(VGLIST,VGLIST+1) = VECTOR LIST ADDRESS
+;	(A) = MSB OF ADDRESS
+;	(X) = LSB OF ADDRESS
+;EXIT	(VGLIST,VGLIST+1) = NEW VECTOR LIST ADDRESS
+;USES	A,Y,(VGLIST,VGLIST+1)
+
 E43F: 38       sec
 E440: E9 20    sbc #$20
 E442: 4A       lsr a
@@ -7545,58 +7189,131 @@ E44D: 6A       ror a
 E44E: 91 08    sta ($08), y
 E450: C8       iny
 E451: D0 1F    bne $e472
+
+;VGJSRL - ADD JSRL TO VECTOR LIST
+;
+;ENTRY	(VGLIST,VGLIST+1) = VECTOR LIST ADDRESS
+;	(A) = MSB OF ADDRESS
+;	(X) = LSB OF ADDRESS
+;EXIT	(VGLIST,VGLIST+1) = NEW VECTOR LIST ADDRESS
+;USES	A,Y,(VGLIST,VGLIST+1)
+
 E453: 38       sec
 E454: E9 20    sbc #$20
 E456: 4A       lsr a
-E457: 29 1F    and #$1f
+E457: 29 1F    and #$1f         ;BASE ADDRESS IS RELATIVE
 E459: 09 A0    ora #$a0
-E45B: D0 EA    bne $e447
+E45B: D0 EA    bne $e447        ;MOVE INTO VECTOR LIST
+
+;VGSTAT - SET VECTOR GENERATOR STATUS
+;
+;ENTRY	(A)=HI/LOW AND IN/OUT FLAGS AND ENABLE (0,1,2,3,OR 4)
+;	(Y)=VECTOR BRIGHTNESS (0,10,20,...,F0)
+;	(VGLIST,VGLIST+1)=VECTOR LIST ADDRESS
+;EXIT	(VGLIST,VGLIST+1)=NEW VECTOR LIST ADDRESS
+;USES	A,X,Y,(VGLIST,VGLIST+1)
+
 E45D: A4 0A    ldy $0a
+;VGSTAT
 E45F: 09 60    ora #$60
-E461: AA       tax
+E461: AA       tax      ;OPCODE + LIMIT BITS
 E462: 98       tya
-E463: 4C 6A E4 jmp $e46a
+E463: 4C 6A E4 jmp $e46a     ;ADD 2 BYTES TO VECTOR LIST
+;VGCNTR - CENTER BEAM IN MIDDLE OF SCREEN
+;
+;ENTRY	(VGLIST,VGLIST+1)=VECTOR LIST ADDRESS
+;USES	A,X,Y,(VGLIST,VGLIST+1)
+;
 E466: A9 40    lda #$40
 E468: A2 80    ldx #$80
+
 E46A: A0 00    ldy #$00
 E46C: 91 08    sta ($08), y
 E46E: C8       iny
 E46F: 8A       txa
 E470: 91 08    sta ($08), y
-E472: 98       tya
+
+;VGADD - ADD Y+1 TO VECTOR LIST ADDRESS
+;
+;ENTRY	(VGLIST,VGLIST+1) = VECTOR LIST ADDRESS
+;	(Y) = VALUE+1 TO BE ADDED TO VECTOR LIST
+;EXIT	(VGLIST,VGLIST+1) = NEW VECTOR LIST ADDRESS
+;USES	A,(VGLIST,VGLIST+1)
+
+E472: 98       tya    ;ADD 1+(Y) TO VGLIST
 E473: 38       sec
 E474: 65 08    adc $08
 E476: 85 08    sta $08
 E478: 90 02    bcc $e47c
 E47A: E6 09    inc $09
 E47C: 60       rts
-E47D: A0 00    ldy #$00
-E47F: 09 70    ora #$70
+
+;VGSCAL-SET VECTOR GENERATOR SCALE
+;
+;ENTRY	(Y)=LINEAR SCALE FACTOR (0=FULL SIZE, FF=1/256 SIZE)
+;	(A)=POWER OF 2 SCALE FACTOR (0=FULL SIZE,1=1/2 SIZE,...)
+;	(VGLIST,VGLIST+1)=VECTOR LIST ADDRESS
+;EXIT	(VGLIST,VGLIST+1)=NEW VECTOR LIST ADDRESS
+;USES	A,X,Y(VGLIST,VGLIST+1)
+
+E47D: A0 00    ldy #$00   ;USE FULL SIZE
+E47F: 09 70    ora #$70   ;OPCODE + SCALE SIZE
 E481: AA       tax
 E482: 98       tya
-E483: 4C 6A E4 jmp $e46a
+E483: 4C 6A E4 jmp $e46a   ;ADD 2 BYTES TO VECTOR LIST
+;VGDOT - DRAW A DOT AT CURRENT POSITION
+;
+;ENTRY	(VGLIST,VGLIST+1) = VECTOR LIST ADDRESS
+;	(A) = INTENSITY (0 = OFF, EQ = MAX, 20 = INCREMENT)
+;EXIT	(VGLIST,VGLIST+1) = NEW VECTOR LIST ADDRESS
+;	(VGBRIT) = NEW INTENSITY
+;USES	A,Y,(VGLIST,VGLIST+1)
 E486: A8       tay
 E487: A9 00    lda #$00
 E489: AA       tax
+
+;VGVTR - SHORT FORM VGVCTR CALL
+;
+;ENTRY	(VGLIST,VGLIST+1) = VECTOR LIST ADDRESS
+;	(A) = CHANGE IN X/4 (-80 TO +7F)
+;	(X) = CHANGE IN Y/4 (-80 TO +7F)
+;	(Y) = VECTOR BRIGHTNESS (0,10,20,...,F0)
+;EXIT	(VGLIST,VGLIST+1) = NEW VECTOR LIST ADDRESS
+;	(VGBRIT)=NEW VECTOR BRIGHTNESS
+;USES	A,X,Y,(VGLIST,VGLIST+1),(XCOMP,XCOMP+3)
+
 E48A: 84 0A    sty $0a
 E48C: A0 00    ldy #$00
 E48E: 0A       asl a
-E48F: 90 01    bcc $e492
+E48F: 90 01    bcc $e492   ;SIGN EXTEND
 E491: 88       dey
-E492: 84 05    sty $05
+E492: 84 05    sty $05     ;WITH SCALE=0 A=1 MEANS=DOTS ON XY
 E494: 0A       asl a
 E495: 26 05    rol $05
 E497: 85 04    sta $04
-E499: 8A       txa
+E499: 8A       txa     ;WRITE Y VALUE TO XCOMP+2,XCOMP+3
 E49A: 0A       asl a
 E49B: A0 00    ldy #$00
-E49D: 90 01    bcc $e4a0
-E49F: 88       dey
+E49D: 90 01    bcc $e4a0   ;SIGN EXTEND
+E49F: 88       dey    ;Y=-1
 E4A0: 84 07    sty $07
 E4A2: 0A       asl a
 E4A3: 26 07    rol $07
 E4A5: 85 06    sta $06
 E4A7: A2 04    ldx #$04
+
+;VGVCTR - ADD VECTOR TO VECTOR LIST
+;
+;NOTE:	IF THE NUMBERS GIVEN ARE MORE THAN
+;	15 BITS IN SIGNIFICANCE THEN AN
+;	INCORRECT VECTOR WILL BE GENERATED
+;
+;ENTRY	(X) =4 ZERO PAGE LOCN.  CONTAINING (X LSB,X MSB,Y MSB,Y LSB)
+;	(VGLIST,VGLIST+1) = VECTOR LIST ADDRESS
+;	(VGBRIT)=VECTOR BRIGHTNESS (ONLY THE UPPER 3 BITS ARE USED)
+;EXIT	(VGLIST,VGLIST+1) = NEW VECTOR LIST ADDRESS
+;USES	A,X,Y,(VGLIST,VGLIST+1)
+
 E4A9: A0 00    ldy #$00
 E4AB: B5 02    lda $02, x
 E4AD: 91 08    sta ($08), y
@@ -7609,21 +7326,38 @@ E4B8: C8       iny
 E4B9: 91 08    sta ($08), y
 E4BB: B5 01    lda $01, x
 E4BD: 45 0A    eor $0a
-E4BF: 29 1F    and #$1f
-E4C1: 45 0A    eor $0a
+E4BF: 29 1F    and #$1f    ;CLEAR SIGN EXTENSION
+E4C1: 45 0A    eor $0a     ;COMBINE UPPER 3 BITS OF VGBRIT WITH X MSB
 E4C3: C8       iny
-E4C4: 91 08    sta ($08), y
-E4C6: D0 AA    bne $e472
-E4C8: 00       brk
+E4C4: 91 08    sta ($08), y     ;SET INTENSITY
+E4C6: D0 AA    bne $e472    ;ALWAYS - UPDATE VGLIST POINTER
+
+; end of file "VGUT.MAC"
+; start of file "LOOEAR.MAC"
+
+;	.TITLE	LOOEAR-LUNAR BATTLE EAROM
+;	.SBTTL	**************************
+;	.SBTTL	*			 *
+;	.SBTTL	*MODULE-LOOEAR		 *
+;	.SBTTL	*PROGRAMMER:DAVE THEURER *
+;	.SBTTL	*FUNCTION:LOONY EAROM	 *
+;	.SBTTL	*			 *
+;	.SBTTL	**************************
+;	.NLIST
+
+E4D4: A9 04    lda #$04
+E4D6: D0 06    bne $e4de
+E4D8: A9 03    lda #$03
+E4DA: D0 02    bne $e4de
 
 E4DC: A9 07    lda #$07
 E4DE: A0 FF    ldy #$ff
 E4E0: D0 08    bne $e4ea
-E4E2: A9 03    lda #$03
+E4E2: A9 03    lda #$03     ;WRITE HIGH SCORES & INITIALS
 E4E4: D0 02    bne $e4e8
-E4E6: A9 04    lda #$04
+E4E6: A9 04    lda #$04    ;REQUEST BOOKKEEPING UPDATE
 E4E8: A0 00    ldy #$00
-E4EA: 8C 70 01 sty $0170
+E4EA: 8C 70 01 sty $0170   ;DO NOT ZERO EAROM
 E4ED: 48       pha
 E4EE: 0D 71 01 ora $0171
 E4F1: 8D 71 01 sta $0171
@@ -7631,21 +7365,29 @@ E4F4: 68       pla
 E4F5: 0D 72 01 ora $0172
 E4F8: 8D 72 01 sta $0172
 E4FB: 60       rts
-E4FC: A9 07    lda #$07
+E4FC: A9 07    lda #$07		;READ IN EVERYTHING
 E4FE: 8D 71 01 sta $0171
 E501: A9 00    lda #$00
 E503: 8D 72 01 sta $0172
+;INPUT:EAFLG:0=NO ACTIVITY;80=ERASE;40=WRITE;20=READ
+;      EAX:INDEX INTO EADAL OF LOC TO ACCESS IN EAROM
+;      EABC:OFFSET FROM @EASRCE OF RAM DATA TO ACCESS
+;      EACNT:EAROM OFFSET OF LAST BYTE TO MODIFY (STOP WHEN EAX>EACNT)
+;
+;OUTPUT:EAROM ERASED, WRITTEN TOO, OR READ
+;
+;EAUPD
 E506: AD 74 01 lda $0174
 E509: D0 4B    bne $e556
 E50B: AD 71 01 lda $0171
 E50E: F0 46    beq $e556
 E510: A2 00    ldx #$00
-E512: 8E 75 01 stx $0175
-E515: 8E 79 01 stx $0179
-E518: 8E 78 01 stx $0178
+E512: 8E 75 01 stx $0175    ;ZERO SOURCE INDEX
+E515: 8E 79 01 stx $0179    ;ZERO CHECKSUM
+E518: 8E 78 01 stx $0178    ;ZERO SELECT BIT
 E51B: A2 08    ldx #$08
 E51D: 38       sec
-E51E: 6E 78 01 ror $0178
+E51E: 6E 78 01 ror $0178   ;LOOP UNTIL 1ST BIT ON LEFT IS FOUND
 E521: 0A       asl a
 E522: CA       dex
 E523: 90 F9    bcc $e51e
@@ -7653,7 +7395,7 @@ E525: A0 80    ldy #$80
 E527: AD 78 01 lda $0178
 E52A: 2D 72 01 and $0172
 E52D: D0 02    bne $e531
-E52F: A0 20    ldy #$20
+E52F: A0 20    ldy #$20   ;DEFAULT TO ERASE/WRITE
 E531: 8C 74 01 sty $0174
 E534: AD 78 01 lda $0178
 E537: 4D 71 01 eor $0171
@@ -7733,8 +7475,11 @@ E5E7: EE 76 01 inc $0176
 E5EA: 8C 00 89 sty $8900
 E5ED: 98       tya
 E5EE: D0 03    bne $e5f3
-E5F0: 4C 06 E5 jmp $e506
+E5F0: 4C 06 E5 jmp $e506    ;YES. DO ALL READS AT ONCE
 E5F3: 60       rts
+
+; end of file "LOOEAR.MAC"
+
 E5F4: 78       sei
 E5F5: D8       cld
 E5F6: A9 FF    lda #$ff
@@ -7822,14 +7567,322 @@ E69D: A9 80    lda #$80
 E69F: 8D FE 26 sta $26fe
 E6A2: 8D FE 27 sta $27fe
 E6A5: 4C 4E E6 jmp $e64e
-E6A8: 01 01    ora ($01, x)
-E6AA: 15 2B    ora $2b, x
+
+; start of file "COIN65.MAC"
+;        .SBTTL COIN65 - 650X "UNIVERSAL" COIN ROUTINE
+;        .SBTTL *********************************
+;        .SBTTL * PROGRAMERS: DOWNEND & ALBAUGH *
+;        .SBTTL *                               *
+;        .SBTTL * CHECKER:                      *
+;        .SBTTL *                               *
+;        .SBTTL *********************************
+;
+;	SLAM=0
+;	BONADD=1
+;	MECHS=3
+;	EMCTRS=3
+;	COIN=0
+;	COIN01=1
+;        .SBTTL EXPLANATION
+;	.RAD=10
+;        .RADIX 16
+;	.ENABL LC
+;        .LIST MEB
+;;THIS IS A MAJOR REVISION OF THE COIN ROUTINE DERIVED FROM PENNY.
+;;ALL NEW PROGRAMS SHOULD USE THIS ROUTINE.  OLD PROGRAMS CAN CONTINUE
+;;TO USE PENNY, BUT NO FURTHER OPTIONS WILL BE SUPPORTED IN PENNY.
+;;REVISED 7/80 TO SUPPORT BONUS-ADDER
+;        .SBTTL DEFAULT ASSIGNMENTS
+;        .LIST CND
+;	.IIF NDF,FTEST,FTEST=0		;NOT FIELD TEST
+;        .IIF NDF,MODES,MODES=4          ;FOUR COIN MODES STANDARD
+;					;ALTERNATE IS MODES=0
+;	.IIF NDF,MECHS,MECHS=3		;# OF MECHS (1,2 OR 3)
+;	.IIF NDF,INCLUDE,INCLUDE=0	;NOT ".INCLUDE"'D
+;;IF "INCLUDE=1",THE ".END" IS SUPPRESSED
+;	.IIF NDF,RTS,RTS=1		;EXIT VIA RTS
+;;IF RTS=0,EXITS BY FALLING OUT
+;	.IIF NDF,BONADD,BONADD=0	;DO NOT BONUS-ADDER,BONADD=1 TO DO BONUS ADDER
+;	.IF EQ,MECHS-3			;DEFAULTS FOR MECHS=3
+;	.IIF NDF,MULTS,MULTS=1   		;IMPLEMENT H.DELMAN STANDARD MULTIPLIERS
+;					        ;(SEE GHM,GDM BELOW)
+;	.IIF NDF,EMCTRS,EMCTRS=3         	;3 ELECTRO-MECH COUNTERS
+;	.IIF NDF,OFFSET,OFFSET=1		;OFFSET BY 1
+;	.ENDC				;EQ,MECHS-3
+;	
+;	.IF EQ,MECHS-2			;DEFAULTS FOR MECHS=2
+;	.IIF NDF,MULTS,MULTS=0	   		;MULTIPLIERS DO NOT APPLY
+;	.IIF NDF,EMCTRS,EMCTRS=0	   	;NO E.M. COUNTERS
+;        .IIF NDF,OFFSET,OFFSET=2	   	;SWITCHES AND STATUS BYTES TWO-APART
+;	.ENDC				;EQ, MECHS-2
+;
+;	.IF EQ,MECHS-1			;DEFAULTS FOR MECHS=1
+;	.IIF NDF,MULTS,MULTS=1			;H. DELMAN STD. MULTS
+;	.IIF NDF,EMCTRS,EMCTRS=1		;1 COUNTER
+;	.IIF NDF,OFFSET,OFFSET=1		;OFFSET FOR COUNTERS
+;	.ENDC				;EQ,MECHS-1
+;
+;	.IIF NDF,SEPCCT,SEPCCT=0	;DO NOT IMPLEMENT SEPARATE $CNCT'S
+;;USE SEPCCT=1 ONLY FOR WIERD,NON-STANDARD MECH-MULTIPLIERS
+;        .IIF NDF,COIN,COIN=0            ;COIN IS LOW-TRUE
+;        .IIF NDF,CNTINT,CNTINT=1        ;COUNT INTERRUPTS (IN $INTCT)
+;        .IIF NDF,SLAM,SLAM=1            ;SLAM IS HIGH-TRUE
+;        .IIF NDF,CMZP,CMZP=1            ;COIN MODE IS IN ZERO-PAGE
+;;D0,D1=0,1,2,3 FOR FREE, 2 PLAY/COIN, 1 PLAY/COIN,2 COIN/PLAY
+;;D2,D3=0,1,2,3 FOR 1,4,5,6 "UNITS"/RIGHT COIN
+;;D4=0,1 FOR 1,2 "UNITS"/MIDDLE COIN
+;;ONLY D2,3,4 USED IF MODES=0
+;        .IIF NDF,COIN67,COIN67=0        ;COINS NOT IN D7,D6 OF SAME BYTE
+;	.IIF NDF,COIN01,COIN01=0	;COINS NOT IN D0,D1 EITHER
+;        .IIF NDF,PRST,PRST=30.          ;PRE-COIN SLAM KILLS COINS FOR 30 FRAMES
+;        .IIF NDF,POST,POST=30.          ;POST-COIN SLAM KILLS COINS WITHIN 30 FRAMES
+;	.IF NE,<EMCTRS>*<EMCTRS-1>*<EMCTRS-3>*<EMCTRS-4>
+;	.ERROR		;NONE,ONE,THREE, OR FOUR E.M.CTRS ONLY
+;	.ENDC
+;	.IF NE,FTEST
+;	CCTRS	=1			;FIELD TEST, 1 COIN COUNTER
+;	.IFF
+;	CCTRS	=EMCTRS			;NORMALLY
+;	.ENDC
+;        .IF NE,CMZP
+;;IF YOU USE CMZP=0, DEFINE EQUIVALENT MACROS
+;;(GCM NOT NEEDED IF MODES=0)
+;        .MACRO GCM
+;;ACC0,ACC1:=COIN OPTION ACC 2-7=0,Z-FLAG SET PER ACC  CARRY IS DON'T CARE.
+;        LDA Z,$CMODE			;GET COIN MODE FROM ZERO-PAGE
+;	.IF NE,MULTS
+;	AND I,3				;ISOLATE COINS-CREDITS OPTION
+;	.ENDC				;NE,MULTS
+;        .ENDM
+;
+;;GHM, GDM NOT NEEDED IF MULTS=0
+;	.MACRO GHM
+;;ACC=0 FOR 1 "UNIT" ,<>0 FOR 2 "UNITS" PER MIDDLE-MECH COIN.
+;;  Z FLAG SET PER ACC.  CARRY IS DON'T CARE
+;	LDA Z,$CMODE			;GET COIN MODE FROM ZERO-PAGE
+;	AND I,10			;ISOLATE HALF-MULTIPLIER
+;	.ENDM
+;
+;	.MACRO GDM
+;;ACC=0,1,2,3 FOR 1,4,5,6 "UNITS" PER RIGHT-MECH COIN.  CARRY CLEAR.  Z-FLAG SET PER ACC
+;	LDA Z,$CMODE
+;	AND I,0C
+;	LSR
+;	LSR
+;	.ENDM
+;        .ENDC			;NE,CMZP
+;	.MACRO GBAM
+;;ACC= 0,1,2,3,4,5,6,7 FOR BONUS-ADDER MODE
+;	LDA Z,$CMODE
+;	LSR
+;	LSR
+;	LSR
+;	LSR
+;	LSR			;ISOLATE BONUS-ADDER MODE IN BITS 0-2
+;	.ENDM
+;        .NLIST CND
+;	.NLIST CND
+;;ENTRY POINT
+;        .GLOBL MOOLAH
+;;
+;;EXTERNAL REFERENCES
+;	.IF NE,BONADD
+;	.GLOBL $BCCNT
+;	.GLOBL $BC
+;	.ENDC
+;	.IF NE,MODES!MULTS
+;	.IF NE,CMZP
+;        .GLOBL $CMODE                   ;INPUT COIN MODE
+;	.ENDC				;NE, CMZP
+;	.ENDC				;NE,MODES!MULTS
+;        .GLOBL $COINA,$LAM              ;SWITCH LOCATIONS (COIN & SLAM)
+;        .GLOBL $LMBIT                   ;MASK WITH 1 IN BIT WHERE SLAM SW. IS
+;        .GLOBL $CNSTT,$PSTSL		;INTERNAL LOCATIONS
+;	.GLOBL $INTCT			;INTERRUPT COUNTER
+;        .GLOBL $LMTIM,$CNCT             ;SLAM-TIMER, COINCOUNT
+;	.IF NE,MODES
+;        .GLOBL $$CRDT                   ;RESULT OF ALL THIS
+;	.ENDC				;NE,MODES
+;	.IF NE,EMCTRS
+;	.GLOBL $CCTIM			;COIN-COUNTER TIMER BYTE(S)
+;	.ENDC				;NE,EMCTRS
+;        .IF NE,MODES*<MODES-4>
+;        .ERROR   ;2 FLAVORS-0 OR 4 MODES
+;        .ENDC				;NE,MODES*<MODES-4>
+;	.IF NE,<MECHS-2>*<MECHS-3>*<MECHS-1>	;CHECK # OF MECHS SPEC'D
+;	.ERROR ;1, 2 OR 3 MECHS ONLY, PLEASE
+;	.ENDC				;NE,<MECHS-2>*<CMECHS-3>*<MECHS-1>
+;	.IF EQ,RTS!INCLUDE
+;	.ERROR ;NO RTS, NO INCLUDE???
+;	.ENDC			;RTS!INCLUDE
+;	.IF NE,MULTS*SEPCCT
+;	.ERROR ;BOTH MULTS AND SEPCCT?!?
+;	.ENDC				;NE,MULTS*SEPCCT
+;	.IF NE,MODES*SEPCCT
+;	.ERROR ;SEPCCT AND MODES TOO?!?
+;	.ENDC				;NE,MODES*SEPCCT
+;        .IIF GT,PRST-31.,PRST=31.
+;        .IIF GT,POST-63.,POST=63.
+;;        The coin routine assumes the presence of the following .GLOBL variables:
+;	.IF NE,BONADD
+;	.REPT 0
+;$BCCNT:	ONE BASE PAGE BYTE USED TO COUNT COINS TOWARDS
+;	BONUS COINS. IT MUST BE INITIALIZED TO ZERO ON
+;	POWER-ON. IT MUST ALSO BE INITIALIZED TO ZERO
+;	WHEN A START-BUTTON IA PUSHED.
+;$BC:	ONE BASE-PAGE BYTE USED TO
+;	HOLD ACTUAL BONUS COINS ACCRUED.
+;	INITIALIZE TO ZERO AT POWER-ON
+;	AND EACH TIME A START BUTTON IS
+;	PUSED.***CLEAR $BCCNT, THEN & BC.
+;	.ENDR
+;	.ENDC
+;	.IF NE,MODES
+;	.REPT 0
+;$$CRDT:   Base page byte initialized to 0 on restart.  This is where accrued  credit
+;        is  kept.   Should  be  decremented  for each player-start.  Note that a DECREMENT
+;        instruction must be used to insure  mutual  exclusion  between  the  main  program
+;        accessing  $$CRDT  and  the  interrupt-driven coin routine accessing $$CRDT".  Not
+;        used if MODES=0
+;	.ENDR
+;	.ENDC			;NE,MODES
+;	.IF NE,CMZP
+;	.REPT 0
+;	.IIF NDF,SEPCCT,SEPCCT=0	;DO NOT IMPLEMENT SEPARATE $CNCT'S
+;$CMODE:   Base page byte that contains the coin option  switches  in  its  low-order
+;        bits  (high true).  You must put them there.  This is not used if flag CMZP=0.
+;	See bit definitions in DEFAULT ASSIGNMENTS, and Macro definitions GCM,GHM,GDM.
+;	.ENDR
+;	.ENDC			;NE,CMZP
+;	.REPT 0
+;$CNSTT:   "MECHS" base page bytes ($CNSTT, $CNSTT+OFFSET,$CNSTT+2*OFFSET) which should be
+;	initialized to 00 (the timers for coin detection).
+;$COINA:   "MECHS" locations containing coin switches in D7. Left mech is at  $COINA,  Right
+;        mech is  at  $COINA+(2*OFFSET). If COIN67=1, Switches  are  all in $COINA, D7-Right,
+;	D6-Mid, D5-Left. If Coin01=1, D0-Right,	D1-MId, D2-Left.
+;	.ENDR
+;	.IF NE,SEPCCT
+;	.REPT 0
+;$CNCT:    "MECHS" base page bytes ($CNCT, $CNCT+OFFSET, $CNCT+(2*OFFSET)) which must be zeroed
+;	 on pwron - coin counters for program (As distinct from $CCTIM,Below). Only one is used
+;	if SEPCCT=0.
+;	.ENDR
+;	.IFF
+;	.REPT 0
+;$CNCT:	  Base page byte which must be initialized to zero on pwron. This is used to count
+;	coins for program (As distinct from $CCTIM, below).
+;	.ENDR
+;	.ENDC			;NE,SEPCCT
+;	.REPT 0
+;$PSTSL:   "MECHS" base page bytes  ($PSTSL, $PSTSL+OFFSET,$PSTSL+(2*OFFSET)used to
+;	time post-coin slam.
+;$LAM:     Address of the SLAM switch.  The bit position inside $LAM is specified  by
+;       $LMBIT (see below)
+;$LMBIT:  Mask used to select which bit in the slam switch  byte  should  be  tested
+;        (used as I,$LMBIT).  NOT A LOCATION, JUST A VALUE!!
+;$LMTIM:   Base  page  byte  used  as  a  timer  for  pre-slam  protection.   May  be
+;        initialized  to  0FF  at  pwron  to  disallow  coin input for 4 seconds.  Coins are
+;        disallowed for two frames anyway.  This will be non-zero if SLAM was
+;	true within PRST*4 frames.
+;$INTCT:  Interrupt counter for  long  string-timer.   If  CNTINT=1,  this  will  be
+;        incremented  (default  case).   If CNTINT=0, this should be equated to an existing
+;        counter.
+;$CCTIM:  Timers(s) for pulses output to electro-mechanical counters, if EMCTRS > 0.
+;	Sign of $CCTIM(X) set if assoc. coin counter should be turned on, cleared
+;	for off. If 3 used, they are Left @ $CCTIM, Mid @ $CCTIM+OFFSET,
+;	Right @ $CCTIM+(2*OFFSET)
+;Space requirements:
+;                RAM: 3+CMZP+2*MECHS+EMCTRS (13. TYPICAL)
+;                ROM: About 200. bytes
+;The coin routine also assumes it will be called 4 times  a  frame,  where  one  frame=1/60
+;second.   In  most  cases  this may be accomplished by making the coin routine part of the
+;interrupt routine.
+;	.ENDR
+;	.IF EQ,OFFSET-2
+;	.REPT 0
+;SAMPLE BASE PAGE ALLOCATION:  (WHERE OFFSET=2,MECHS=3)
+;	$BCCNT:	.BLKB 1		;COUNT TOWARDS BONUS COIN
+;	$BC:	.BLKB 1		;BONUS COINS
+;	$CCTIM:	.BLKB 1		;COIN COUNTER TIMER (IF 1 USED)
+;        $$CRDT: .BLKB 1		;CREDIT TOTAL
+;        $CNCT:  .BLKB 1		;COIN COUNT
+;	$LMTIM:	.BLKB 1		;PRE-COIN SLAM-TIMER
+;	$CMODE:	.BLKB 1		;COIN MODE
+;        $PSTSL: .BLKB 6		;POST-COIN SLAM TIMERS (@ 0,2,4)
+;        $CNSTT  =$PSTSL+1	;COIN STATUS/TIMERS (@ 1,3,5)
+;        .ENDR
+;	.ENDC			;EQ,OFFSET-2
+;	.IF EQ,OFFSET-1
+;	.REPT 0
+;SAMPLE BASE PAGE ALLOCATION: (WHERE OFFSET=1,MODES=4)
+;	$BCCNT:	.BLKB 1		;COUNT TOWARDS BONUS COIN
+;	$BC:	.BLKB 1		;BONUS COINS
+;	$CCTIM:	.BLKB EMCTRS	;E.M. COUNTER TIMERS (-FOR ON)
+;	$$CRDT:	.BLKB 1		;CREDIT TOTAL
+;	$CNCT:	.BLKB 1		;"UNIT-COIN" COUNT
+;	$PSTSL:	.BLKB MECHS	;POST-COIN SLAM TIMERS
+;	$CNSTT:	.BLKB MECHS	;COIN-STATUS/TIMER
+;	$LMTIM:	.BLKB 1		;PRE-COIN SLAM TIMER
+;	$CMODE:	.BLKB 1		;COIN MODE
+;	.ENDR
+;	.ENDC			;EQ,OFFSET-1
+;        .IF EQ,MODES-4
+;        .REPT 0
+;THE COIN MODES ARE:
+;  0:    FREE PLAY- $CNCT is zeroed, $$CRDT is not changed
+;  1:    2 PLAYS PER COIN
+;  2:    1 PLAY PER COIN
+;  3:    2 COINS PER PLAY
+;        .ENDR
+;        .ENDC			;EQ,MODES-4
+;        .REPT 0
+;                   *** COIN DETECTION ***
+;Coin detection, courtesy of Mike Albaugh, uses two counters in one  byte  ($CNSTT).   This
+;byte  is  used to remember the condition of the coin switch.  The upper counter (D7,D6,D5)
+;runs when the coin is absent and is reset when the coin is  present.   The  lower  counter
+;(D4-D0)  runs  when  the  coin is present and is reset when the coin is absent, unless the
+;coin was present for 5 successive samples.  This "unless"  enables  $CNSTT  to  "remember"
+;that a coin has been VALID-HIGH while waiting for VALID-LOW.
+;Basically, a valid coin is defined as between 16 and 800 ms of coin present, preceded  and
+;followed  by  33 ms of coin absent.  The 33 ms lows need not immediately precede or follow
+;the high.  The lower five bits count  down  from  31  when  the  coin  is  present.   This
+;countdown  is  fast  (once  per  interupt)  for the first five samples (31-26, about 16-20
+;milliseconds) then slow (once per EIGHT interrupts) for the remaining counts (26-0,  about
+;800  ms).   The  count  then  stops  at zero.  This counter is reset if the coin goes away
+;during the first five counts, I.E., the coin must be present for at least  16  ms.   After
+;that  the coin must go away for eight counts to reset it.  This is because after the first
+;five counts a coin is VALID HIGH and must not be reset until VALID LOW occurs  to  prevent
+;mid-coin glitches from making a valid coin into 0 or 2 (or more) coins.
+;
+;The upper three bits count up from zero when the coin is absent.  The count  is  reset  if
+;coin  is  ever  found  present.   When  the  count  finally wraps (8 samples, 33 ms).  The
+;coin-present counter is checked.  A count from 27-31 (less than 16-20 ms) is too short.  A
+;count of 0 (more than 800 ms) is too long.  Both of these cases are simply reset to 31.  A
+;count of 1-26 is a (tentatively) valid coin.  The counter is again set to 31, but  another
+;counter ($PSTSL) is started.
+;
+;$PSTSL is the POST-COIN-SLAM timer.  Initially  set  to  120,  it  counts  down  once  per
+;interrupt  (4  times per frame) to give a nominal 1/2 second delay.  If the slam switch is
+;seen during this time, $PSTSL is cleared, invalidating the coin.  The length of the  delay
+;(in  frames)  is  defined by POST which defaults to 30.  It may be set as high as 63 (1.05
+;seconds) by definition E.G.
+;
+;        POST=50         ;POST-SLAM=50 FRAMES
+;
+;SIMILARY A SLAM IS "REMEMBERED" FOR PRST frames (default=30, max=31) and no  coin  can  be
+;"seen" during this time.
+;
+;Note that the proper initial  state  of  all  these  counters  etc  is  0,  therefore  the
+;traditional power-on clear does the trick.  Since coins "transit" from $CNSTT to $PSTSL to
+;$CNCT to $$CRDT, locations should be cleared in that order, I.E.   $$CRDT  should  be  the
+;last location cleared. ($$CRDT, of course, exists only if MODES=4)
 
 
+E72A: A2 02    ldx #$02       ;X IS USED TO INDEX FROM RIGHT TO LEFT COIN MECH
 E72C: AD 00 78 lda $7800            ;GET COIN SWITCHES
-E72F: E0 01    cpx #$01
-E731: F0 03    beq $e736
-E733: B0 02    bcs $e737
+E72F: E0 01    cpx #$01          ;WHICH MECH ARE WE DOING
+E731: F0 03    beq $e736     ;MIDDLE (X=OFFSET) SHIFT TWICE
+E733: B0 02    bcs $e737     ;RIGHT (X=2*OFFSET) SHIFT ONCE
 E735: 4A       lsr a		;ELSE LEFT, SHIFT THRICE
 E736: 4A       lsr a
 E737: 4A       lsr a
@@ -7973,9 +8026,14 @@ E833: 30 03    bmi $e838
 E835: CA       dex
 E836: 10 F2    bpl $e82a
 E838: 60       rts
-E839: CD 78 A2 cmp $a278
-E83C: FE 9A A9 inc $a99a, x
-E83F: 00       brk
+
+; end of file "COIN65.MAC"
+; start of file "LOOTS2.MAC"
+
+E83A: 78       sei
+E83B: A2 FE    ldx #$fe
+E83D: 9A       txs
+E83E: A9 00    lda #$00
 E840: 8D 80 88 sta $8880
 E843: D8       cld
 E844: AA       tax
@@ -8029,17 +8087,23 @@ E8BB: 20 FC E4 jsr $e4fc
 E8BE: AD 74 01 lda $0174
 E8C1: 8D 80 89 sta $8980
 E8C4: D0 F8    bne $e8be
-E8C6: AD 73 01 lda $0173
-E8C9: 4A       lsr a
+E8C6: AD 73 01 lda $0173    ;DATA OK?
+E8C9: 4A       lsr a      ;BIT 0
 E8CA: B0 03    bcs $e8cf
 E8CC: 20 9E CB jsr $cb9e
 E8CF: 4C 00 90 jmp $9000
-E8D2: A2 11    ldx #$11
-E8D4: 9A       txs
+
+;SET UP INITIALS AND HIGH SCORE FOR EACH GAME
+E8D2: A2 11    ldx #$11   ;BEGINNING PATTERN
+E8D4: 9A       txs    ;S HOLDS PATTERN
 E8D5: 8A       txa
-E8D6: 86 00    stx $00
+E8D6: 86 00    stx $00   ;TEST CELL START @ 0
 E8D8: A0 00    ldy #$00
 E8DA: A2 01    ldx #$01
+;SCAN ALL FURLTE BYTES TO
+;SEE IF ANY ARE ON AS A
+;RESULT OF THIS LOAD
+
 E8DC: C8       iny
 E8DD: B9 00 00 lda $0000, y
 E8E0: D0 21    bne $e903
@@ -8098,14 +8162,22 @@ E93F: 4A       lsr a
 E940: B0 03    bcs $e945
 E942: BA       tsx
 E943: D0 D4    bne $e919
-E945: 4C FF E9 jmp $e9ff
+E945: 4C FF E9 jmp $e9ff  ;WAIT FOR SWITCH
 E948: A2 FF    ldx #$ff
 E94A: 9A       txs
 E94B: A2 00    ldx #$00
 E94D: 8A       txa
-E94E: 95 00    sta $00, x
+E94E: 95 00    sta $00, x		;ZERO ZERO-PAGE
 E950: E8       inx
 E951: D0 FB    bne $e94e
+
+;
+;	VECTOR GEN RAM TEST
+;
+;
+;
+;
+
 E953: A8       tay
 E954: A9 01    lda #$01
 E956: 85 01    sta $01
@@ -8198,12 +8270,17 @@ E9FB: C6 00    dec $00
 E9FD: 10 9C    bpl $e99b
 E9FF: 8D 80 89 sta $8980
 EA02: A9 FF    lda #$ff
-EA04: 85 74    sta $74
+EA04: 85 74    sta $74    ;BAD RAM
+
+;
+;	ROM TEST
+;
+
 EA06: A9 00    lda #$00
 EA08: AA       tax
 EA09: 9D 00 01 sta $0100, x
 EA0C: 9D 00 02 sta $0200, x
-EA0F: 9D 00 03 sta $0300, x
+EA0F: 9D 00 03 sta $0300, x		;CLEAR RAM
 EA12: CA       dex
 EA13: D0 F4    bne $ea09
 EA15: A8       tay
@@ -8230,13 +8307,16 @@ EA3A: A9 90    lda #$90
 EA3C: 85 22    sta $22
 EA3E: C9 F0    cmp #$f0
 EA40: 90 D8    bcc $ea1a
+;JUST FINISHED 4K ROMS...........
+;MUST NOW DO SPECIAL CASE 2K ROM AT 2800
+
 EA42: A2 FF    ldx #$ff
 EA44: A9 28    lda #$28
 EA46: 85 22    sta $22
-EA48: A9 08    lda #$08
+EA48: A9 08    lda #$08   ;ONLY 8 PAGES HERE
 EA4A: D0 D2    bne $ea1e
 EA4C: A5 6A    lda $6a
-EA4E: 05 6B    ora $6b
+EA4E: 05 6B    ora $6b   ;ANY VGROM ERROR?
 EA50: F0 0A    beq $ea5c
 EA52: A9 F0    lda #$f0
 EA54: A2 A2    ldx #$a2
@@ -8249,9 +8329,20 @@ EA64: D0 05    bne $ea6b
 EA66: CA       dex
 EA67: 10 F8    bpl $ea61
 EA69: 85 75    sta $75
+;
+; (TEMP2,+1) = SCRATCH
+; (PNTTBL,+6) = 7 CHKSUMS FOR ROMS
+; (TEMP3)    = DIAG STEP #
+; (ERPLC,+3) = ERROR FLAGS FOR:
+;	ERPLC:		RAM ERROR
+;	ERPLC+1:	POKEY1
+;	ERPLC+2:	POKEY2
+;	ERPLC+3:	EAROM
+
+; TEST POKEY & EAROM
 EA6B: A2 05    ldx #$05
 EA6D: AD 0A 60 lda $600a
-EA70: CD 0A 60 cmp $600a
+EA70: CD 0A 60 cmp $600a    ;MAKE SURE ITS RUNNING
 EA73: D0 05    bne $ea7a
 EA75: CA       dex
 EA76: 10 F8    bpl $ea70
@@ -8266,7 +8357,8 @@ EA87: 20 DC E4 jsr $e4dc
 EA8A: A0 00    ldy #$00
 EA8C: 8C 73 01 sty $0173
 EA8F: 84 69    sty $69
-EA91: 4C D7 EC jmp $ecd7
+EA91: 4C D7 EC jmp $ecd7   ;DO DIAG MAIN LINE
+; BAD EAROM RECOVERY
 EA94: AD 74 01 lda $0174
 EA97: 0D 71 01 ora $0171
 EA9A: D0 0C    bne $eaa8
@@ -8276,6 +8368,7 @@ EAA2: 85 77    sta $77
 EAA4: A9 02    lda #$02
 EAA6: 85 69    sta $69
 EAA8: 60       rts
+;REPORT PROBLEMS & DISPLAY SWITCHES
 EAA9: A0 A7    ldy #$a7
 EAAB: A9 04    lda #$04
 EAAD: 20 5F E4 jsr $e45f
@@ -8326,11 +8419,14 @@ EB0E: BE 49 4D ldx $4d49, y
 EB11: 20 6A E4 jsr $e46a
 EB14: C6 22    dec $22
 EB16: 10 E8    bpl $eb00
-EB18: 20 A7 EC jsr $eca7
+EB18: 20 A7 EC jsr $eca7    ;BEEP ON SWITCH CLOSURE
 EB1B: 60       rts
+
+; PATTERN TEST & ALPEHBET (TELL A FRIEND)
 EB1C: A2 5C    ldx #$5c
 EB1E: A9 4B    lda #$4b
 EB20: 4C 53 E4 jmp $e453
+; HYSTERSIS & SOUND TEST
 EB23: E6 30    inc $30
 EB25: 10 06    bpl $eb2d
 EB27: A9 00    lda #$00
@@ -8344,7 +8440,7 @@ EB35: A9 00    lda #$00
 EB37: 99 F1 67 sta $67f1, y
 EB3A: BC 69 EB ldy $eb69, x
 EB3D: BD 72 EB lda $eb72, x
-EB40: 99 F0 67 sta $67f0, y
+EB40: 99 F0 67 sta $67f0, y    ; ;FAKE POKEY ADDRESS
 EB43: A9 A8    lda #$a8
 EB45: 99 F1 67 sta $67f1, y
 EB48: A2 62    ldx #$62
@@ -8361,6 +8457,8 @@ EB5E: 20 7F E4 jsr $e47f
 EB61: A2 90    ldx #$90
 EB63: A9 4A    lda #$4a
 EB65: 4C 53 E4 jmp $e453
+
+; COLOR BARS
 EB7A: A2 8E    ldx #$8e                                            
 EB7C: A9 4A    lda #$4a                                            
 
@@ -8369,7 +8467,7 @@ EB81: A0 06    ldy #$06
 EB83: 84 23    sty $23
 EB85: 20 66 E4 jsr $e466
 EB88: A4 23    ldy $23
-EB8A: B9 BB EB lda $ebbb, y
+EB8A: B9 BB EB lda $ebbb, y    ;POSITION THIS GROUP
 EB8D: BE C2 EB ldx $ebc2, y
 EB90: 20 8A E4 jsr $e48a
 EB93: A5 23    lda $23
@@ -8419,10 +8517,11 @@ EC0E: 06 21    asl $21
 EC10: 90 02    bcc $ec14
 EC12: E6 38    inc $38
 EC14: 4C 1B EC jmp $ec1b
-EC17: A9 20    lda #$20
+EC17: A9 20    lda #$20     ;RESET NOT PUSHED
 EC19: 85 21    sta $21
 EC1B: 60       rts
 
+; RASTER TEST
 EC2A: A2 CE    ldx #$ce
 EC2C: A9 4B    lda #$4b
 EC2E: 20 53 E4 jsr $e453
@@ -8434,6 +8533,8 @@ EC39: 20 53 E4 jsr $e453
 EC3C: C6 21    dec $21
 EC3E: 10 F5    bpl $ec35
 EC40: 60       rts
+; DISPLAY OPTION SWITCHES
+
 EC41: A2 0F    ldx #$0f
 EC43: 86 22    stx $22
 EC45: 8D 0B 60 sta $600b
@@ -8488,6 +8589,8 @@ ECA0: 85 39    sta $39
 ECA2: C9 90    cmp #$90
 ECA4: 90 CF    bcc $ec75
 ECA6: 60       rts
+; SWITCH TEST (BEEP)
+
 ECA7: 84 24    sty $24
 ECA9: AD 00 78 lda $7800
 ECAC: 29 0F    and #$0f
@@ -8575,13 +8678,15 @@ ED60: 29 10    and #$10
 ED62: D0 03    bne $ed67
 ED64: 4C D7 EC jmp $ecd7
 ED67: 4C 3A E8 jmp $e83a
-ED6A: 93 EA    sha ($ea), y
-ED6C: A8       tay
-ED6D: EA       nop
-ED6E: 1B EB 22 slo $22eb, y
-ED71: EB 29    sbc #$29
-ED73: EC 79 EB cpx $eb79
-ED76: CC EB A6 cpy $a6eb
+;SFTJSR
+;	.WORD STEST5-1		;EAROM ERROR CORRECTION
+;	.WORD STEST6-1		;DISPLAY SWITCHES & REPORT PROBLEMS
+;	.WORD STEST7-1		;CROSS HATCH $ ALPHA
+;	.WORD STEST8-1		;SOUND & HYSTERSIS
+;	.WORD STST11-1
+;	.WORD STEST9-1		;COLOR BARS
+;	.WORD STST10-1		;HATCH
+
 ED79: 69 E0    adc #$e0
 ED7B: 0E 90 04 asl $0490
 ED7E: A2 02    ldx #$02
@@ -8887,1624 +8992,7 @@ EFE9: A5 F8    lda $f8
 EFEB: 49 C0    eor #$c0
 EFED: 85 F8    sta $f8
 EFEF: 60       rts
-
-F0D3: A9 8F    lda #$8f
-F0D5: D0 38    bne $f10f
-F0D7: A9 BF    lda #$bf
-F0D9: D0 34    bne $f10f
-F0DB: A9 0F    lda #$0f
-F0DD: D0 30    bne $f10f
-F0DF: A9 1F    lda #$1f
-F0E1: D0 2C    bne $f10f
-F0E3: A9 2F    lda #$2f
-F0E5: D0 28    bne $f10f
-F0E7: A9 5F    lda #$5f
-F0E9: D0 24    bne $f10f
-F0EB: A9 6F    lda #$6f
-F0ED: D0 20    bne $f10f
-F0EF: A9 7F    lda #$7f
-F0F1: D0 1C    bne $f10f
-F0F3: A9 3F    lda #$3f
-F0F5: D0 18    bne $f10f
-F0F7: A9 4F    lda #$4f
-F0F9: D0 14    bne $f10f
-F0FB: A9 9F    lda #$9f
-F0FD: D0 10    bne $f10f
-F0FF: A9 AF    lda #$af
-F101: D0 11    bne $f114
-F103: A9 CF    lda #$cf
-F105: D0 08    bne $f10f
-F107: A9 DF    lda #$df
-F109: D0 04    bne $f10f
-F10B: A9 EF    lda #$ef
-F10D: D0 00    bne $f10f
-F10F: 24 D0    bit $d0
-F111: D0 01    bne $f114
-F113: 60       rts
-F114: 86 25    stx $25
-F116: 84 26    sty $26
-F118: A8       tay
-F119: A2 0F    ldx #$0f
-F11B: B9 8D DE lda $de8d, y
-F11E: F0 0E    beq $f12e
-F120: 86 8C    stx $8c
-F122: 95 8E    sta $8e, x
-F124: A9 01    lda #$01
-F126: 95 AE    sta $ae, x
-F128: 95 BE    sta $be, x
-F12A: A9 FF    lda #$ff
-F12C: 85 8C    sta $8c
-F12E: 88       dey
-F12F: CA       dex
-F130: 10 E9    bpl $f11b
-F132: A6 25    ldx $25
-F134: A4 26    ldy $26
-F136: 60       rts
-F137: A2 0F    ldx #$0f
-F139: B5 8E    lda $8e, x
-F13B: F0 7E    beq $f1bb
-F13D: E4 8C    cpx $8c
-F13F: F0 7A    beq $f1bb
-F141: D6 AE    dec $ae, x
-F143: D0 76    bne $f1bb
-F145: D6 BE    dec $be, x
-F147: D0 38    bne $f181
-F149: F6 8E    inc $8e, x
-F14B: F6 8E    inc $8e, x
-F14D: B5 8E    lda $8e, x
-F14F: 0A       asl a
-F150: A8       tay
-F151: B0 10    bcs $f163
-F153: B9 77 DF lda $df77, y
-F156: 95 9E    sta $9e, x
-F158: B9 7A DF lda $df7a, y
-F15B: 95 BE    sta $be, x
-F15D: B9 78 DF lda $df78, y
-F160: 4C 70 E1 jmp $e170
-F163: B9 77 E0 lda $e077, y
-F166: 95 9E    sta $9e, x
-F168: B9 7A E0 lda $e07a, y
-F16B: 95 BE    sta $be, x
-F16D: B9 78 E0 lda $e078, y
-F170: 95 AE    sta $ae, x
-F172: D0 0A    bne $f17e
-F174: 95 8E    sta $8e, x
-F176: B5 9E    lda $9e, x
-F178: F0 04    beq $f17e
-F17A: 95 8E    sta $8e, x
-F17C: D0 CB    bne $f149
-F17E: 4C AC E1 jmp $e1ac
-F181: 0A       asl a
-F182: A8       tay
-F183: B0 0B    bcs $f190
-F185: B9 78 DF lda $df78, y
-F188: 95 AE    sta $ae, x
-F18A: B9 79 DF lda $df79, y
-F18D: 4C 98 E1 jmp $e198
-F190: B9 78 E0 lda $e078, y
-F193: 95 AE    sta $ae, x
-F195: B9 79 E0 lda $e079, y
-F198: B4 9E    ldy $9e, x
-F19A: 18       clc
-F19B: 75 9E    adc $9e, x
-F19D: 95 9E    sta $9e, x
-F19F: 8A       txa
-F1A0: 4A       lsr a
-F1A1: 90 09    bcc $f1ac
-F1A3: 98       tya
-F1A4: 55 9E    eor $9e, x
-F1A6: 29 F0    and #$f0
-F1A8: 55 9E    eor $9e, x
-F1AA: 95 9E    sta $9e, x
-F1AC: B5 9E    lda $9e, x
-F1AE: E0 08    cpx #$08
-F1B0: 90 06    bcc $f1b8
-F1B2: 9D F8 67 sta $67f8, x
-F1B5: 4C BB E1 jmp $e1bb
-F1B8: 9D 00 60 sta $6000, x
-F1BB: CA       dex
-F1BC: 30 03    bmi $f1c1
-F1BE: 4C 39 E1 jmp $e139
-F1C1: 60       rts
-F1C2: A9 00    lda #$00
-F1C4: 8D 0F 60 sta $600f
-F1C7: 8D 0F 68 sta $680f
-F1CA: A9 07    lda #$07
-F1CC: 8D 0F 60 sta $600f
-F1CF: 8D 0F 68 sta $680f
-F1D2: A2 0F    ldx #$0f
-F1D4: A9 00    lda #$00
-F1D6: 9D 00 60 sta $6000, x
-F1D9: 9D 00 68 sta $6800, x
-F1DC: 95 8E    sta $8e, x
-F1DE: 95 9E    sta $9e, x
-F1E0: CA       dex
-F1E1: 10 F3    bpl $f1d6
-F1E3: A9 00    lda #$00
-F1E5: 8D 08 60 sta $6008
-F1E8: A2 00    ldx #$00
-F1EA: 8E 08 68 stx $6808
-F1ED: 60       rts
-F1EE: 48       pha
-F1EF: 8A       txa
-F1F0: 48       pha
-F1F1: 20 66 E4 jsr $e466
-F1F4: 68       pla
-F1F5: AA       tax
-F1F6: 68       pla
-F1F7: A0 00    ldy #$00
-F1F9: 4C 8A E4 jmp $e48a
-F1FC: 84 22    sty $22
-F1FE: A9 00    lda #$00
-F200: A0 03    ldy #$03
-F202: 20 5F E4 jsr $e45f
-F205: A4 22    ldy $22
-F207: A9 00    lda #$00
-F209: 0A       asl a
-F20A: 0A       asl a
-F20B: C0 1D    cpy #$1d
-F20D: 90 0A    bcc $f219
-F20F: 69 01    adc #$01
-F211: AA       tax
-F212: 98       tya
-F213: 38       sec
-F214: E9 1D    sbc #$1d
-F216: A8       tay
-F217: 10 01    bpl $f21a
-F219: AA       tax
-F21A: BD 7B E2 lda $e27b, x
-F21D: 85 20    sta $20
-F21F: BD 7A E2 lda $e27a, x
-F222: 85 1F    sta $1f
-F224: 18       clc
-F225: 71 1F    adc ($1f), y
-F227: 85 1F    sta $1f
-F229: 90 02    bcc $f22d
-F22B: E6 20    inc $20
-F22D: A0 00    ldy #$00
-F22F: A2 00    ldx #$00
-F231: A1 1F    lda ($1f, x)
-F233: 85 22    sta $22
-F235: 4A       lsr a
-F236: 4A       lsr a
-F237: 20 56 E2 jsr $e256
-F23A: A1 1F    lda ($1f, x)
-F23C: 2A       rol a
-F23D: 26 22    rol $22
-F23F: 2A       rol a
-F240: A5 22    lda $22
-F242: 2A       rol a
-F243: 0A       asl a
-F244: 20 5C E2 jsr $e25c
-F247: A1 1F    lda ($1f, x)
-F249: 85 22    sta $22
-F24B: 20 56 E2 jsr $e256
-F24E: 46 22    lsr $22
-F250: 90 DF    bcc $f231
-F252: 88       dey
-F253: 4C 72 E4 jmp $e472
-F256: E6 1F    inc $1f
-F258: D0 02    bne $f25c
-F25A: E6 20    inc $20
-F25C: 29 3E    and #$3e
-F25E: D0 04    bne $f264
-F260: 68       pla
-F261: 68       pla
-F262: D0 EE    bne $f252
-F264: C9 0A    cmp #$0a
-F266: 90 02    bcc $f26a
-F268: 69 0D    adc #$0d
-F26A: AA       tax
-F26B: BD 46 4D lda $4d46, x
-F26E: 91 08    sta ($08), y
-F270: C8       iny
-F271: BD 47 4D lda $4d47, x
-F274: 91 08    sta ($08), y
-F276: C8       iny
-F277: A2 00    ldx #$00
-F279: 60       rts
-F27A: 7E E2 71 ror $71e2, x
-F27D: E3 1D    isb ($1d, x)
-F27F: 25 2B    and $2b
-F281: 33 37    rla ($37), y
-F283: 3B 3F 47 rla $473f, y
-F286: 4B 57    asr #$57
-F288: 61 65    adc ($65, x)
-F28A: 6F 79 87 rra $8779
-F28D: 95 A1    sta $a1, x
-F28F: AD AD B1 lda $b1ad
-F292: B5 BB    lda $bb, x
-F294: BF C5 CD lax $cdc5, y
-F297: D7 E1    dcp $e1, x
-F299: E5 EB    sbc $eb
-F29B: A5 92    lda $92
-F29D: BD C2 BE lda $bec2, x
-F2A0: 0A       asl a
-F2A1: B6 00    ldx $00, y
-F2A3: 59 62 48 eor $4862, y
-F2A6: 66 D2    ror $d2
-F2A8: 6D 9E 70 adc $709e
-F2AB: 0C D4 0A nop $0ad4
-F2AE: B2       kil
-F2AF: 4C 00 B9 jmp $b900
-
-F40F: A9 C0    lda #$c0
-F411: D0 05    bne $f418
-F413: 20 66 E4 jsr $e466
-F416: A9 20    lda #$20
-F418: A0 00    ldy #$00
-F41A: 91 08    sta ($08), y
-F41C: 4C C3 E4 jmp $e4c3
-F41F: 90 04    bcc $f425
-F421: 29 0F    and #$0f
-F423: F0 05    beq $f42a
-F425: 29 0F    and #$0f
-F427: 18       clc
-F428: 69 01    adc #$01
-F42A: 08       php
-F42B: 0A       asl a
-F42C: A0 00    ldy #$00
-F42E: AA       tax
-F42F: BD 48 4D lda $4d48, x
-F432: 91 08    sta ($08), y
-F434: BD 49 4D lda $4d49, x
-F437: C8       iny
-F438: 91 08    sta ($08), y
-F43A: 20 72 E4 jsr $e472
-F43D: 28       plp
-F43E: 60       rts
-F43F: 38       sec
-F440: E9 20    sbc #$20
-F442: 4A       lsr a
-F443: 29 1F    and #$1f
-F445: 09 E0    ora #$e0
-F447: A0 01    ldy #$01
-F449: 91 08    sta ($08), y
-F44B: 88       dey
-F44C: 8A       txa
-F44D: 6A       ror a
-F44E: 91 08    sta ($08), y
-F450: C8       iny
-F451: D0 1F    bne $f472
-F453: 38       sec
-F454: E9 20    sbc #$20
-F456: 4A       lsr a
-F457: 29 1F    and #$1f
-F459: 09 A0    ora #$a0
-F45B: D0 EA    bne $f447
-F45D: A4 0A    ldy $0a
-F45F: 09 60    ora #$60
-F461: AA       tax
-F462: 98       tya
-F463: 4C 6A E4 jmp $e46a
-F466: A9 40    lda #$40
-F468: A2 80    ldx #$80
-F46A: A0 00    ldy #$00
-F46C: 91 08    sta ($08), y
-F46E: C8       iny
-F46F: 8A       txa
-F470: 91 08    sta ($08), y
-F472: 98       tya
-F473: 38       sec
-F474: 65 08    adc $08
-F476: 85 08    sta $08
-F478: 90 02    bcc $f47c
-F47A: E6 09    inc $09
-F47C: 60       rts
-F47D: A0 00    ldy #$00
-F47F: 09 70    ora #$70
-F481: AA       tax
-F482: 98       tya
-F483: 4C 6A E4 jmp $e46a
-F486: A8       tay
-F487: A9 00    lda #$00
-F489: AA       tax
-F48A: 84 0A    sty $0a
-F48C: A0 00    ldy #$00
-F48E: 0A       asl a
-F48F: 90 01    bcc $f492
-F491: 88       dey
-F492: 84 05    sty $05
-F494: 0A       asl a
-F495: 26 05    rol $05
-F497: 85 04    sta $04
-F499: 8A       txa
-F49A: 0A       asl a
-F49B: A0 00    ldy #$00
-F49D: 90 01    bcc $f4a0
-F49F: 88       dey
-F4A0: 84 07    sty $07
-F4A2: 0A       asl a
-F4A3: 26 07    rol $07
-F4A5: 85 06    sta $06
-F4A7: A2 04    ldx #$04
-F4A9: A0 00    ldy #$00
-F4AB: B5 02    lda $02, x
-F4AD: 91 08    sta ($08), y
-F4AF: B5 03    lda $03, x
-F4B1: 29 1F    and #$1f
-F4B3: C8       iny
-F4B4: 91 08    sta ($08), y
-F4B6: B5 00    lda $00, x
-F4B8: C8       iny
-F4B9: 91 08    sta ($08), y
-F4BB: B5 01    lda $01, x
-F4BD: 45 0A    eor $0a
-F4BF: 29 1F    and #$1f
-F4C1: 45 0A    eor $0a
-F4C3: C8       iny
-F4C4: 91 08    sta ($08), y
-F4C6: D0 AA    bne $f472
-
-F4DC: A9 07    lda #$07
-F4DE: A0 FF    ldy #$ff
-F4E0: D0 08    bne $f4ea
-F4E2: A9 03    lda #$03
-F4E4: D0 02    bne $f4e8
-F4E6: A9 04    lda #$04
-F4E8: A0 00    ldy #$00
-F4EA: 8C 70 01 sty $0170
-F4ED: 48       pha
-F4EE: 0D 71 01 ora $0171
-F4F1: 8D 71 01 sta $0171
-F4F4: 68       pla
-F4F5: 0D 72 01 ora $0172
-F4F8: 8D 72 01 sta $0172
-F4FB: 60       rts
-F4FC: A9 07    lda #$07
-F4FE: 8D 71 01 sta $0171
-F501: A9 00    lda #$00
-F503: 8D 72 01 sta $0172
-F506: AD 74 01 lda $0174
-F509: D0 4B    bne $f556
-F50B: AD 71 01 lda $0171
-F50E: F0 46    beq $f556
-F510: A2 00    ldx #$00
-F512: 8E 75 01 stx $0175
-F515: 8E 79 01 stx $0179
-F518: 8E 78 01 stx $0178
-F51B: A2 08    ldx #$08
-F51D: 38       sec
-F51E: 6E 78 01 ror $0178
-F521: 0A       asl a
-F522: CA       dex
-F523: 90 F9    bcc $f51e
-F525: A0 80    ldy #$80
-F527: AD 78 01 lda $0178
-F52A: 2D 72 01 and $0172
-F52D: D0 02    bne $f531
-F52F: A0 20    ldy #$20
-F531: 8C 74 01 sty $0174
-F534: AD 78 01 lda $0178
-F537: 4D 71 01 eor $0171
-F53A: 8D 71 01 sta $0171
-F53D: 8A       txa
-F53E: 0A       asl a
-F53F: AA       tax
-F540: BD C8 E4 lda $e4c8, x
-F543: 8D 76 01 sta $0176
-F546: BD C9 E4 lda $e4c9, x
-F549: 8D 77 01 sta $0177
-F54C: BD CE E4 lda $e4ce, x
-F54F: 85 E1    sta $e1
-F551: BD CF E4 lda $e4cf, x
-F554: 85 E2    sta $e2
-F556: A0 00    ldy #$00
-F558: 8C 00 89 sty $8900
-F55B: AD 74 01 lda $0174
-F55E: D0 01    bne $f561
-F560: 60       rts
-F561: AC 75 01 ldy $0175
-F564: AE 76 01 ldx $0176
-F567: 0A       asl a
-F568: 90 0D    bcc $f577
-F56A: 9D 40 89 sta $8940, x
-F56D: A9 40    lda #$40
-F56F: 8D 74 01 sta $0174
-F572: A0 0E    ldy #$0e
-F574: 4C EA E5 jmp $e5ea
-F577: 10 25    bpl $f59e
-F579: A9 80    lda #$80
-F57B: 8D 74 01 sta $0174
-F57E: AD 70 01 lda $0170
-F581: F0 04    beq $f587
-F583: A9 00    lda #$00
-F585: 91 E1    sta ($e1), y
-F587: B1 E1    lda ($e1), y
-F589: EC 77 01 cpx $0177
-F58C: 90 08    bcc $f596
-F58E: A9 00    lda #$00
-F590: 8D 74 01 sta $0174
-F593: AD 79 01 lda $0179
-F596: 9D 40 89 sta $8940, x
-F599: A0 0C    ldy #$0c
-F59B: 4C DD E5 jmp $e5dd
-F59E: A9 08    lda #$08
-F5A0: 8D 00 89 sta $8900
-F5A3: 9D 40 89 sta $8940, x
-F5A6: A9 09    lda #$09
-F5A8: 8D 00 89 sta $8900
-F5AB: EA       nop
-F5AC: A9 08    lda #$08
-F5AE: 8D 00 89 sta $8900
-F5B1: EC 77 01 cpx $0177
-F5B4: AD 00 70 lda $7000
-F5B7: 90 20    bcc $f5d9
-F5B9: 4D 79 01 eor $0179
-F5BC: F0 13    beq $f5d1
-F5BE: A9 00    lda #$00
-F5C0: AC 75 01 ldy $0175
-F5C3: 91 E1    sta ($e1), y
-F5C5: 88       dey
-F5C6: 10 FB    bpl $f5c3
-F5C8: AD 78 01 lda $0178
-F5CB: 0D 73 01 ora $0173
-F5CE: 8D 73 01 sta $0173
-F5D1: A9 00    lda #$00
-F5D3: 8D 74 01 sta $0174
-F5D6: 4C DB E5 jmp $e5db
-F5D9: 91 E1    sta ($e1), y
-F5DB: A0 00    ldy #$00
-F5DD: 18       clc
-F5DE: 6D 79 01 adc $0179
-F5E1: 8D 79 01 sta $0179
-F5E4: EE 75 01 inc $0175
-F5E7: EE 76 01 inc $0176
-F5EA: 8C 00 89 sty $8900
-F5ED: 98       tya
-F5EE: D0 03    bne $f5f3
-F5F0: 4C 06 E5 jmp $e506
-F5F3: 60       rts
-F5F4: 78       sei
-F5F5: D8       cld
-F5F6: A9 FF    lda #$ff
-F5F8: 85 02    sta $02
-F5FA: D0 11    bne $f60d
-F5FC: A5 00    lda $00
-F5FE: F0 0D    beq $f60d
-F600: AD 00 78 lda $7800
-F603: 29 40    and #$40
-F605: F0 06    beq $f60d
-F607: 8D 80 88 sta $8880
-F60A: 8D 40 88 sta $8840
-F60D: 8D 80 89 sta $8980
-F610: AD 00 78 lda $7800
-F613: 29 10    and #$10
-F615: F0 03    beq $f61a
-F617: 4C 3A E8 jmp $e83a
-F61A: AD 00 80 lda $8000
-F61D: 18       clc
-F61E: 2A       rol a
-F61F: 2A       rol a
-F620: 2A       rol a
-F621: 2A       rol a
-F622: 49 FF    eor #$ff
-F624: 29 07    and #$07
-F626: 85 00    sta $00
-F628: A5 00    lda $00
-F62A: C5 02    cmp $02
-F62C: F0 CE    beq $f5fc
-F62E: 85 02    sta $02
-F630: AA       tax
-F631: F0 21    beq $f654
-F633: A9 C7    lda #$c7
-F635: 8D 00 20 sta $2000
-F638: A9 60    lda #$60
-F63A: 8D 01 20 sta $2001
-F63D: BC A8 E6 ldy $e6a8, x
-F640: BD B0 E6 lda $e6b0, x
-F643: AA       tax
-F644: B9 B8 E6 lda $e6b8, y
-F647: 9D 02 20 sta $2002, x
-F64A: 88       dey
-F64B: CA       dex
-F64C: 10 F6    bpl $f644
-F64E: 8D 80 88 sta $8880
-F651: 4C FC E5 jmp $e5fc
-F654: A9 20    lda #$20
-F656: 85 04    sta $04
-F658: A9 00    lda #$00
-F65A: 85 03    sta $03
-F65C: 85 01    sta $01
-F65E: A8       tay
-F65F: A9 08    lda #$08
-F661: 85 00    sta $00
-F663: 18       clc
-F664: A5 01    lda $01
-F666: 91 03    sta ($03), y
-F668: 69 05    adc #$05
-F66A: 85 01    sta $01
-F66C: C8       iny
-F66D: D0 F4    bne $f663
-F66F: E6 04    inc $04
-F671: C6 00    dec $00
-F673: D0 EE    bne $f663
-F675: A0 07    ldy #$07
-F677: A2 00    ldx #$00
-F679: A9 11    lda #$11
-F67B: 9D 80 27 sta $2780, x
-F67E: 9D 80 26 sta $2680, x
-F681: 48       pha
-F682: 8A       txa
-F683: 18       clc
-F684: 69 10    adc #$10
-F686: AA       tax
-F687: 68       pla
-F688: 88       dey
-F689: 10 F0    bpl $f67b
-F68B: 8D B2 26 sta $26b2
-F68E: 8D B2 27 sta $27b2
-F691: 8D DE 26 sta $26de
-F694: 8D EE 26 sta $26ee
-F697: 8D DE 27 sta $27de
-F69A: 8D EE 27 sta $27ee
-F69D: A9 80    lda #$80
-F69F: 8D FE 26 sta $26fe
-F6A2: 8D FE 27 sta $27fe
-F6A5: 4C 4E E6 jmp $e64e
-
-
-F72C: AD 00 78 lda $7800
-F72F: E0 01    cpx #$01
-F731: F0 03    beq $f736
-F733: B0 02    bcs $f737
-F735: 4A       lsr a
-F736: 4A       lsr a
-F737: 4A       lsr a
-F738: B5 DB    lda $db, x
-F73A: 29 1F    and #$1f
-F73C: B0 37    bcs $f775
-F73E: F0 10    beq $f750
-F740: C9 1B    cmp #$1b
-F742: B0 0A    bcs $f74e
-F744: A8       tay
-F745: A5 E0    lda $e0
-F747: 29 07    and #$07
-F749: C9 07    cmp #$07
-F74B: 98       tya
-F74C: 90 02    bcc $f750
-F74E: E9 01    sbc #$01
-F750: 95 DB    sta $db, x
-F752: AD 00 78 lda $7800
-F755: 29 08    and #$08
-F757: D0 04    bne $f75d
-F759: A9 F0    lda #$f0
-F75B: 85 DE    sta $de
-F75D: A5 DE    lda $de
-F75F: F0 08    beq $f769
-F761: C6 DE    dec $de
-F763: A9 00    lda #$00
-F765: 95 DB    sta $db, x
-F767: 95 D8    sta $d8, x
-F769: 18       clc
-F76A: B5 D8    lda $d8, x
-F76C: F0 23    beq $f791
-F76E: D6 D8    dec $d8, x
-F770: D0 1F    bne $f791
-F772: 38       sec
-F773: B0 1C    bcs $f791
-F775: C9 1B    cmp #$1b
-F777: B0 09    bcs $f782
-F779: B5 DB    lda $db, x
-F77B: 69 20    adc #$20
-F77D: 90 D1    bcc $f750
-F77F: F0 01    beq $f782
-F781: 18       clc
-F782: A9 1F    lda #$1f
-F784: B0 CA    bcs $f750
-F786: 95 DB    sta $db, x
-F788: B5 D8    lda $d8, x
-F78A: F0 01    beq $f78d
-F78C: 38       sec
-F78D: A9 78    lda #$78
-F78F: 95 D8    sta $d8, x
-F791: 90 2A    bcc $f7bd
-F793: A9 00    lda #$00
-F795: E0 01    cpx #$01
-F797: 90 16    bcc $f7af
-F799: F0 0C    beq $f7a7
-F79B: A5 DF    lda $df
-F79D: 29 0C    and #$0c
-F79F: 4A       lsr a
-F7A0: 4A       lsr a
-F7A1: F0 0C    beq $f7af
-F7A3: 69 02    adc #$02
-F7A5: D0 08    bne $f7af
-F7A7: A5 DF    lda $df
-F7A9: 29 10    and #$10
-F7AB: F0 02    beq $f7af
-F7AD: A9 01    lda #$01
-F7AF: 38       sec
-F7B0: 48       pha
-F7B1: 65 D1    adc $d1
-F7B3: 85 D1    sta $d1
-F7B5: 68       pla
-F7B6: 38       sec
-F7B7: 65 D7    adc $d7
-F7B9: 85 D7    sta $d7
-F7BB: F6 D3    inc $d3, x
-F7BD: CA       dex
-F7BE: 30 03    bmi $f7c3
-F7C0: 4C 2C E7 jmp $e72c
-F7C3: A5 DF    lda $df
-F7C5: 4A       lsr a
-F7C6: 4A       lsr a
-F7C7: 4A       lsr a
-F7C8: 4A       lsr a
-F7C9: 4A       lsr a
-F7CA: A8       tay
-F7CB: A5 D1    lda $d1
-F7CD: 38       sec
-F7CE: F9 DF E7 sbc $e7df, y
-F7D1: 30 14    bmi $f7e7
-F7D3: 85 D1    sta $d1
-F7D5: E6 D2    inc $d2
-F7D7: C0 03    cpy #$03
-F7D9: D0 0C    bne $f7e7
-F7DB: E6 D2    inc $d2
-F7DD: D0 08    bne $f7e7
-F7DF: 7F 02 04 rra $0402, x
-F7E2: 04 05    nop $05
-F7E4: 03 7F    slo ($7f, x)
-F7E6: 7F A5 DF rra $dfa5, x
-F7E9: 29 03    and #$03
-F7EB: A8       tay
-F7EC: F0 1A    beq $f808
-F7EE: 4A       lsr a
-F7EF: 69 00    adc #$00
-F7F1: 49 FF    eor #$ff
-F7F3: 38       sec
-F7F4: 65 D7    adc $d7
-F7F6: B0 08    bcs $f800
-F7F8: 65 D2    adc $d2
-F7FA: 30 0E    bmi $f80a
-F7FC: 85 D2    sta $d2
-F7FE: A9 00    lda #$00
-F800: C0 02    cpy #$02
-F802: B0 02    bcs $f806
-F804: E6 D6    inc $d6
-F806: E6 D6    inc $d6
-F808: 85 D7    sta $d7
-F80A: E6 E0    inc $e0
-F80C: A5 E0    lda $e0
-F80E: 4A       lsr a
-F80F: B0 27    bcs $f838
-F811: A0 00    ldy #$00
-F813: A2 02    ldx #$02
-F815: B5 D3    lda $d3, x
-F817: F0 09    beq $f822
-F819: C9 10    cmp #$10
-F81B: 90 05    bcc $f822
-F81D: 69 EF    adc #$ef
-F81F: C8       iny
-F820: 95 D3    sta $d3, x
-F822: CA       dex
-F823: 10 F0    bpl $f815
-F825: 98       tya
-F826: D0 10    bne $f838
-F828: A2 02    ldx #$02
-F82A: B5 D3    lda $d3, x
-F82C: F0 07    beq $f835
-F82E: 18       clc
-F82F: 69 EF    adc #$ef
-F831: 95 D3    sta $d3, x
-F833: 30 03    bmi $f838
-F835: CA       dex
-F836: 10 F2    bpl $f82a
-F838: 60       rts
-F839: CD 78 A2 cmp $a278
-F83C: FE 9A A9 inc $a99a, x
-F83F: 00       brk
-F840: 8D 80 88 sta $8880
-F843: D8       cld
-F844: AA       tax
-F845: 95 00    sta $00, x
-F847: 9D 00 01 sta $0100, x
-F84A: 9D 00 02 sta $0200, x
-F84D: 9D 00 03 sta $0300, x
-F850: 9D 00 04 sta $0400, x
-F853: 9D 00 05 sta $0500, x
-F856: 9D 00 06 sta $0600, x
-F859: 9D 00 07 sta $0700, x
-F85C: 9D 00 20 sta $2000, x
-F85F: 9D 00 21 sta $2100, x
-F862: 9D 00 22 sta $2200, x
-F865: 9D 00 23 sta $2300, x
-F868: 9D 00 24 sta $2400, x
-F86B: 9D 00 25 sta $2500, x
-F86E: 9D 00 26 sta $2600, x
-F871: 9D 00 27 sta $2700, x
-F874: 9D 00 60 sta $6000, x
-F877: 9D 00 68 sta $6800, x
-F87A: 8D 80 89 sta $8980
-F87D: E8       inx
-F87E: D0 C5    bne $f845
-F880: A9 C0    lda #$c0
-F882: 8D 00 88 sta $8800
-F885: A9 07    lda #$07
-F887: 8D 0F 60 sta $600f
-F88A: 8D 0F 68 sta $680f
-F88D: AD 00 78 lda $7800
-F890: 29 10    and #$10
-F892: D0 03    bne $f897
-F894: 4C D2 E8 jmp $e8d2
-F897: A9 01    lda #$01
-F899: 8D 00 20 sta $2000
-F89C: A9 E2    lda #$e2
-F89E: 8D 01 20 sta $2001
-F8A1: A9 20    lda #$20
-F8A3: 8D 03 20 sta $2003
-F8A6: 8D 03 24 sta $2403
-F8A9: A9 24    lda #$24
-F8AB: 85 09    sta $09
-F8AD: A9 02    lda #$02
-F8AF: 85 08    sta $08
-F8B1: 58       cli
-F8B2: E6 FB    inc $fb
-F8B4: A5 FB    lda $fb
-F8B6: 8D 80 89 sta $8980
-F8B9: D0 F9    bne $f8b4
-F8BB: 20 FC E4 jsr $e4fc
-F8BE: AD 74 01 lda $0174
-F8C1: 8D 80 89 sta $8980
-F8C4: D0 F8    bne $f8be
-F8C6: AD 73 01 lda $0173
-F8C9: 4A       lsr a
-F8CA: B0 03    bcs $f8cf
-F8CC: 20 9E CB jsr $cb9e
-F8CF: 4C 00 90 jmp $9000
-F8D2: A2 11    ldx #$11
-F8D4: 9A       txs
-F8D5: 8A       txa
-F8D6: 86 00    stx $00
-F8D8: A0 00    ldy #$00
-F8DA: A2 01    ldx #$01
-F8DC: C8       iny
-F8DD: B9 00 00 lda $0000, y
-F8E0: D0 21    bne $f903
-F8E2: E8       inx
-F8E3: D0 F7    bne $f8dc
-F8E5: BA       tsx
-F8E6: 8A       txa
-F8E7: 8D 80 89 sta $8980
-F8EA: C8       iny
-F8EB: 59 00 00 eor $0000, y
-F8EE: D0 13    bne $f903
-F8F0: 8A       txa
-F8F1: A2 00    ldx #$00
-F8F3: 96 00    stx $00, y
-F8F5: C8       iny
-F8F6: D0 05    bne $f8fd
-F8F8: 0A       asl a
-F8F9: A2 00    ldx #$00
-F8FB: B0 4B    bcs $f948
-F8FD: AA       tax
-F8FE: 9A       txs
-F8FF: 96 00    stx $00, y
-F901: D0 D7    bne $f8da
-F903: AA       tax
-F904: 8A       txa
-F905: A0 82    ldy #$82
-F907: 29 0F    and #$0f
-F909: F0 02    beq $f90d
-F90B: A0 12    ldy #$12
-F90D: 8A       txa
-F90E: A2 82    ldx #$82
-F910: 29 F0    and #$f0
-F912: F0 02    beq $f916
-F914: A2 12    ldx #$12
-F916: 98       tya
-F917: 9A       txs
-F918: AA       tax
-F919: 8E 00 60 stx $6000
-F91C: A2 A8    ldx #$a8
-F91E: 8E 01 60 stx $6001
-F921: A0 0C    ldy #$0c
-F923: A2 64    ldx #$64
-F925: 2C 00 78 bit $7800
-F928: 30 FB    bmi $f925
-F92A: 2C 00 78 bit $7800
-F92D: 10 FB    bpl $f92a
-F92F: 8D 80 89 sta $8980
-F932: CA       dex
-F933: D0 F0    bne $f925
-F935: C0 05    cpy #$05
-F937: D0 03    bne $f93c
-F939: 8E 01 60 stx $6001
-F93C: 88       dey
-F93D: D0 E4    bne $f923
-F93F: 4A       lsr a
-F940: B0 03    bcs $f945
-F942: BA       tsx
-F943: D0 D4    bne $f919
-F945: 4C FF E9 jmp $e9ff
-F948: A2 FF    ldx #$ff
-F94A: 9A       txs
-F94B: A2 00    ldx #$00
-F94D: 8A       txa
-F94E: 95 00    sta $00, x
-F950: E8       inx
-F951: D0 FB    bne $f94e
-F953: A8       tay
-F954: A9 01    lda #$01
-F956: 85 01    sta $01
-F958: A2 11    ldx #$11
-F95A: B1 00    lda ($00), y
-F95C: D0 27    bne $f985
-F95E: 8A       txa
-F95F: 91 00    sta ($00), y
-F961: 51 00    eor ($00), y
-F963: D0 20    bne $f985
-F965: 8A       txa
-F966: 0A       asl a
-F967: AA       tax
-F968: 90 F5    bcc $f95f
-F96A: C8       iny
-F96B: D0 EB    bne $f958
-F96D: 8D 80 89 sta $8980
-F970: E6 01    inc $01
-F972: A6 01    ldx $01
-F974: E0 04    cpx #$04
-F976: 90 E0    bcc $f958
-F978: A9 20    lda #$20
-F97A: E0 20    cpx #$20
-F97C: 90 D8    bcc $f956
-F97E: E0 28    cpx #$28
-F980: 90 D6    bcc $f958
-F982: 4C 06 EA jmp $ea06
-F985: A6 01    ldx $01
-F987: E0 20    cpx #$20
-F989: 85 02    sta $02
-F98B: 90 03    bcc $f990
-F98D: 8A       txa
-F98E: E9 1C    sbc #$1c
-F990: 4A       lsr a
-F991: 4A       lsr a
-F992: 29 07    and #$07
-F994: A8       tay
-F995: A5 02    lda $02
-F997: 84 00    sty $00
-F999: 85 01    sta $01
-F99B: A9 01    lda #$01
-F99D: 85 02    sta $02
-F99F: A2 A8    ldx #$a8
-F9A1: A0 82    ldy #$82
-F9A3: A5 00    lda $00
-F9A5: D0 08    bne $f9af
-F9A7: A5 01    lda $01
-F9A9: 29 0F    and #$0f
-F9AB: F0 02    beq $f9af
-F9AD: A0 12    ldy #$12
-F9AF: 8E 01 60 stx $6001
-F9B2: 8C 00 60 sty $6000
-F9B5: A9 09    lda #$09
-F9B7: C0 12    cpy #$12
-F9B9: F0 02    beq $f9bd
-F9BB: A9 01    lda #$01
-F9BD: A8       tay
-F9BE: A2 00    ldx #$00
-F9C0: 2C 00 78 bit $7800
-F9C3: 30 FB    bmi $f9c0
-F9C5: 2C 00 78 bit $7800
-F9C8: 10 FB    bpl $f9c5
-F9CA: 8D 80 89 sta $8980
-F9CD: CA       dex
-F9CE: D0 F0    bne $f9c0
-F9D0: 88       dey
-F9D1: D0 ED    bne $f9c0
-F9D3: 8E 01 60 stx $6001
-F9D6: A0 09    ldy #$09
-F9D8: 2C 00 78 bit $7800
-F9DB: 30 FB    bmi $f9d8
-F9DD: 2C 00 78 bit $7800
-F9E0: 10 FB    bpl $f9dd
-F9E2: 8D 80 89 sta $8980
-F9E5: CA       dex
-F9E6: D0 F0    bne $f9d8
-F9E8: 88       dey
-F9E9: D0 ED    bne $f9d8
-F9EB: A5 00    lda $00
-F9ED: D0 08    bne $f9f7
-F9EF: A5 01    lda $01
-F9F1: 4A       lsr a
-F9F2: 4A       lsr a
-F9F3: 4A       lsr a
-F9F4: 4A       lsr a
-F9F5: 85 01    sta $01
-F9F7: C6 02    dec $02
-F9F9: F0 A4    beq $f99f
-F9FB: C6 00    dec $00
-F9FD: 10 9C    bpl $f99b
-F9FF: 8D 80 89 sta $8980
-FA02: A9 FF    lda #$ff
-FA04: 85 74    sta $74
-FA06: A9 00    lda #$00
-FA08: AA       tax
-FA09: 9D 00 01 sta $0100, x
-FA0C: 9D 00 02 sta $0200, x
-FA0F: 9D 00 03 sta $0300, x
-FA12: CA       dex
-FA13: D0 F4    bne $fa09
-FA15: A8       tay
-FA16: 85 21    sta $21
-FA18: A9 30    lda #$30
-FA1A: 85 22    sta $22
-FA1C: A9 10    lda #$10
-FA1E: 85 23    sta $23
-FA20: 8A       txa
-FA21: 51 21    eor ($21), y
-FA23: C8       iny
-FA24: D0 FB    bne $fa21
-FA26: E6 22    inc $22
-FA28: 8D 80 89 sta $8980
-FA2B: C6 23    dec $23
-FA2D: D0 F2    bne $fa21
-FA2F: 95 6B    sta $6b, x
-FA31: E8       inx
-FA32: F0 18    beq $fa4c
-FA34: A5 22    lda $22
-FA36: C9 60    cmp #$60
-FA38: D0 04    bne $fa3e
-FA3A: A9 90    lda #$90
-FA3C: 85 22    sta $22
-FA3E: C9 F0    cmp #$f0
-FA40: 90 D8    bcc $fa1a
-FA42: A2 FF    ldx #$ff
-FA44: A9 28    lda #$28
-FA46: 85 22    sta $22
-FA48: A9 08    lda #$08
-FA4A: D0 D2    bne $fa1e
-FA4C: A5 6A    lda $6a
-FA4E: 05 6B    ora $6b
-FA50: F0 0A    beq $fa5c
-FA52: A9 F0    lda #$f0
-FA54: A2 A2    ldx #$a2
-FA56: 8D 04 60 sta $6004
-FA59: 8E 05 60 stx $6005
-FA5C: A2 05    ldx #$05
-FA5E: AD 0A 68 lda $680a
-FA61: CD 0A 68 cmp $680a
-FA64: D0 05    bne $fa6b
-FA66: CA       dex
-FA67: 10 F8    bpl $fa61
-FA69: 85 75    sta $75
-FA6B: A2 05    ldx #$05
-FA6D: AD 0A 60 lda $600a
-FA70: CD 0A 60 cmp $600a
-FA73: D0 05    bne $fa7a
-FA75: CA       dex
-FA76: 10 F8    bpl $fa70
-FA78: 85 76    sta $76
-FA7A: 58       cli
-FA7B: 20 FC E4 jsr $e4fc
-FA7E: A0 02    ldy #$02
-FA80: AD 73 01 lda $0173
-FA83: F0 0A    beq $fa8f
-FA85: 85 77    sta $77
-FA87: 20 DC E4 jsr $e4dc
-FA8A: A0 00    ldy #$00
-FA8C: 8C 73 01 sty $0173
-FA8F: 84 69    sty $69
-FA91: 4C D7 EC jmp $ecd7
-FA94: AD 74 01 lda $0174
-FA97: 0D 71 01 ora $0171
-FA9A: D0 0C    bne $faa8
-FA9C: 20 FC E4 jsr $e4fc
-FA9F: AD 73 01 lda $0173
-FAA2: 85 77    sta $77
-FAA4: A9 02    lda #$02
-FAA6: 85 69    sta $69
-FAA8: 60       rts
-FAA9: A0 A7    ldy #$a7
-FAAB: A9 04    lda #$04
-FAAD: 20 5F E4 jsr $e45f
-FAB0: A2 8E    ldx #$8e
-FAB2: A9 4A    lda #$4a
-FAB4: 20 53 E4 jsr $e453
-FAB7: A9 48    lda #$48
-FAB9: A2 40    ldx #$40
-FABB: A0 00    ldy #$00
-FABD: 20 8A E4 jsr $e48a
-FAC0: 20 41 EC jsr $ec41
-FAC3: A9 01    lda #$01
-FAC5: 20 7F E4 jsr $e47f
-FAC8: A2 46    ldx #$46
-FACA: 86 23    stx $23
-FACC: A2 09    ldx #$09
-FACE: B5 6A    lda $6a, x
-FAD0: F0 1B    beq $faed
-FAD2: 86 22    stx $22
-FAD4: 20 66 E4 jsr $e466
-FAD7: A6 23    ldx $23
-FAD9: 8A       txa
-FADA: 38       sec
-FADB: E9 08    sbc #$08
-FADD: 85 23    sta $23
-FADF: A9 F6    lda #$f6
-FAE1: A0 00    ldy #$00
-FAE3: 20 8A E4 jsr $e48a
-FAE6: A5 22    lda $22
-FAE8: 20 54 DE jsr $de54
-FAEB: A6 22    ldx $22
-FAED: CA       dex
-FAEE: 10 DE    bpl $face
-FAF0: 20 66 E4 jsr $e466
-FAF3: A9 F6    lda #$f6
-FAF5: A2 58    ldx #$58
-FAF7: A0 00    ldy #$00
-FAF9: 20 8A E4 jsr $e48a
-FAFC: A2 03    ldx #$03
-FAFE: 86 22    stx $22
-FB00: A6 22    ldx $22
-FB02: A0 00    ldy #$00
-FB04: B5 74    lda $74, x
-FB06: F0 03    beq $fb0b
-FB08: BC C9 EB ldy $ebc9, x
-FB0B: B9 48 4D lda $4d48, y
-FB0E: BE 49 4D ldx $4d49, y
-FB11: 20 6A E4 jsr $e46a
-FB14: C6 22    dec $22
-FB16: 10 E8    bpl $fb00
-FB18: 20 A7 EC jsr $eca7
-FB1B: 60       rts
-FB1C: A2 5C    ldx #$5c
-FB1E: A9 4B    lda #$4b
-FB20: 4C 53 E4 jmp $e453
-FB23: E6 30    inc $30
-FB25: 10 06    bpl $fb2d
-FB27: A9 00    lda #$00
-FB29: 85 30    sta $30
-FB2B: E6 23    inc $23
-FB2D: A5 23    lda $23
-FB2F: 29 07    and #$07
-FB31: AA       tax
-FB32: BC 68 EB ldy $eb68, x
-FB35: A9 00    lda #$00
-FB37: 99 F1 67 sta $67f1, y
-FB3A: BC 69 EB ldy $eb69, x
-FB3D: BD 72 EB lda $eb72, x
-FB40: 99 F0 67 sta $67f0, y
-FB43: A9 A8    lda #$a8
-FB45: 99 F1 67 sta $67f1, y
-FB48: A2 62    ldx #$62
-FB4A: A9 4B    lda #$4b
-FB4C: 20 53 E4 jsr $e453
-FB4F: 20 66 E4 jsr $e466
-FB52: A4 30    ldy $30
-FB54: A5 23    lda $23
-FB56: 29 07    and #$07
-FB58: D0 04    bne $fb5e
-FB5A: A9 01    lda #$01
-FB5C: 85 23    sta $23
-FB5E: 20 7F E4 jsr $e47f
-FB61: A2 90    ldx #$90
-FB63: A9 4A    lda #$4a
-FB65: 4C 53 E4 jmp $e453
-FB68: 16 00    asl $00, x
-FB6A: 10 02    bpl $fb6e
-FB6C: 12       kil
-FB6D: 04 14    nop $14
-FB6F: 06 16    asl $16
-FB71: 00       brk
-FB72: 10 10    bpl $fb84
-FB74: 40       rti
-FB75: 40       rti
-FB76: 90 90    bcc $fb08
-FB78: FF FF A2 isb $a2ff, x
-FB7B: 8E A9 4A stx $4aa9
-FB7E: 20 53 E4 jsr $e453
-FB81: A0 06    ldy #$06
-FB83: 84 23    sty $23
-FB85: 20 66 E4 jsr $e466
-FB88: A4 23    ldy $23
-FB8A: B9 BB EB lda $ebbb, y
-FB8D: BE C2 EB ldx $ebc2, y
-FB90: 20 8A E4 jsr $e48a
-FB93: A5 23    lda $23
-FB95: 49 FF    eor #$ff
-FB97: 29 07    and #$07
-FB99: A8       tay
-FB9A: 20 5F E4 jsr $e45f
-FB9D: A5 23    lda $23
-FB9F: D0 07    bne $fba8
-FBA1: A2 1E    ldx #$1e
-FBA3: A9 4B    lda #$4b
-FBA5: 4C AC EB jmp $ebac
-FBA8: A2 18    ldx #$18
-FBAA: A9 4B    lda #$4b
-FBAC: 20 53 E4 jsr $e453
-FBAF: C6 23    dec $23
-FBB1: 10 D2    bpl $fb85
-FBB3: A2 3C    ldx #$3c
-FBB5: A9 4B    lda #$4b
-FBB7: 20 53 E4 jsr $e453
-FBBA: 60       rts
-
-FBD9: A4 22    ldy $22
-FBDB: A9 98    lda #$98
-FBDD: BE 1C EC ldx $ec1c, y
-FBE0: 20 8A E4 jsr $e48a
-FBE3: A2 54    ldx #$54
-FBE5: A9 4B    lda #$4b
-FBE7: 20 53 E4 jsr $e453
-FBEA: C6 22    dec $22
-FBEC: 10 EB    bpl $fbd9
-FBEE: A2 06    ldx #$06
-FBF0: 86 22    stx $22
-FBF2: A4 22    ldy $22
-FBF4: B9 23 EC lda $ec23, y
-FBF7: A2 60    ldx #$60
-FBF9: 20 8A E4 jsr $e48a
-FBFC: A2 4C    ldx #$4c
-FBFE: A9 4B    lda #$4b
-FC00: 20 53 E4 jsr $e453
-FC03: C6 22    dec $22
-FC05: 10 EB    bpl $fbf2
-FC07: AD 00 88 lda $8800
-FC0A: 29 20    and #$20
-FC0C: D0 09    bne $fc17
-FC0E: 06 21    asl $21
-FC10: 90 02    bcc $fc14
-FC12: E6 38    inc $38
-FC14: 4C 1B EC jmp $ec1b
-FC17: A9 20    lda #$20
-FC19: 85 21    sta $21
-FC1B: 60       rts
-
-FC2A: A2 CE    ldx #$ce
-FC2C: A9 4B    lda #$4b
-FC2E: 20 53 E4 jsr $e453
-FC31: A9 20    lda #$20
-FC33: 85 21    sta $21
-FC35: A2 C2    ldx #$c2
-FC37: A9 4B    lda #$4b
-FC39: 20 53 E4 jsr $e453
-FC3C: C6 21    dec $21
-FC3E: 10 F5    bpl $fc35
-FC40: 60       rts
-FC41: A2 0F    ldx #$0f
-FC43: 86 22    stx $22
-FC45: 8D 0B 60 sta $600b
-FC48: EA       nop
-FC49: AD 08 60 lda $6008
-FC4C: 85 24    sta $24
-FC4E: 8D 0B 68 sta $680b
-FC51: EA       nop
-FC52: AD 08 68 lda $6808
-FC55: 48       pha
-FC56: 29 01    and #$01
-FC58: 18       clc
-FC59: 20 54 DE jsr $de54
-FC5C: 46 24    lsr $24
-FC5E: 68       pla
-FC5F: 6A       ror a
-FC60: C6 22    dec $22
-FC62: 10 F1    bpl $fc55
-FC64: A9 D0    lda #$d0
-FC66: A0 00    ldy #$00
-FC68: A2 F8    ldx #$f8
-FC6A: 20 8A E4 jsr $e48a
-FC6D: A2 07    ldx #$07
-FC6F: 86 22    stx $22
-FC71: A9 78    lda #$78
-FC73: 85 39    sta $39
-FC75: A9 07    lda #$07
-FC77: 85 3A    sta $3a
-FC79: A9 00    lda #$00
-FC7B: 85 38    sta $38
-FC7D: A8       tay
-FC7E: B1 38    lda ($38), y
-FC80: 49 FF    eor #$ff
-FC82: 29 7F    and #$7f
-FC84: 48       pha
-FC85: 29 01    and #$01
-FC87: 18       clc
-FC88: 20 54 DE jsr $de54
-FC8B: 68       pla
-FC8C: 6A       ror a
-FC8D: C8       iny
-FC8E: C6 3A    dec $3a
-FC90: 10 F2    bpl $fc84
-FC92: A9 D0    lda #$d0
-FC94: A0 00    ldy #$00
-FC96: A2 F8    ldx #$f8
-FC98: 20 8A E4 jsr $e48a
-FC9B: A5 39    lda $39
-FC9D: 18       clc
-FC9E: 69 08    adc #$08
-FCA0: 85 39    sta $39
-FCA2: C9 90    cmp #$90
-FCA4: 90 CF    bcc $fc75
-FCA6: 60       rts
-FCA7: 84 24    sty $24
-FCA9: AD 00 78 lda $7800
-FCAC: 29 0F    and #$0f
-FCAE: 85 21    sta $21
-FCB0: AD 00 80 lda $8000
-FCB3: 29 1F    and #$1f
-FCB5: 85 22    sta $22
-FCB7: AD 00 88 lda $8800
-FCBA: 29 7F    and #$7f
-FCBC: 85 23    sta $23
-FCBE: A5 21    lda $21
-FCC0: 09 10    ora #$10
-FCC2: 25 22    and $22
-FCC4: 09 60    ora #$60
-FCC6: 25 23    and $23
-FCC8: 49 7F    eor #$7f
-FCCA: F0 07    beq $fcd3
-FCCC: 69 40    adc #$40
-FCCE: 8D 00 60 sta $6000
-FCD1: A0 A4    ldy #$a4
-FCD3: 8C 01 60 sty $6001
-FCD6: 60       rts
-FCD7: A2 18    ldx #$18
-FCD9: 2C 00 78 bit $7800
-FCDC: 10 FB    bpl $fcd9
-FCDE: 2C 00 78 bit $7800
-FCE1: 30 FB    bmi $fcde
-FCE3: CA       dex
-FCE4: 10 F3    bpl $fcd9
-FCE6: E6 4F    inc $4f
-FCE8: 2C 00 78 bit $7800
-FCEB: 50 FB    bvc $fce8
-FCED: A9 00    lda #$00
-FCEF: 85 08    sta $08
-FCF1: A9 20    lda #$20
-FCF3: 85 09    sta $09
-FCF5: AD 00 78 lda $7800
-FCF8: 49 FF    eor #$ff
-FCFA: 29 24    and #$24
-FCFC: F0 26    beq $fd24
-FCFE: 06 7B    asl $7b
-FD00: 90 1F    bcc $fd21
-FD02: AD 00 88 lda $8800
-FD05: 29 40    and #$40
-FD07: D0 06    bne $fd0f
-FD09: 20 C2 E1 jsr $e1c2
-FD0C: 20 F4 E5 jsr $e5f4
-FD0F: E6 69    inc $69
-FD11: E6 69    inc $69
-FD13: A9 00    lda #$00
-FD15: A2 06    ldx #$06
-FD17: 9D 00 60 sta $6000, x
-FD1A: 9D 00 68 sta $6800, x
-FD1D: CA       dex
-FD1E: CA       dex
-FD1F: 10 F6    bpl $fd17
-FD21: 4C 28 ED jmp $ed28
-FD24: A9 20    lda #$20
-FD26: 85 7B    sta $7b
-FD28: A5 69    lda $69
-FD2A: C9 0C    cmp #$0c
-FD2C: D0 0E    bne $fd3c
-FD2E: A5 38    lda $38
-FD30: 29 07    and #$07
-FD32: D0 02    bne $fd36
-FD34: A9 01    lda #$01
-FD36: 09 C0    ora #$c0
-FD38: A8       tay
-FD39: 4C 3E ED jmp $ed3e
-FD3C: A0 A7    ldy #$a7
-FD3E: A9 04    lda #$04
-FD40: 20 5F E4 jsr $e45f
-FD43: A2 8E    ldx #$8e
-FD45: A9 4A    lda #$4a
-FD47: 20 53 E4 jsr $e453
-FD4A: 20 78 ED jsr $ed78
-FD4D: 20 66 E4 jsr $e466
-FD50: 20 13 E4 jsr $e413
-FD53: A9 C0    lda #$c0
-FD55: 85 F8    sta $f8
-FD57: 8D 40 88 sta $8840
-FD5A: 8D 80 89 sta $8980
-FD5D: AD 00 78 lda $7800
-FD60: 29 10    and #$10
-FD62: D0 03    bne $fd67
-FD64: 4C D7 EC jmp $ecd7
-FD67: 4C 3A E8 jmp $e83a
-
-FD7E: A2 02    ldx #$02
-FD80: 86 69    stx $69
-FD82: BD 6B ED lda $ed6b, x
-FD85: 48       pha
-FD86: BD 6A ED lda $ed6a, x
-FD89: 48       pha
-FD8A: 60       rts
-FD8B: A9 00    lda #$00
-FD8D: 85 00    sta $00
-FD8F: 8D 13 E4 sta $e413
-FD92: 20 C2 E1 jsr $e1c2
-FD95: 20 FC E4 jsr $e4fc
-FD98: AD 74 01 lda $0174
-FD9B: 30 32    bmi $fdcf
-FD9D: A6 35    ldx $35
-FD9F: AD 00 88 lda $8800
-FDA2: 29 20    and #$20
-FDA4: 85 35    sta $35
-FDA6: D0 27    bne $fdcf
-FDA8: AD 00 80 lda $8000
-FDAB: 29 02    and #$02
-FDAD: D0 0D    bne $fdbc
-FDAF: A5 00    lda $00
-FDB1: D0 03    bne $fdb6
-FDB3: 4C 3A E8 jmp $e83a
-FDB6: 20 DF ED jsr $eddf
-FDB9: 4C CF ED jmp $edcf
-FDBC: 8A       txa
-FDBD: 29 20    and #$20
-FDBF: F0 0E    beq $fdcf
-FDC1: E6 00    inc $00
-FDC3: E6 00    inc $00
-FDC5: A5 00    lda $00
-FDC7: C9 08    cmp #$08
-FDC9: 90 04    bcc $fdcf
-FDCB: A9 00    lda #$00
-FDCD: 85 00    sta $00
-FDCF: 20 03 EE jsr $ee03
-FDD2: 20 11 EE jsr $ee11
-FDD5: AD 00 78 lda $7800
-FDD8: 29 10    and #$10
-FDDA: F0 BC    beq $fd98
-FDDC: 4C 3A E8 jmp $e83a
-FDDF: A6 00    ldx $00
-FDE1: E0 08    cpx #$08
-FDE3: 90 04    bcc $fde9
-FDE5: A2 00    ldx #$00
-FDE7: 86 00    stx $00
-FDE9: BD F3 ED lda $edf3, x
-FDEC: 48       pha
-FDED: BD F2 ED lda $edf2, x
-FDF0: 48       pha
-FDF1: 60       rts
-FDF2: F9 ED F9 sbc $f9ed, y
-FDF5: ED FC ED sbc $edfc
-FDF8: FF ED 4C isb $4ced, x
-FDFB: D8       cld
-FDFC: E4 4C    cpx $4c
-FDFE: D4 E4    nop $e4, x
-FE00: 4C DC E4 jmp $e4dc
-FE03: A5 1D    lda $1d
-FE05: 29 1F    and #$1f
-FE07: C9 1F    cmp #$1f
-FE09: D0 05    bne $fe10
-FE0B: 68       pla
-FE0C: 68       pla
-FE0D: 4C E1 90 jmp $90e1
-FE10: 60       rts
-FE11: 2C 00 78 bit $7800
-FE14: 50 FB    bvc $fe11
-FE16: A9 20    lda #$20
-FE18: 85 09    sta $09
-FE1A: A9 00    lda #$00
-FE1C: 85 08    sta $08
-FE1E: A2 A6    ldx #$a6
-FE20: A9 4B    lda #$4b
-FE22: 20 53 E4 jsr $e453
-FE25: A9 01    lda #$01
-FE27: A0 40    ldy #$40
-FE29: 20 7F E4 jsr $e47f
-FE2C: 20 32 EF jsr $ef32
-FE2F: 20 49 EF jsr $ef49
-FE32: 20 68 EF jsr $ef68
-FE35: 20 A1 EF jsr $efa1
-FE38: A2 40    ldx #$40
-FE3A: A9 B0    lda #$b0
-FE3C: 20 EE E1 jsr $e1ee
-FE3F: A0 29    ldy #$29
-FE41: 20 FC E1 jsr $e1fc
-FE44: A5 00    lda $00
-FE46: 4A       lsr a
-FE47: A8       tay
-FE48: B9 98 EE lda $ee98, y
-FE4B: AA       tax
-FE4C: B9 94 EE lda $ee94, y
-FE4F: 48       pha
-FE50: A9 E0    lda #$e0
-FE52: 20 EE E1 jsr $e1ee
-FE55: 68       pla
-FE56: A8       tay
-FE57: 20 FC E1 jsr $e1fc
-FE5A: 20 ED EE jsr $eeed
-FE5D: A9 F0    lda #$f0
-FE5F: A2 D0    ldx #$d0
-FE61: 20 EE E1 jsr $e1ee
-FE64: 20 9C EE jsr $ee9c
-FE67: 20 AD EE jsr $eead
-FE6A: A2 C0    ldx #$c0
-FE6C: A9 F0    lda #$f0
-FE6E: 20 EE E1 jsr $e1ee
-FE71: 18       clc
-FE72: A5 22    lda $22
-FE74: 20 47 DE jsr $de47
-FE77: A5 21    lda $21
-FE79: 20 47 DE jsr $de47
-FE7C: AD 74 01 lda $0174
-FE7F: 10 0C    bpl $fe8d
-FE81: A9 F0    lda #$f0
-FE83: A2 50    ldx #$50
-FE85: 20 EE E1 jsr $e1ee
-FE88: A0 27    ldy #$27
-FE8A: 20 FC E1 jsr $e1fc
-FE8D: 20 13 E4 jsr $e413
-FE90: 8D 40 88 sta $8840
-FE93: 60       rts
-FE94: 28       plp
-FE95: 2A       rol a
-FE96: 2B 2C    anc #$2c
-FE98: 30 30    bmi $feca
-FE9A: 30 30    bmi $fecc
-FE9C: A5 3A    lda $3a
-FE9E: 18       clc
-FE9F: 20 47 DE jsr $de47
-FEA2: A5 39    lda $39
-FEA4: 20 47 DE jsr $de47
-FEA7: A5 38    lda $38
-FEA9: 20 47 DE jsr $de47
-FEAC: 60       rts
-FEAD: A9 00    lda #$00
-FEAF: 85 21    sta $21
-FEB1: 85 22    sta $22
-FEB3: AD 54 04 lda $0454
-FEB6: 85 38    sta $38
-FEB8: AD 55 04 lda $0455
-FEBB: 85 39    sta $39
-FEBD: AD 56 04 lda $0456
-FEC0: 85 3A    sta $3a
-FEC2: A5 23    lda $23
-FEC4: 05 24    ora $24
-FEC6: F0 24    beq $feec
-FEC8: F8       sed
-FEC9: A5 21    lda $21
-FECB: 18       clc
-FECC: 69 01    adc #$01
-FECE: 85 21    sta $21
-FED0: A5 22    lda $22
-FED2: 69 00    adc #$00
-FED4: 85 22    sta $22
-FED6: D8       cld
-FED7: A5 38    lda $38
-FED9: 38       sec
-FEDA: E5 23    sbc $23
-FEDC: 85 38    sta $38
-FEDE: A5 39    lda $39
-FEE0: E5 24    sbc $24
-FEE2: 85 39    sta $39
-FEE4: A5 3A    lda $3a
-FEE6: E9 00    sbc #$00
-FEE8: 85 3A    sta $3a
-FEEA: 10 DC    bpl $fec8
-FEEC: 60       rts
-FEED: AD 52 04 lda $0452
-FEF0: 0A       asl a
-FEF1: 85 21    sta $21
-FEF3: AD 53 04 lda $0453
-FEF6: 2A       rol a
-FEF7: 85 22    sta $22
-FEF9: AD 50 04 lda $0450
-FEFC: 18       clc
-FEFD: 65 21    adc $21
-FEFF: 85 21    sta $21
-FF01: 85 23    sta $23
-FF03: AD 51 04 lda $0451
-FF06: 65 22    adc $22
-FF08: 85 22    sta $22
-FF0A: 85 24    sta $24
-FF0C: A0 0F    ldy #$0f
-FF0E: A9 00    lda #$00
-FF10: 85 38    sta $38
-FF12: 85 39    sta $39
-FF14: 85 3A    sta $3a
-FF16: F8       sed
-FF17: 06 21    asl $21
-FF19: 26 22    rol $22
-FF1B: A5 38    lda $38
-FF1D: 65 38    adc $38
-FF1F: 85 38    sta $38
-FF21: A5 39    lda $39
-FF23: 65 39    adc $39
-FF25: 85 39    sta $39
-FF27: A5 3A    lda $3a
-FF29: 65 3A    adc $3a
-FF2B: 85 3A    sta $3a
-FF2D: 88       dey
-FF2E: 10 E7    bpl $ff17
-FF30: D8       cld
-FF31: 60       rts
-FF32: A2 68    ldx #$68
-FF34: A9 FC    lda #$fc
-FF36: 20 EE E1 jsr $e1ee
-FF39: A5 F0    lda $f0
-FF3B: 29 10    and #$10
-FF3D: F0 05    beq $ff44
-FF3F: A9 1C    lda #$1c
-FF41: 4C 46 EF jmp $ef46
-FF44: A9 22    lda #$22
-FF46: 4C F8 D9 jmp $d9f8
-FF49: A9 F0    lda #$f0
-FF4B: A2 58    ldx #$58
-FF4D: 20 EE E1 jsr $e1ee
-FF50: A5 F1    lda $f1
-FF52: 4A       lsr a
-FF53: 4A       lsr a
-FF54: 4A       lsr a
-FF55: 4A       lsr a
-FF56: 4A       lsr a
-FF57: A8       tay
-FF58: B9 60 EF lda $ef60, y
-FF5B: 18       clc
-FF5C: 20 47 DE jsr $de47
-FF5F: 60       rts
-FF60: 00       brk
-FF61: 00       brk
-FF62: 14 24    nop $24, x
-FF64: 15 13    ora $13, x
-FF66: 00       brk
-FF67: 00       brk
-FF68: A9 F0    lda #$f0
-FF6A: A2 60    ldx #$60
-FF6C: 20 EE E1 jsr $e1ee
-FF6F: A5 F1    lda $f1
-FF71: 29 03    and #$03
-FF73: A8       tay
-FF74: B9 9D EF lda $ef9d, y
-FF77: 18       clc
-FF78: 20 54 DE jsr $de54
-FF7B: A5 F1    lda $f1
-FF7D: 29 0C    and #$0c
-FF7F: 4A       lsr a
-FF80: 4A       lsr a
-FF81: A8       tay
-FF82: B9 99 EF lda $ef99, y
-FF85: 20 54 DE jsr $de54
-FF88: A5 F1    lda $f1
-FF8A: 29 10    and #$10
-FF8C: D0 05    bne $ff93
-FF8E: A9 01    lda #$01
-FF90: 4C 95 EF jmp $ef95
-FF93: A9 02    lda #$02
-FF95: 20 54 DE jsr $de54
-FF98: 60       rts
-FF99: 01 04    ora ($04, x)
-FF9B: 05 06    ora $06
-FF9D: 00       brk
-FF9E: 02       kil
-FF9F: 01 00    ora ($00, x)
-FFA1: A9 C0    lda #$c0
-FFA3: A2 D0    ldx #$d0
-FFA5: 20 EE E1 jsr $e1ee
-FFA8: A5 F0    lda $f0
-FFAA: 4A       lsr a
-FFAB: 4A       lsr a
-FFAC: 29 03    and #$03
-FFAE: A8       tay
-FFAF: B9 F0 EF lda $eff0, y
-FFB2: 85 21    sta $21
-FFB4: AD C6 45 lda $45c6
-FFB7: AE C7 45 ldx $45c7
-FFBA: 20 6A E4 jsr $e46a
-FFBD: A2 FB    ldx #$fb
-FFBF: A9 F8    lda #$f8
-FFC1: A0 00    ldy #$00
-FFC3: 20 8A E4 jsr $e48a
-FFC6: C6 21    dec $21
-FFC8: 10 EA    bpl $ffb4
-FFCA: AD 00 88 lda $8800
-FFCD: 30 20    bmi $ffef
-FFCF: A9 C0    lda #$c0
-FFD1: A2 B0    ldx #$b0
-FFD3: 20 EE E1 jsr $e1ee
-FFD6: A9 18    lda #$18
-FFD8: 20 F8 D9 jsr $d9f8
-FFDB: A6 18    ldx $18
-FFDD: AD 00 88 lda $8800
-FFE0: 29 40    and #$40
-FFE2: 85 18    sta $18
-FFE4: D0 09    bne $ffef
-FFE6: 8A       txa
-FFE7: F0 06    beq $ffef
-FFE9: A5 F8    lda $f8
-FFEB: 49 C0    eor #$c0
-FFED: 85 F8    sta $f8
-FFEF: 60       rts
+; end of file "LOOTS2.MAC"
+; start of file "LOOSND.MAC"
+; seems that $F000 repeats $E000-$EFFF so let's drop that
 

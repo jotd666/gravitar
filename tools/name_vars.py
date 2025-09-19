@@ -72,6 +72,7 @@ unresolved = dict()
 
 # collect the unresolved symbols
 # add blank after line containing "rts" or "jmp"
+lineno = 1
 for i,line in enumerate(lines):
     toks = re.sub("\s*;.*","",line).split()
     if toks:
@@ -82,9 +83,11 @@ for i,line in enumerate(lines):
                 # branch (including jmp): ignore
                 pass
             else:
-                unresolved[i] = last
+                unresolved[lineno] = last
         if ("jmp" in toks and "else" not in toks[-1]) or "rts" in toks:
             lines[i] += "\n"
+            lineno += 1
+    lineno += 1
 
 # now insert known labels at the proper locations
 for addr,lineno in address2line.items():
