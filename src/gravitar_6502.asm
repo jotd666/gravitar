@@ -123,9 +123,9 @@
 50CC: 8D 59 01 sta $0159	; NO ROOM LEFT FOR THIS GUY
 50CF: 60       rts
 
-50D0:
-	.BYTE 2,4,6,8,9,9,9,9
-	.BYTE 9,9,9,9,9,9,9
+;50D0:
+;	.BYTE 2,4,6,8,9,9,9,9
+;	.BYTE 9,9,9,9,9,9,9
 	
 50DF: A5 F0    lda $f0
 50E1: 29 0C    and #$0c
@@ -134,8 +134,8 @@
 50E5: A8       tay
 50E6: B9 EA 50 lda $50ea, y
 50E9: 60       rts
-50ea:
-	.BYTE 2,3,4,5
+;50ea:
+;	.BYTE 2,3,4,5
 	
 50EE: 20 19 54 jsr $5419                                           
 50F1: 20 67 54 jsr $5467                                           
@@ -379,22 +379,24 @@
 52F1: 85 4B    sta $4b
 52F3: 85 4C    sta $4c
 52F5: 60       rts
-52F6: .BYTE -60,-60,60,60,$A0,0,-60,0
-	.BYTE 60,-$A0,-60,-60,60,60,$A0
-5305:
-      .BYTE -1,-1,0,0,0,0,-1,0
-	.BYTE 0,-1,-1,-1,0,0,0
 
-5314:
-	.BYTE -60,60,60,-60,0,-60,0,60
-	.BYTE 0,-$0A0,-60,60,60,-60,0	
+;52F6: .BYTE -60,-60,60,60,$A0,0,-60,0
+;	.BYTE 60,-$A0,-60,-60,60,60,$A0
+;5305:
+;      .BYTE -1,-1,0,0,0,0,-1,0
+;	.BYTE 0,-1,-1,-1,0,0,0
+;
+;5314:
+;	.BYTE -60,60,60,-60,0,-60,0,60
+;	.BYTE 0,-$0A0,-60,60,60,-60,0	
+;
+;5323:
+;     .BYTE -1,0,0,-1,0,-1,0,0
+;	.BYTE 0,-1,-1,0,0,-1,0
+;5332:
+;	.BYTE 28,38,8,18,10,20,30,0
+;	.BYTE 10,28,28,38,8,18,10
 
-5323:
-     .BYTE -1,0,0,-1,0,-1,0,0
-	.BYTE 0,-1,-1,0,0,-1,0
-5332:
-	.BYTE 28,38,8,18,10,20,30,0
-	.BYTE 10,28,28,38,8,18,10
 5346: BD DC C0 lda $c0dc, x
 5349: 85 39    sta $39
 534B: BD FE C0 lda $c0fe, x
@@ -530,7 +532,9 @@
 545E: AD E5 C0 lda $c0e5
 5461: 9D 0C 01 sta $010c, x
 5464: 60       rts
-5465: .BYTE 10,18
+
+;5465: .BYTE 10,18
+
 5467: A0 0E    ldy #$0e		;ASHOTS+PSHOTS+1
 5469: A9 00    lda #$00
 546B: 99 EC 02 sta $02ec, y
@@ -690,9 +694,9 @@
 5593: A9 08    lda #$08
 5595: 85 EB    sta $eb
 5597: 60       rts
-5598: .BYTE 2,9,4,9,6,9,8,9,9,9
-	.BYTE 9,9,9,9,9,9,9,9,9,9
-	.BYTE 9,9,9,9,9,9,9,9,9,9
+;5598: .BYTE 2,9,4,9,6,9,8,9,9,9
+;	.BYTE 9,9,9,9,9,9,9,9,9,9
+;	.BYTE 9,9,9,9,9,9,9,9,9,9
 	
 55B6: A9 FF    lda #$ff
 55B8: 18       clc
@@ -950,6 +954,7 @@
 5AF6: 10 EC    bpl $5ae4
 5AF8: 60       rts
 
+5B19: A6 CF    ldx $cf
 5B1B: B5 4D    lda $4d, x
 5B1D: 0A       asl a
 5B1E: 18       clc
@@ -1426,9 +1431,9 @@
 93B1: A9 06    lda #$06
 93B3: 95 EB    sta $eb, x
 93B5: 60       rts
-93B6: 
-   .BYTE 81,81,81,64,60,81,81,81
-   .BYTE 50,60,81,81,70,81,60
+;93B6: 
+;   .BYTE 81,81,81,64,60,81,81,81
+;   .BYTE 50,60,81,81,70,81,60
 
 ;PBSCAL:	.BYTE 2,2,2,3,3,2,2,2
 ;	.BYTE 3,3,2,2,3,2,3
@@ -2173,18 +2178,19 @@
 99F4: 68       pla
 99F5: 68       pla
 99F6: 4C 5F 99 jmp $995f
-99fa:	
-.BYTE 0,0,0,0FA,0F8,0,0,0,
-	.BYTE 0,0F8,0,0,-6,0,-8
-9a0a:	
-  .BYTE 0,0,0,6,3,0,0,0
-	.BYTE 4,3,0,0,6,0,8
-9a19:
-  .BYTE 0,0,0,6,8,0,0,0
-	.BYTE 8,8,0,0,8,0,8
-9a28:
-   .BYTE 0,0,0,0FA,0F8,0,0,0
-	.BYTE 0,-8,0,0,-8,0,-8
+99F9: 60       rts
+;99fa:	
+;.BYTE 0,0,0,0FA,0F8,0,0,0,
+;	.BYTE 0,0F8,0,0,-6,0,-8
+;9a0a:	
+;  .BYTE 0,0,0,6,3,0,0,0
+;	.BYTE 4,3,0,0,6,0,8
+;9a19:
+;  .BYTE 0,0,0,6,8,0,0,0
+;	.BYTE 8,8,0,0,8,0,8
+;9a28:
+;   .BYTE 0,0,0,0FA,0F8,0,0,0
+;	.BYTE 0,-8,0,0,-8,0,-8
 	
 9A37: A9 00    lda #$00
 9A39: 85 7A    sta $7a
@@ -2441,8 +2447,8 @@
 9C56: A9 07    lda #$07
 9C58: 95 E3    sta $e3, x
 9C5A: 60       rts
-9c5b:
-	.BYTE 1,2,3,4,5,6,7,8
+;9c5b:
+;	.BYTE 1,2,3,4,5,6,7,8
 9C63: A2 01    ldx #$01
 9C65: 20 04 9D jsr $9d04
 9C68: CA       dex
@@ -2466,11 +2472,11 @@
 9C8E: C6 21    dec $21
 9C90: 10 F8    bpl $9c8a
 9C92: 60       rts
-9C93: 
+;9C93: 
 ;  .BYTE 3,3,3,0,0,4,3,3
 ;	.BYTE 3,3,3,3,3,3,3
 
-9ca2:
+;9ca2:
 ; .BYTE -1,-1,-1,-1,0,3,1,-1
 ;	.BYTE 0,0,1,0,0,0,0
 
@@ -3568,7 +3574,7 @@ BEF4: A5 11    lda $11
 BEF6: C9 20    cmp #$20
 BEF8: 90 02    bcc $befc
 BEFA: 49 3F    eor #$3f
-BEFC: C9 04    cmp #$04
+BEFC: C9 04    cmp #$04   ; useless cmp, call to $c2c5 returns carry
 BEFE: A9 FF    lda #$ff
 BF00: 85 4B    sta $4b
 BF02: 20 C5 C2 jsr $c2c5
@@ -3584,7 +3590,7 @@ BF17: A5 11    lda $11
 BF19: C9 20    cmp #$20
 BF1B: 90 02    bcc $bf1f
 BF1D: 49 3F    eor #$3f
-BF1F: C9 1C    cmp #$1c
+BF1F: C9 1C    cmp #$1c   ; useless cmp, call to $c2c5 returns carry
 BF21: 4C FE BE jmp $befe
 BF24: 60       rts
 BF25: A9 00    lda #$00
@@ -6094,9 +6100,8 @@ D951: 4C 99 D9 jmp $d999
 
 ;SCPHH:  .BYTE -2,0
 
-D954: FE 00 A0 inc $a000, x
-D957: 01 91    ora ($91, x)
-D959: 08       php
+D956: A0 01    ldy #$01
+D958: 91 08    sta ($08), y
 D95A: 88       dey
 D95B: 8A       txa
 D95C: 91 08    sta ($08), y
@@ -6173,7 +6178,8 @@ D9EF: 10 F2    bpl $d9e3
 D9F1: C6 24    dec $24
 D9F3: 10 B6    bpl $d9ab
 D9F5: 60       rts
-D9F6: FE 00 A8 inc $a800, x
+;FCPHH:  .BYTE -2,0
+D9F8: A8       tay
 D9F9: BE 4A 4D ldx $4d4a, y
 D9FC: B9 4B 4D lda $4d4b, y
 D9FF: 20 56 D9 jsr $d956
@@ -6215,7 +6221,7 @@ DA44: 60       rts
 ;LIVOSH: .BYTE 0FB,0FB
 
 DA4D: A6 CF    ldx $cf                                             
-DA4F: B5 00    lda $00, x                                          B5 00
+DA4F: B5 00    lda $00, x
 DA51: C9 08    cmp #$08
 DA53: D0 33    bne $da88
 DA55: B5 4D    lda $4d, x
@@ -6376,19 +6382,19 @@ DB9D: C6 23    dec $23
 DB9F: 10 BB    bpl $db5c
 DBA1: 60       rts
 
-MPOSVH: .BYTE 2,2,0FE,0FE,0FD,0FD,2,2,0,0
-	.BYTE 2,2,0FF,0FF,0FD,0FD,0FF,0FF,2,2
-
-MPOSVL: .BYTE 20,20,0,0,60,60,0,0,0,0
-
-	.BYTE 0,0,90,90,80,80,30,30,10,10
-
-MPOSHH: .BYTE 2,2,2,2,0FD,0FD,0FD,0FD,0FD,0FD
-	.BYTE -1,-1,2,2,-1,-1,-3,-3,2,2
-
-MPOSHL: .BYTE 60,60,80,80,60,60,0E0,0E0,0,0
-	.BYTE 0A0,0A0,0E0,0E0,-1,-1,10,10,0E0,0E0
-BOINDX: .BYTE 8,12,1C
+;MPOSVH: .BYTE 2,2,0FE,0FE,0FD,0FD,2,2,0,0
+;	.BYTE 2,2,0FF,0FF,0FD,0FD,0FF,0FF,2,2
+;
+;MPOSVL: .BYTE 20,20,0,0,60,60,0,0,0,0
+;
+;	.BYTE 0,0,90,90,80,80,30,30,10,10
+;
+;MPOSHH: .BYTE 2,2,2,2,0FD,0FD,0FD,0FD,0FD,0FD
+;	.BYTE -1,-1,2,2,-1,-1,-3,-3,2,2
+;
+;MPOSHL: .BYTE 60,60,80,80,60,60,0E0,0E0,0,0
+;	.BYTE 0A0,0A0,0E0,0E0,-1,-1,10,10,0E0,0E0
+;BOINDX: .BYTE 8,12,1C
 
 
 
@@ -6848,11 +6854,6 @@ E1ED: 60       rts
 ;	.SBTTL * DISK 77 & B49
 ;	.SBTTL ******************
 ;
-;ENTRY POINTS
-	.GLOBL VGMSG	;MESSAGE PROCESSOR
-	.GLOBL MESGPOS
-;
-
 ;
 ;
 ; PASS XPOS=A, YPOS=X
@@ -8687,8 +8688,9 @@ ED67: 4C 3A E8 jmp $e83a
 ;	.WORD STEST9-1		;COLOR BARS
 ;	.WORD STST10-1		;HATCH
 
-ED79: 69 E0    adc #$e0
-ED7B: 0E 90 04 asl $0490
+ED78: A6 69    ldx $69
+ED7A: E0 0E    cpx #$0e
+ED7C: 90 04    bcc $ed82
 ED7E: A2 02    ldx #$02
 ED80: 86 69    stx $69
 ED82: BD 6B ED lda $ed6b, x
@@ -8743,6 +8745,14 @@ EDED: BD F2 ED lda $edf2, x
 EDF0: 48       pha
 EDF1: 60       rts
 
+EDF2:
+	.word	$edfa-1    ; $edf2
+	.word	$edfa-1    ; $edf4
+	.word	$edfd-1    ; $edf6
+	.word	$ee00-1    ; $edf8
+	
+EDFA: 4C D8 E4 jmp $e4d8
+EDFD: 4C D4 E4 jmp $e4d4
 EE00: 4C DC E4 jmp $e4dc
 EE03: A5 1D    lda $1d
 EE05: 29 1F    and #$1f
@@ -8936,11 +8946,12 @@ EF90: 4C 95 EF jmp $ef95
 EF93: A9 02    lda #$02
 EF95: 20 54 DE jsr $de54
 EF98: 60       rts
-EF99: 01 04    ora ($04, x)
-EF9B: 05 06    ora $06
-EF9D: 00       brk
-EF9E: 02       kil
-EF9F: 01 00    ora ($00, x)
+
+
+;RMULT:	.BYTE 1,4,5,6
+;CMTABL: .BYTE 0,2,1,0
+
+
 EFA1: A9 C0    lda #$c0
 EFA3: A2 D0    ldx #$d0
 EFA5: 20 EE E1 jsr $e1ee

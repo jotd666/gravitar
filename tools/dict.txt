@@ -13,6 +13,8 @@ $9036 EXSTAT
 $9097 ALWAYS
 $cd72 DISPLAY
 $7800 IN0
+$eddf STATMD
+$edf2:2 STAJSR
 $ed8b STMAIN
 $9000 mainline
 $fa MKMDFL
@@ -76,7 +78,6 @@ $f9 MONEY_USE
 $fc NCTIME
 $fa MKMDFL
 $2000:2048 VECRAM
-$eb DSTATE
 $0c LACPHF
 $55 ASQUAD
 $e1c2 INISOU
@@ -189,7 +190,7 @@ $0138 PMXVEL
 $0139 NMXVEL
 $28 thrust_vertical
 $29 thrust_horizontal
-$12 LAVEHH
+$12 lander_velocity_HH
 $4d:2 CRPLNT
 $93b6 PLSCAL
 $939c else
@@ -220,7 +221,6 @@ $50df SETLIV
 $42:2 lives
 $e3 ASHSPD
 $016c FUEL3
-$49:2 WAVENO
 $d1 money_BCCNT
 $d2 money_bc
 $0450:2 nb_1p_game
@@ -363,8 +363,8 @@ $E425 display_digit
 $37 ZOOMST
 $48 FUESED
 $2b LFTSCT
-$15 LAVEVH
-$16 LAVEVL
+$15 lander_velocity_VH
+$16 lander_velocity_VL
 $e252 VGMSG0
 $e4c3 VGWAI1
 $36 base_status
@@ -403,7 +403,7 @@ $5980 APTMIN
 $5ae0 IBSTAT
 $596e else
 $5af5 else
-$0049 wave_number
+$0049:2 wave_number
 $5b72:2 XDPNTR
 $56:2 XDELTA
 $5c26:2 VOSPTR
@@ -433,9 +433,9 @@ $9744 sin_table
 $95c5 else
 $DE6E multiply
 $9655 VSIGN
-$17 LAVEVF
-$14 LAVEHF
-$13 LAVEHL
+$17 lander_velocity_VF
+$14 lander_velocity_HF
+$13 lander_velocity_HL
 $9600 else
 $1A MUPCAN
 $19 MUPYER
@@ -454,7 +454,7 @@ $0000 state
 $9848 else
 $98c1 else
 $9849 COMPNT
-$98c7 STICKY
+$98c7 drag_constant
 $9a7e update_landscape_sector_info
 $998e check_scroll_limits
 $9960 NEGVEL
@@ -801,3 +801,6 @@ $4d48 VGMSGA
 $E43F add_jmpl_to_vector_list
 $E46A add_2_words_to_vector_list
 $E47D set_vector_generator_scale
+$edfa CLERSC
+$edfd CLERTM
+$ee00 CLTMSC

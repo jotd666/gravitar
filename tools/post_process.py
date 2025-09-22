@@ -58,10 +58,38 @@ def doit():
             line = lines[i]
             line_address = get_line_address(line)
 
-            if line_address in [0xd92b,0xd939]:
-                # disable port 3/4, put zero
-                line = change_instruction("clr.b\td0",lines,i)
+            if line_address in [0x54b6,0x553a]:
+                # change cmp carry
+                line += "\tINVERT_XC_FLAGS\n"
 
+            if line_address in {0x54bb,0x553a,0x5b6f,0x90af,0x90b3,0xe81d,0xbbeb,0xbf1f}:
+                lines[i+1] = remove_error(lines[i+1])
+
+            if line_address in {0xe784,0xe791}:
+                line = "\tSET_C_FROM_X\n" + line
+                lines[i+1] = remove_error(lines[i+1])
+
+            if line_address in {0xEF16}:
+                line = remove_error(line)
+
+            if line_address in {0xef1f,0xef25,0xef2b}:
+                lines[i-1] = change_instruction("abcd\td4,d0",lines,i-1)
+
+            if line_address == 0x94f1:
+                # remove mixed code/data label:
+                    lines[i-1]="out_94f1:\n"
+            if line_address == 0x94dc:
+                line = line.replace("command_minus_1_","out_")
+
+            if line_address == 0xbbe7:
+                line = "\tPUSH_SR\n"+line
+                lines[i+1] += "\tPOP_SR\n"
+            if line_address == 0x90af:
+                lines[i+1] = "\tPUSH_SR\n"
+            if line_address == 0x90b3:
+                line = "\tPOP_SR\n" + line
+            if line_address == 0xe81d and "addx" in line:
+                line = "\tINVERT_XC_FLAGS\n"+line
 
             if "jump_table" in line:
                 m = jmpre.search(line)
@@ -101,6 +129,7 @@ def doit():
         fw.write(header)
         fw.writelines(lines)
 
+    return nb_errors
 
 if __name__ == "__main__":
     doit()

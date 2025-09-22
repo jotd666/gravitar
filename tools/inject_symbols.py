@@ -78,7 +78,12 @@ def doit():
     # add blank after line containing "rts" or "jmp"
     lineno = 1
     for i,line in enumerate(lines):
+        # remove ,x/,y addressing to detect more labels
+        line = re.sub(", [xy]","",line)
+        line = re.sub("[\(\)]","",line)
+
         toks = re.sub("\s*;.*","",line).split()
+
         if toks:
             last = toks[-1]
             prev = ""
