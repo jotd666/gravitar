@@ -62,18 +62,37 @@ def doit():
                 # change cmp carry
                 line += "\tINVERT_XC_FLAGS\n"
 
-            if line_address in {0x54bb,0x553a,0x5b6f,0x90af,0x90b3,0xe81d,0xbbeb,0xbf1f}:
+            # remove various ERROR directives that we handled somewhere else (or which were
+            # false alarms)
+            if line_address in {0xe749,0Xe49d,0xd965,0xe523,0xe41f,0Xe229,0x54bb,0xe74c,0xe73c,0xe8e3,0xe968,
+            0x553a,0x5b6f,0x90af,0x90b3,0xe81d,0xbbeb,0xbf1f,0xed8a,0xedf1,0xcd90,0x9052,0xe8fb,0xe20f,
+            0xe940,0Xe98b,  # disabled, not fixed (self-tests)
+            }:
                 lines[i+1] = remove_error(lines[i+1])
+
+            # invert asl/sub instructions to preserve carry
+            if line_address in [0xe522,0xe49b,0xe8f9]:
+                line = lines[i-1].rstrip()+" inverted to preserve asl carry\n"
+                lines[i-1] = lines[i]
 
             if line_address in {0xe784,0xe791}:
                 line = "\tSET_C_FROM_X\n" + line
                 lines[i+1] = remove_error(lines[i+1])
 
-            if line_address in {0xEF16}:
+            if re.search("GET_ADDRESS\t.*jump_table",line):
+                index = "X" if ", x" in line or ",x" in line else "Y"
+                line = line.replace("+1","")
+                line = line.replace("GET_ADDRESS",f"PUSH_TABLE_{index}_ADDRESS")
+                lines[i+1] = "\trts   | and jump!\n\n"
+
+            if line_address in {0xEF16,0x95a4}: # sed shit
                 line = remove_error(line)
 
             if line_address in {0xef1f,0xef25,0xef2b}:
                 lines[i-1] = change_instruction("abcd\td4,d0",lines,i-1)
+
+            if line_address == 0x95A7 and "addx" in line:
+                 line = change_instruction("abcd\td4,d0",lines,i)
 
             if line_address == 0x94f1:
                 # remove mixed code/data label:
@@ -84,13 +103,34 @@ def doit():
             if line_address == 0xbbe7:
                 line = "\tPUSH_SR\n"+line
                 lines[i+1] += "\tPOP_SR\n"
-            if line_address == 0x90af:
+            elif line_address == 0x90af:
                 lines[i+1] = "\tPUSH_SR\n"
-            if line_address == 0x90b3:
+            elif line_address == 0x90b3:
                 line = "\tPOP_SR\n" + line
-            if line_address == 0xe81d and "addx" in line:
+            elif line_address == 0xe81d and "addx" in line:
                 line = "\tINVERT_XC_FLAGS\n"+line
 
+            elif line_address == 0xe20d:
+                line += "\tSET_X_FROM_CLEARED_C\n"
+
+            elif line_address == 0xe749:
+                line += "\tSET_X_FROM_CLEARED_C\n\tPUSH_SR\n"
+            elif line_address == 0xe74c:
+                line = "\tPOP_SR\n"+line
+            elif line_address == 0xe74e:
+                # carry is set but X is not, remove SBC (no further carry test)
+                line = change_instruction("subq\t#1,d0",lines,i)
+
+            elif line_address == 0Xe773:
+                # deoptimize
+                lines[i-1] = "\tSET_XC_FLAGS\n"
+                lines[i-2] = ""  # remove optimization comment
+
+            elif line_address == 0xe770:
+                line = "\tCLR_XC_FLAGS\n"+line  # dec doesn't set C
+
+            elif line_address == 0xe73a:
+                line += "\tSET_C_FROM_X   | retrieve lsr X flag for C\n"
             if "jump_table" in line:
                 m = jmpre.search(line)
                 if m:

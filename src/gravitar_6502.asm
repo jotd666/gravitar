@@ -1047,7 +1047,7 @@
 9043: BD 79 90 lda $9079, x
 9046: 48       pha
 9047: 4C 52 90 jmp $9052
-904A: BD 54 90 lda $9054, x
+904A: BD 54 90 lda $9054, x		; [jump_table]
 904D: 48       pha
 904E: BD 53 90 lda $9053, x
 9051: 48       pha
@@ -5205,7 +5205,7 @@ CD80: 20 7F E4 jsr $e47f
 CD83: A6 CF    ldx $cf
 CD85: B5 EB    lda $eb, x
 CD87: AA       tax
-CD88: BD 92 CD lda $cd92, x
+CD88: BD 92 CD lda $cd92, x		; [jump_table]
 CD8B: 48       pha
 CD8C: BD 91 CD lda $cd91, x
 CD8F: 48       pha
@@ -7137,7 +7137,7 @@ E41C: 4C C3 E4 jmp $e4c3    ;ADD LAST BYTE
 ;EXIT	(C) = CARRY CLEARED IF NON-ZERO DIGIT DISPLAYED
 ;USES	A,X,Y,(VGLIST,VGLIST+1)
 
-;VGHEXZ
+;VGHEXZ (this seems uncalled/unused)
 E41F: 90 04    bcc $e425    ;IF NO ZERO SUPPRESSION
 E421: 29 0F    and #$0f
 E423: F0 05    beq $e42a    ;LEAVE C SET
@@ -8679,21 +8679,24 @@ ED60: 29 10    and #$10
 ED62: D0 03    bne $ed67
 ED64: 4C D7 EC jmp $ecd7
 ED67: 4C 3A E8 jmp $e83a
-;SFTJSR
-;	.WORD STEST5-1		;EAROM ERROR CORRECTION
-;	.WORD STEST6-1		;DISPLAY SWITCHES & REPORT PROBLEMS
-;	.WORD STEST7-1		;CROSS HATCH $ ALPHA
-;	.WORD STEST8-1		;SOUND & HYSTERSIS
-;	.WORD STST11-1
-;	.WORD STEST9-1		;COLOR BARS
-;	.WORD STST10-1		;HATCH
+
+ED6A:
+	.word	$ea94-1    ; $ed6a   ;EAROM ERROR CORRECTION
+	.word	$eaa9-1    ; $ed6c   ;DISPLAY SWITCHES & REPORT PROBLEMS
+	.word	$eb1c-1    ; $ed6e   ;CROSS HATCH $ ALPHA
+	.word	$eb23-1    ; $ed70   ;SOUND & HYSTERSIS
+	.word	$ec2a-1    ; $ed72   
+	.word	$eb7a-1    ; $ed74   ;COLOR BARS
+	.word	$ebcd-1    ; $ed76   ;HATCH
+
+
 
 ED78: A6 69    ldx $69
 ED7A: E0 0E    cpx #$0e
 ED7C: 90 04    bcc $ed82
 ED7E: A2 02    ldx #$02
 ED80: 86 69    stx $69
-ED82: BD 6B ED lda $ed6b, x
+ED82: BD 6B ED lda $ed6b, x   ; [jump_table]
 ED85: 48       pha
 ED86: BD 6A ED lda $ed6a, x
 ED89: 48       pha
@@ -8739,7 +8742,7 @@ EDE1: E0 08    cpx #$08
 EDE3: 90 04    bcc $ede9
 EDE5: A2 00    ldx #$00
 EDE7: 86 00    stx $00
-EDE9: BD F3 ED lda $edf3, x
+EDE9: BD F3 ED lda $edf3, x   ; [jump_table]
 EDEC: 48       pha
 EDED: BD F2 ED lda $edf2, x
 EDF0: 48       pha
