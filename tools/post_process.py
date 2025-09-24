@@ -65,7 +65,9 @@ def doit():
             # remove various ERROR directives that we handled somewhere else (or which were
             # false alarms)
             if line_address in {0xe749,0Xe49d,0xd965,0xe523,0xe41f,0Xe229,0x54bb,0xe74c,0xe73c,0xe8e3,0xe968,
-            0x553a,0x5b6f,0x90af,0x90b3,0xe81d,0xbbeb,0xbf1f,0xed8a,0xedf1,0xcd90,0x9052,0xe8fb,0xe20f,
+            0x553a,0x5b6f,0x90af,0x90b3,0xe81d,0xbbeb,0xbf1f,0xed8a,0xedf1,0xcd90,0x9052,0xe8fb,0xe20f,0x9e63,0x9e6e,
+            0x9e7c,0X9e87,0X9e95,0X9ea0,0Xde54,0Xe268,0x960a,0xd6d2,0xe151,0Xde85,0xdab2,0Xbfb2,0Xbfbc,0Xbc78,
+            0xbce3,0xbf05,0xa12d,0xa18c,
             0xe940,0Xe98b,  # disabled, not fixed (self-tests)
             }:
                 lines[i+1] = remove_error(lines[i+1])
@@ -85,7 +87,7 @@ def doit():
                 line = line.replace("GET_ADDRESS",f"PUSH_TABLE_{index}_ADDRESS")
                 lines[i+1] = "\trts   | and jump!\n\n"
 
-            if line_address in {0xEF16,0x95a4}: # sed shit
+            if line_address in {0xEF16,0x95a4,0xddb1}: # sed shit
                 line = remove_error(line)
 
             if line_address in {0xef1f,0xef25,0xef2b}:
@@ -103,16 +105,50 @@ def doit():
             if line_address == 0xbbe7:
                 line = "\tPUSH_SR\n"+line
                 lines[i+1] += "\tPOP_SR\n"
-            elif line_address == 0x90af:
+            elif line_address == 0xe262:
+                line = change_instruction("jra\tVGMSG0_e252",lines,i)
+            elif line_address in [0xddb8,0xddbe]:
+                lines[i-1] = lines[i-1].replace("addx.b","abcd")
+            elif line_address == 0xcc89:
+                line = change_instruction("rts",lines,i)
+            elif line_address == 0xE261:
+                line = change_instruction("addq\t#4,sp",lines,i)
+            elif line_address in [0x90af]:
                 lines[i+1] = "\tPUSH_SR\n"
-            elif line_address == 0x90b3:
+            elif line_address == 0xc9f3:
+                lines[i+2] = remove_error(lines[i+2])
+            elif line_address in [0x90b3,0xbce3]:
                 line = "\tPOP_SR\n" + line
+            elif line_address in [0xbcdc]:
+                line += "\tPUSH_SR\n"
             elif line_address == 0xe81d and "addx" in line:
                 line = "\tINVERT_XC_FLAGS\n"+line
+            elif line_address == 0xe268 and "addx" in line:
+                line = "\tSET_XC_FLAGS\n"+line
+            elif line_address == 0xbfb7:
+                lines[i+2] += "\tSET_X_FROM_C\n\tINVERT_XC_FLAGS\n"
+                lines[i+3] = remove_error(lines[i+3])
+            elif line_address == 0xe894:
+                line = remove_instruction(lines,i)
+            elif line_address == 0x902b:
+                line = change_instruction("jra\tl_901e",lines,i)
+                for j in range(i+1,i+5):
+                    lines[j] = remove_instruction(lines,j)
 
-            elif line_address == 0xe20d:
+            elif line_address in [0xe20d]:
                 line += "\tSET_X_FROM_CLEARED_C\n"
+            elif line_address in [0xe987]:
+                line += "\tSET_X_FROM_C\n\tINVERT_XC_FLAGS\n"
 
+            elif line_address == 0xe150:
+                line += "\tSET_C_FROM_X\n"
+            elif line_address == 0xe989:
+                lines[i-1] = remove_error(lines[i-1])
+
+            elif line_address == 0Xde51:
+                line = line.replace("move.w","movem.w")  # preserve SR
+                line += "\tPUSH_SR\n"
+                lines[i+1] += "\tPOP_SR\n"
             elif line_address == 0xe749:
                 line += "\tSET_X_FROM_CLEARED_C\n\tPUSH_SR\n"
             elif line_address == 0xe74c:
@@ -129,8 +165,21 @@ def doit():
             elif line_address == 0xe770:
                 line = "\tCLR_XC_FLAGS\n"+line  # dec doesn't set C
 
+            elif line_address == 0xd6cc:
+                line = "\tPUSH_SR\n"+line  # move push upper
+                lines[i+2] = ""
+
             elif line_address == 0xe73a:
                 line += "\tSET_C_FROM_X   | retrieve lsr X flag for C\n"
+
+            elif line_address == 0x9604:
+                line += "\tPUSH_SR\n"
+            elif line_address == 0x9609:
+                line += "\tPOP_SR\n"
+
+            elif line_address == 0Xbfbc:
+                line = "\tSET_C_FROM_X\n" + line
+
             if "jump_table" in line:
                 m = jmpre.search(line)
                 if m:
@@ -139,6 +188,11 @@ def doit():
                     reg = {"x":"A2","y":"A3"}[m.group(3)]
                     rest = re.sub(".*\"","",line)
                     line = f"\t{inst}_{ireg}_INDEXED\t{reg}{rest}"
+
+            if line_address == 0xe8cf:
+                # stop after that line
+                lines[i+1:] = []
+
             lines[i] = line
             i+=1
 

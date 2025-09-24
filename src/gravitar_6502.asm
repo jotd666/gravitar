@@ -3140,6 +3140,9 @@ A4CB: CA       dex
 A4CC: 10 E4    bpl $a4b2
 A4CE: 60       rts
 
+; $a4cf: .BYTE 1,0,2
+
+;COLTST
 A4D2: 20 99 A4 jsr $a499
 A4D5: A5 39    lda $39
 A4D7: 05 3B    ora $3b
@@ -3159,6 +3162,7 @@ A4F5: A5 38    lda $38
 A4F7: 4C FB A4 jmp $a4fb
 A4FA: 38       sec
 A4FB: 60       rts
+;TSTBAS
 A4FC: A4 22    ldy $22
 A4FE: A5 38    lda $38
 A500: D9 12 A5 cmp $a512, y
@@ -3169,6 +3173,15 @@ A50A: B0 05    bcs $a511
 A50C: 65 38    adc $38
 A50E: D9 22 A5 cmp $a522, y
 A511: 60       rts
+
+;BASIZV: .BYTE 24,24,24,24,24,24,24,24
+;
+;BASIZH: .BYTE 2E,2E,2E,2E,2E,2E,2E,2E
+;
+;BASIZD: .BYTE 40,40,40,40,40,40,40,40
+;VSIZE:	.BYTE 13,10,23,30
+;HSIZE:	.BYTE 11,14,24,50
+;DSIZE:	.BYTE 18,1C,32,70
 
 A536: A5 31    lda $31
 A538: 38       sec
@@ -4479,7 +4492,7 @@ C6C7: 18       clc
 C6C8: 65 21    adc $21
 C6CA: 29 3F    and #$3f
 C6CC: A8       tay
-C6CD: B9 2F C8 lda $c82f, y     	;SETUP SHT VELOCITIES
+C6CD: B9 2F C8 lda $c82f, y     	;SETUP SHOOT VELOCITIES
 C6D0: 9D D9 02 sta $02d9, x
 C6D3: B9 BF C7 lda $c7bf, y
 C6D6: 9D BB 02 sta $02bb, x
@@ -5494,6 +5507,7 @@ D00D: 20 C2 CF jsr $cfc2
 D010: C6 22    dec $22
 D012: 4C C2 CF jmp $cfc2
 
+;DSTRFD
 D0F1: A2 0F    ldx #$0f
 D0F3: 86 21    stx $21
 D0F5: 20 66 E4 jsr $e466
@@ -6538,6 +6552,7 @@ DD51: 09 02    ora #$02
 DD53: 85 F4    sta $f4
 DD55: 60       rts
 
+;COITBL: .BYTE 0,4,0,8
 DD5A: A5 F5    lda $f5
 DD5C: 29 F3    and #$f3
 DD5E: 85 F5    sta $f5
@@ -6752,6 +6767,10 @@ E130: 10 E9    bpl $e11b
 E132: A6 25    ldx $25
 E134: A4 26    ldy $26
 E136: 60       rts
+;
+;CONTINUES A PREVIOUSLY STARTED SOUND
+;WHEN CHANNEL 1 GOES IDLE, ALL SOUND ENDS
+;
 E137: A2 0F    ldx #$0f
 E139: B5 8E    lda $8e, x
 E13B: F0 7E    beq $e1bb
@@ -7449,9 +7468,9 @@ E5A6: A9 09    lda #$09
 E5A8: 8D 00 89 sta $8900
 E5AB: EA       nop
 E5AC: A9 08    lda #$08
-E5AE: 8D 00 89 sta $8900
+E5AE: 8D 00 89 sta $8900     ;SELECT CHIP
 E5B1: EC 77 01 cpx $0177
-E5B4: AD 00 70 lda $7000
+E5B4: AD 00 70 lda $7000     ;READ EAROM
 E5B7: 90 20    bcc $e5d9
 E5B9: 4D 79 01 eor $0179
 E5BC: F0 13    beq $e5d1
@@ -7901,21 +7920,21 @@ E74B: 98       tya
 E74C: 90 02    bcc $e750
 E74E: E9 01    sbc #$01
 E750: 95 DB    sta $db, x
-E752: AD 00 78 lda $7800
+E752: AD 00 78 lda $7800     ;CHECK SLAM SWITCH
 E755: 29 08    and #$08
 E757: D0 04    bne $e75d
-E759: A9 F0    lda #$f0
-E75B: 85 DE    sta $de
-E75D: A5 DE    lda $de
+E759: A9 F0    lda #$f0     ;ELSE SET PRE-COIN SLAM TIMER
+E75B: 85 DE    sta $de     ;DECR. 8 TIMES/FRAME=PRST FRAMES
+E75D: A5 DE    lda $de     ;CHECK PRE-COIN SLAM TIMER
 E75F: F0 08    beq $e769
 E761: C6 DE    dec $de
 E763: A9 00    lda #$00
 E765: 95 DB    sta $db, x
-E767: 95 D8    sta $d8, x
-E769: 18       clc
-E76A: B5 D8    lda $d8, x
-E76C: F0 23    beq $e791
-E76E: D6 D8    dec $d8, x
+E767: 95 D8    sta $d8, x  ;CLEAR POST-COIN SLAM TIMER
+E769: 18       clc         ;DEFAULT "NO COIN DETECTED"
+E76A: B5 D8    lda $d8, x  ;CHECK POST-COIN SLAM TIMER
+E76C: F0 23    beq $e791   ;EMPTY, PROCEED
+E76E: D6 D8    dec $d8, x  ;ELSE RUN TIMER
 E770: D0 1F    bne $e791
 E772: 38       sec
 E773: B0 1C    bcs $e791
@@ -8031,6 +8050,8 @@ E838: 60       rts
 ; end of file "COIN65.MAC"
 ; start of file "LOOTS2.MAC"
 
+; this is where the game boots
+
 E83A: 78       sei
 E83B: A2 FE    ldx #$fe
 E83D: 9A       txs
@@ -8065,9 +8086,11 @@ E885: A9 07    lda #$07
 E887: 8D 0F 60 sta $600f
 E88A: 8D 0F 68 sta $680f
 E88D: AD 00 78 lda $7800
-E890: 29 10    and #$10
+E890: 29 10    and #$10		; service mode?
 E892: D0 03    bne $e897
+; all tests...
 E894: 4C D2 E8 jmp $e8d2
+; boots without tests
 E897: A9 01    lda #$01
 E899: 8D 00 20 sta $2000
 E89C: A9 E2    lda #$e2
@@ -8349,15 +8372,15 @@ EA75: CA       dex
 EA76: 10 F8    bpl $ea70
 EA78: 85 76    sta $76
 EA7A: 58       cli
-EA7B: 20 FC E4 jsr $e4fc
-EA7E: A0 02    ldy #$02
-EA80: AD 73 01 lda $0173
+EA7B: 20 FC E4 jsr $e4fc    ;READ EAROM
+EA7E: A0 02    ldy #$02    ;DEFAULT GOOD
+EA80: AD 73 01 lda $0173   ;ERROR??
 EA83: F0 0A    beq $ea8f
-EA85: 85 77    sta $77
-EA87: 20 DC E4 jsr $e4dc
+EA85: 85 77    sta $77     ;BAD EAROM
+EA87: 20 DC E4 jsr $e4dc   ;CLEAR IT IF BAD
 EA8A: A0 00    ldy #$00
 EA8C: 8C 73 01 sty $0173
-EA8F: 84 69    sty $69
+EA8F: 84 69    sty $69    ;WHICH STATE FIRST?
 EA91: 4C D7 EC jmp $ecd7   ;DO DIAG MAIN LINE
 ; BAD EAROM RECOVERY
 EA94: AD 74 01 lda $0174
@@ -8367,7 +8390,7 @@ EA9C: 20 FC E4 jsr $e4fc
 EA9F: AD 73 01 lda $0173
 EAA2: 85 77    sta $77
 EAA4: A9 02    lda #$02
-EAA6: 85 69    sta $69
+EAA6: 85 69    sta $69     ;GO STRAIGHT TO REPORT
 EAA8: 60       rts
 ;REPORT PROBLEMS & DISPLAY SWITCHES
 EAA9: A0 A7    ldy #$a7

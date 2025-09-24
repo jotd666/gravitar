@@ -129,10 +129,11 @@ def doit():
 
     nb_unresolved = set(unresolved.values())
     print(f"nb unresolved symbols: {len(nb_unresolved)}")
-    if nb_unresolved:
-        ful = min(unresolved)
-        first_unresolved = unresolved[ful]
-        print("first unresolved: {} at line {}".format(first_unresolved,ful+1))
-
+##    if nb_unresolved:
+##        ful = sorted(unresolved)
+##        for f in ful:
+##            first_unresolved = unresolved[f]
+##            print("unresolved: {} at line {}".format(first_unresolved,f+1))
+##        print("...")
 if __name__ == "__main__":
     doit()
