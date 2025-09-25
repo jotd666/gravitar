@@ -1,4 +1,4 @@
-; Pooyan OCS slave
+; Gravitar slave
 	INCDIR	Include:
 	INCLUDE	whdload.i
 	INCLUDE	whdmacros.i
@@ -56,7 +56,7 @@ _config
 	ENDC
 
 DECL_VERSION:MACRO
-	dc.b	"1.2"
+	dc.b	"1.0"
 	IFD BARFLY
 		dc.b	" "
 		INCBIN	"T:date"
@@ -67,10 +67,10 @@ DECL_VERSION:MACRO
 	ENDC
 	ENDM
 _data   dc.b    0
-_name	dc.b	"Lock'N'Chase",0
+_name	dc.b	"Gravitar",0
 _copy	dc.b	'2025 JOTD',0
 _info
-    dc.b    "Original by Data East 1981",0
+    dc.b    "Original by Atari Games 1982",0
 	dc.b	0
 _kickname   dc.b    0
 ;--- version id
@@ -143,6 +143,6 @@ progstart
 	; 020 exe just uses CCR instead of SR. Not a problem in
 	; supervisor mode
 exe:
-	dc.b	"locknchase_000",0
+	dc.b	"gravitar_000",0
 
 	
