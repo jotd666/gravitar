@@ -105,6 +105,9 @@ def doit():
             if line_address == 0xbbe7:
                 line = "\tPUSH_SR\n"+line
                 lines[i+1] += "\tPOP_SR\n"
+            elif line_address == 0xc9f4:
+                # make up for bug in converter
+                line = "l_c9f4:\n"+line
             elif line_address == 0xe262:
                 line = change_instruction("jra\tVGMSG0_e252",lines,i)
             elif line_address in [0xddb8,0xddbe]:
@@ -201,9 +204,8 @@ def doit():
 
     header = """\t.include "gravitar_data.inc"
     \t.include "breakpoint.inc"
-    \t.global\tnmi_ee9e
-    \t.global\treset_eea1
-    \t.global\tirq_eea4
+    \t.global\tPOWERON_e83a
+    \t.global\tIRQ_cbea
 
 
 

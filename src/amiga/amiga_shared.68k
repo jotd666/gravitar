@@ -39,7 +39,7 @@ LOG_BUFFER_SIZE = 0x20000
 osd_read_high_scores:
 	movem.l	d0-d7/a0-a6,-(a7)
 	GET_RAM_START_IN_A6
-	lea		(high_score_table_0294,a6),a1
+	*lea		(high_score_table_0294,a6),a1
 	move.l	_resload,d0
 	beq.b	0f
 	move.l	d0,a2
@@ -64,8 +64,8 @@ osd_read_high_scores:
 	dbf		d0,0b
 1:
 	* also update high score on top
-	lea		(high_score_0007+3,a6),a1
-	lea		(high_score_table_0294,a6),a0
+	*lea		(high_score_0007+3,a6),a1
+	*lea		(high_score_table_0294,a6),a0
 	move.b	(a0)+,(a1)
 	move.b	(a0)+,-(a1)
 	move.b	(a0)+,-(a1)
@@ -80,7 +80,7 @@ osd_write_high_scores:
 	bne.b	2f
 	.endif
 	GET_RAM_START_IN_A6
-	lea		(high_score_table_0294,a6),a0
+	*lea		(high_score_table_0294,a6),a0
 
 	move.l	_resload,d0
 	bne.b	1f
@@ -186,16 +186,7 @@ osd_sound_start:
 	bclr	#7,d0			| stop loop command
 	sne		d2
 
-	cmp.w	#HAPPY_SND,d0
-	jne		0f
-	* special case for that one: the game plays it at a
-	* super high frequency. Sounds must be queued by the sound
-	* cpu so it doesn't matter but it matters for us!
-	* so this sound has just been recorded repeated, and
-	* played once (denied playing the other times)
-	cmp.b	last_sound_played,d0
-	jeq		10f
-0:
+
 	move.b	d0,last_sound_played
 	
 	lsl.w	#3,d0
@@ -351,10 +342,9 @@ save_cpu_log:
 	sub.l	a1,d0
 	jeq		0f
 	move.l	log_ptr,a0
-	* add RAM & ROM base in the end
+	* add RAM base in the end
 	move.l	a6,(a0)+
-	move.l	#rom_base,(a0)+
-	addq	#8,d0
+	addq	#4,d0
 	lea		cpu_log_name(pc),a0
 	jbsr	resload_SaveFile(a2)
 0:	

@@ -412,11 +412,6 @@ _user:
 
 	move.b	d1,dip_switches_2
 
-	* something that is not a dip switch but could be
-	* considered like it is the gate bug fix flag
-	btst	#2,d0
-	sne		leave_gate_bug_flag
-
 	
 
 	move.l	cheat_flags,d0
@@ -613,23 +608,29 @@ demo_game:
 	move.l	a6,ram_start_0000
 	.endif
 	
-	* copy ROM at the end. Memory is one big block now
-	lea	rom_base,a0
+	* copy ROMs. Memory is one big block now
+	lea	rom_9000,a0
 	move.l	a6,a1
-	add.l	#0xC000,a1
-	move.w	#0xFFF,d0
+	add.l	#0x9000,a1
+	move.w	#0x6000/4-1,d0	| ROM ends at F000
 0:
 	move.l	(a0)+,(a1)+
 	dbf		d0,0b
 	
-	clr.b	charbank_value
+	lea	rom_2800,a0
+	move.l	a6,a1
+	add.w	#0x2800,a1
+	move.w	#(0x5000-0x2800)/4-1,d0
+0:
+	move.l	(a0)+,(a1)+
+	dbf		d0,0b
 	
 	* enable interrupts. Game doesn't use them
 	* but relies on vbl sync flags
 	jbsr	cpu_init		| zero all registers
 	moveq	#1,d0
 	jbsr	osd_interrupt_control
-	jmp			reset_f003					| pass control to the mpatrol core
+	jmp			POWERON_e83a					| pass control to the mpatrol core
 		
 	
 * just in case some hardware calls nmi
@@ -706,7 +707,7 @@ _vblank:
 	bne.b	1f
 	* clear the sync flag a few lines later
 	* to simulate an extra vblank
-	st.b	bof_sync_flag
+	jbsr	IRQ_cbea
 	clr.b	d0
 1:
 	move.b	d0,mid_screen_interrupt_count
@@ -715,7 +716,7 @@ _vblank:
 
 	subq.w	#1,delay_timer
 		
-	st.b	bof_sync_flag
+	jbsr	IRQ_cbea
 
 	tst.b	frameskip
 	jeq		0f
@@ -737,19 +738,6 @@ _vblank:
     movem.l (a7)+,d0-d7/a0-a6
     rte
 	
-osd_wait_for_sync:
-	tst.b	insert_coin_requested
-	jeq		0f
-	clr.b	insert_coin_requested
-	jbsr	insert_coin
-0:
-	tst.b	bof_sync_flag
-	jeq		osd_wait_for_sync
-	clr.b	bof_sync_flag
-	.ifndef	RELEASE
-	move.b	#0x3F,d0 	| same value as MAME
-	.endif
-	rts
 	
 osd_blitz:
 	blitz
@@ -825,22 +813,22 @@ is_game_playing:
 	move.l	a6,-(a7)
 	GET_RAM_START_IN_A6
 	* both flags are at 1 when actual game is playing (not demo)
-	cmp.w	#0x0101,(actual_game_04,a6)
+	cmp.l	a6,A6
 	movem.l	(a7)+,a6
 	rts
 	
 lose_all_lives:
 	move.l	a6,-(a7)
 	GET_RAM_START_IN_A6
-	st.b	(nb_lives_current_player_2d,a6)		| no more lives
-	bset.b	#2,(player_state_3b,a6)		| died
+	*st.b	(nb_lives_current_player_2d,a6)		| no more lives
+	*bset.b	#2,(player_state_3b,a6)		| died
 	move.l	(a7)+,a6
 	rts
 
 skip_level:
 	move.l	a6,-(a7)
 	GET_RAM_START_IN_A6
-	st.b	(player_state_3b,a6)		| found by mistake :)
+	*st.b	(player_state_3b,a6)		| found by mistake :)
 	move.l	(a7)+,a6
 	rts
 
@@ -925,46 +913,11 @@ really_update_sprites:
 update_bobs_and_hw_sprites:
 
 
-	*****************************
-	* position hardware sprites *
-	*****************************
-
-	GET_RAM_START_IN_A6
-	lea	(MIRROR_ADDRESS,a6),a0
-
-	lea	HW_SpriteYTable_16,a1
-	lea	game_sprites+2,a3
-	lea	sprite_type_table,a2
-	lea	sprite_table,a4
-	moveq	#0,d6
-	moveq	#NB_TARGET_SPRITES-1,d7
-1:
-	jbsr	update_one_sprite
-	cmp.b	#4,d6
-	jeq		2f		| used all the slots: exit!
-	addq.w	#CURRENT_SPRITE_SIZE,a0
-	dbf		d7,1b
-	* reached here means that not all sprites have been allocated:
-	* clear the rest of the sprites
-	move.l	#blank_sprite,d1
-	move.l	d1,d2
-	swap 	d2
-11:
-	move.w	d1,(4,a3)
-	move.w	d1,(4+8,a3)
-	move.w	d2,(a3)
-	move.w	d2,(8,a3)
-	add.w	#0x10,a3
-	addq	#1,d6
-	cmp.b	#4,d6
-	jne		11b
-2:
 	
-	***********************
-	* erase previous BOBs *
-	***********************
+	*****************************
+	* erase previous lines/dots *
+	*****************************
 	
-	move.l	bob_previous_drawed_sprites(pc),a4
 	lea		_custom,a5
 	
 
@@ -999,13 +952,10 @@ update_bobs_and_hw_sprites:
 	GET_RAM_START_IN_A6
 	lea	(MIRROR_ADDRESS,a6),a0
     lea _custom,A5
-	move.l	bob_previous_drawed_sprites(pc),a6
-	lea		bob_table,a4
-	lea	sprite_type_table,a2
 	
 	moveq	#NB_TARGET_SPRITES-1,d7
 1:
-	jbsr	update_one_bob
+	
 	addq.w	#CURRENT_SPRITE_SIZE,a0
 	dbf		d7,1b
 
@@ -1464,303 +1414,6 @@ sound_indirection_table:
     .byte    -1   | 62
     .byte    -1   | 63
 	
-* python code to switch between 0x1000-0x17FF <=> 0x1800-0x2000
-*def wrap_address(a):
-*    # 0x1182 => 0x184C
-*    q,r = divmod(a&0xFFF,32)
-*    return (0x1800+(32*r)+(q))
-*
-*def unwrap_address(a):
-*    offset = a-0x1800
-*    q,r = divmod(offset,32)
-*    return (0x1000+(32*r)+q)
-
-mirrored_videoram:
-	* compute valid 0x3C00-0x3FFF un-mirror
-	sub.w	#MIRROR_ADDRESS,d7
-	move.w	d7,d1		| save
-	lsr.w	#5,d7		| quotient
-	and.w	#0x1F,d1
-	lsl.w	#5,d1
-	add.w	d1,d7
-	* update A0 as well to unmirrored ram 
-	move.l	a6,a0
-	add.w	#SPRITE_ADDRESS,d7
-	add.w	d7,a0
-	rts
-	
-osd_set_charbank:
-	move.b	d0,charbank_value
-	rts
-	
-* a0=screen address (preserved)
-* a6=ram base
-* should preserve all registers
-* allows 3C00-3FFF and 7C00-7FFF ranges
-* 3C00->3C20: sprites
-* 3C21: start of screen (+1 => next column)
-* 3FDF: last char (bottom right)
-*
-* 7C21: start of screen (+1 => next row, +$20 => next column)
-
-osd_video_byte_dirty:
-
-	movem.l	d0-d7/a0-a2,-(a7)
-	move.b	(a0),d0
-	move.l	a0,d7		| save address
-	sub.l	a6,d7
-	.ifndef	RELEASE
-	jmi		2f
-	* sprite area? (seems like double check as would be minus)
-	cmp.w	#MIRROR_ADDRESS+0x400,d7
-	jcs		0f
-	* above mirror address: error
-	BREAKPOINT	"write videoram out of range (D7)"
-	bra.b	osd_w_videoram_out	
-0:
-	.endif
-	* we're below 8000. Are we in the mirror zone
-	cmp.w	#MIRROR_ADDRESS,d7
-	jcs		0f
-	move.b	(a0),d0			| read data that was just written
-	jbsr	mirrored_videoram		| "correct" address
-	* special operation: write data to "unmirrored"
-	move.b	d0,(a0)
-0:
-	* not in/back from the mirrored zone
-	* we now suppose that we're in 3C00-3FFF
-	* check that in debug mode
-	.ifndef		RELEASE
-	cmp.w	#SPRITE_ADDRESS,d7
-	jcc		0f
-1:
-	BREAKPOINT	"write videoram out of range (D7)"
-	bra.b	osd_w_videoram_out	
-0:
-	* we should update mirror zone now TODO
-	
-	cmp.w	#SPRITE_ADDRESS+0x400,d7
-	jcc		1b
-	.endif
-	* now check if not in sprite memory (start)
-	* else skip
-	
-	sub.w	#SCREEN_TILE_ADDRESS,d7
-	jmi		osd_w_videoram_out		| sprite memory: out
-	
-
-
-	move.b	charbank_value,d1		| char bank
-	* update "color" table in write only memory, this is not needed
-	*move.b	d1,(0x7800,a0,d7)	
-	and.w	#3,d1
-	lsl.w	#8,d1
-	add.w	d1,d0		| extended char code
-
-	jbsr	update_bg_tile
-
-osd_w_videoram_out:
-	movem.l	(a7)+,d0-d7/a0-a2
-	rts	
-	
-	.macro	COPY_TILE8_PLANE_ROW
-	move.b	d0,(offset,a1)  | buffer
-	.endm
-	
-	.macro	CLEAR_TILE8_PLANE
-	.set	offset,0
-	.rept	8
-	clr.b	(offset,a1)
-	.set	offset,offset+NB_BYTES_PER_ROW
-	.endr	
-	.endm
-	
-	.macro	TILE8_NEXT_PLANE
-	add.w	d5,a1
-	.endm
-
-	
-	.macro	COPY_TILE16_PLANE_ROW
-	move.w	d0,(offset,a1)  | buffer
-	.endm
-	
-	.macro	CLEAR_TILE16_PLANE
-	.set	offset,0
-	.rept	16
-	clr.w	(offset,a1)
-	.set	offset,offset+NB_BYTES_PER_ROW
-	.endr	
-	.endm
-
-
-* < D7: 0-0x400
-* > D0: 
-compute_tile_xy:
-	moveq	#0,d0
-	move.b	d7,d0
-	
-	and.b	#0x1F,d0	| x
-	move.w	d7,d1
-	and.w	#0x3FF,d1
-	lsr.w	#5,d1		| Y
-	lsl.w	#3,d1		| times 8
-	rts
-
-*compute_tile_xy_portrait:
-*	moveq	#0,d0
-*	moveq	#0,d1
-*	move.w	d7,d1
-*	lsr.w	#5,d7		| this is X
-*	neg.w	d7
-*	add.w	#32,d7
-*	and.w	#0x1F,d1	| this is Y
-*	*addq.w	#2,d1
-*
-*	move.b	d7,d0		| this is X
-*	lsl.b	#3,d1		| Y times 8
-*	rts
-
-
-
-* each column has 0x20*8 = 256 pixels
-* each visible row has 28*8 = 244 pixels
-
-* < D7: 0-0x400 address
-* < D0: extended tile code
-
-update_bg_tile:
-	move.w	d0,d2	| code
-	
-	bsr		compute_tile_xy
-	
-	lea		character_table,a0
-
-	
-	* updating bitplanes
-	move.l	#SCREEN_PLANE_SIZE,d5
-	move.w	#NB_PLAYFIELD_PLANES-1,d4
-	move.l	background_screen_ptr,a1
-
-
-	lea		mulNB_BYTES_PER_ROW_table,A2
-	add.w	d1,d1
-	move.w	(a2,d1.w),d1
-	add.w	d1,d0
-	add.w	d0,a1
-	
-	add.w	d2,d2
-	jeq		11f				| optimize
-	add.w	d2,d2	
-	move.l	(a0,d2.w),d0		| tile pointer
-	
-	jeq		11f 	| can happen when tile code is read when screen is being erased	
-*	.ifndef	RELEASE
-*	jne		12f
-*	add.w	#0x1400,d7
-*	lsr.w	#2,d2
-*	BREAKPOINT	"game tile (in D2) not registered"	
-*	.endif
-*
-*	jra		11f
-12:
-	move.l	d0,a2		| directly pointer on tile bitplanes
-	
-	
-standard_tile:
-
-	* just copy
-
-4:
-	move.l	(a2)+,d0		| next plane
-	jeq		5f
-	move.l	d0,a0
-	.set	offset,0
-	.rept	8
-	move.b	(a0)+,d0
-	COPY_TILE8_PLANE_ROW
-	.set	offset,offset+NB_BYTES_PER_ROW
-	.endr
-41:
-	TILE8_NEXT_PLANE
-	dbf		d4,4b
-0:
-	rts
-5:
-	CLEAR_TILE8_PLANE
-	jra		41b
-41:
-	TILE8_NEXT_PLANE
-	dbf		d4,4b
-0:
-	rts
-
-	* clear tile
-11:
-	CLEAR_TILE8_PLANE
-	TILE8_NEXT_PLANE
-	dbf		d4,11b
-2:
-	rts
-	
-
-
-	
-* < d0.w: x
-* < d1.w: y
-* < a1: sprite pos table (depending on height)
-* > d0.L: control word
-store_sprite_pos:
-	tst.w	d1
-	jmi	0f
-	cmp.w	#Y_MAX,d1
-	jcc	0f
-
-    move.l  a0,-(a7)
-
-    lea	HW_SpriteXTable(pc),a0
-	
-	.ifdef	NO68020
-    add.w	d0,d0
-    add.w	d0,d0
-    move.l	(a0,d0.w),d0
-	move.w	d1,-(a7)
-    add.w	d1,d1
-    add.w	d1,d1
-    or.l	(a1,d1.w),d0
-	move.w	(a7)+,d1
-	.else
-    move.l	(a0,d0.w*4),d0
-    or.l	(a1,d1.w*4),d0	
-	.endc
-    move.l  (a7)+,a0
-    rts
-0:
-	moveq	#0,d0
-	rts
-	
-
-
-
-HW_SpriteXTable:
-	.set	reptn,0
-	.rept 320
-	.set	x,reptn+0x80
-	.set reptn,reptn+1
-    .byte  0,x>>1,0,x&1
-  .endr
-
-	.macro DEF_HW_SPRITE_Y_TABLE	height
-HW_SpriteYTable_\height:
-  .set	reptn,0
-  .rept 288
-	.set	ys,reptn+0x1c
-	.set	ye,ys+\height
-    .byte  ys&255, 0, ye&255, ((ys>>6)&4)+((ye>>7)&2)
-	.set	reptn,reptn+1
-  .endr
-	.endm
-
-	DEF_HW_SPRITE_Y_TABLE	16
 
 set_background_bitplanes:
 	movem.l	a0-a1/d0-d2,-(a7)
@@ -1790,9 +1443,6 @@ set_bitplanes:
 
 	
 osd_debug_hook:
-	rts
-	
-osd_video_control:
 	rts
 	
 osd_read_inputs:
@@ -1916,19 +1566,6 @@ osd_read_dsw2:
 	
 	rts
 
-insert_coin:
-	movem.l	d0-a6,-(a7)
-	GET_RAM_START_IN_A6
-	jbsr 	cpu_init
-
-	move.b	#0x40,dsw0_value_high_bit	| COIN 1
-	jbsr	insert_coin_irq_f000
-	move.b	#0,dsw0_value_high_bit
-
-	movem.l (a7)+,d0-a6
-	rts	
-
-
 	
 
 level2_interrupt:
@@ -1980,7 +1617,7 @@ handle_keyboard:
 	move.w	#0x0FF,_custom+color
 	movem.l	d0-a6,-(a7)
 	GET_RAM_START_IN_A6
-	move.b	#0x89,(nb_pellets_picked_37,a6)	| set the number of pellets: opens exit
+	*move.b	#0x89,(nb_pellets_picked_37,a6)	| set the number of pellets: opens exit
 	movem.l (a7)+,d0-a6
 
 	st.b	cheat_used
