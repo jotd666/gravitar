@@ -64,11 +64,12 @@ def doit():
 
             # remove various ERROR directives that we handled somewhere else (or which were
             # false alarms)
-            if line_address in {0xe749,0Xe49d,0xd965,0xe523,0xe41f,0Xe229,0x54bb,0xe74c,0xe73c,0xe8e3,0xe968,
-            0x553a,0x5b6f,0x90af,0x90b3,0xe81d,0xbbeb,0xbf1f,0xed8a,0xedf1,0xcd90,0x9052,0xe8fb,0xe20f,0x9e63,0x9e6e,
-            0x9e7c,0X9e87,0X9e95,0X9ea0,0Xde54,0Xe268,0x960a,0xd6d2,0xe151,0Xde85,0xdab2,0Xbfb2,0Xbfbc,0Xbc78,
-            0xbce3,0xbf05,0xa12d,0xa18c,
-            0xe940,0Xe98b,  # disabled, not fixed (self-tests)
+            if line_address in {0xe749,0Xe49d,0xd965,0xe41f,0Xe229,0x54bb,0xe74c,0xe73c,0xe8e3,0xe968,0X96a9,0x99bb,0xa50c,
+            0x553a,0x5b6f,0x90af,0x90b3,0xe81d,0xbbeb,0xbf1f,0xed8a,0xedf1,0xcd90,0x9052,0xe8fb,0xe20f,0x9e63,0x9e6e,0xa4f0,
+            0x9e7c,0X9e87,0X9e95,0X9ea0,0Xde54,0Xe268,0x960a,0xd6d2,0xe151,0Xde85,0xdab2,0Xbfb2,0Xbfbc,0Xbc78,0xbde2,0X9fe4,
+            0xbce3,0xbf05,0xa12d,0xa18c,0Xa511,0xc37f,0xA04C,0xc352,0x9abd,0x9ed7,0x9f21,0x9f46,0x9a9a,0x9eb4,0x9ebf,0x9efc,
+            0xe183,0x99df,
+            #0xe940,0Xe98b,  # disabled, not fixed (self-tests)
             }:
                 lines[i+1] = remove_error(lines[i+1])
 
@@ -87,8 +88,16 @@ def doit():
                 line = line.replace("GET_ADDRESS",f"PUSH_TABLE_{index}_ADDRESS")
                 lines[i+1] = "\trts   | and jump!\n\n"
 
-            if line_address in {0xEF16,0x95a4,0xddb1}: # sed shit
+            if line_address in {0xEF16,0x95a4,0xddb1,0x9687}: # sed shit
                 line = remove_error(line)
+
+            if line_address == 0x968b:
+                line = remove_instruction(lines,i)  # remove SEC
+                lines[i+1] = change_instruction("move.b\tfuel_used_48,d4",lines,i+1)
+                lines[i+1] += "\tsbcd\td4,d0  | [...]\n"
+            elif line_address in [0x9696,0x96ae]:
+                line = change_instruction("moveq\t#0,d4",lines,i)
+                line += "\tsbcd\td4,d0  | [...]\n"
 
             if line_address in {0xef1f,0xef25,0xef2b}:
                 lines[i-1] = change_instruction("abcd\td4,d0",lines,i-1)
@@ -96,13 +105,16 @@ def doit():
             if line_address == 0x95A7 and "addx" in line:
                  line = change_instruction("abcd\td4,d0",lines,i)
 
+            elif line_address == 0xe181:
+                line = line.replace("d0","d2") # perform asl directly on d2
+                lines[i+1] = remove_instruction(lines,i+1)
             if line_address == 0x94f1:
                 # remove mixed code/data label:
                     lines[i-1]="out_94f1:\n"
             if line_address == 0x94dc:
                 line = line.replace("command_minus_1_","out_")
 
-            if line_address == 0xbbe7:
+            if line_address in [0xbbe7]:
                 line = "\tPUSH_SR\n"+line
                 lines[i+1] += "\tPOP_SR\n"
             elif line_address == 0xc9f4:
@@ -110,9 +122,14 @@ def doit():
                 line = "l_c9f4:\n"+line
             elif line_address == 0xe262:
                 line = change_instruction("jra\tVGMSG0_e252",lines,i)
-            elif line_address in [0xddb8,0xddbe]:
+            elif line_address in [0xa50e,0xa4f2]:
+                lines[i-1] = lines[i-1].replace("addx.b","add.b")  # carry is clear
+            elif line_address in [0xddb8,0xddbe,0xc38a,0xc392,0xc39a]:
                 lines[i-1] = lines[i-1].replace("addx.b","abcd")
             elif line_address == 0xcc89:
+                # remove register restore and normal return
+                for j in range(i,i-6,-1):
+                    lines[j] = remove_instruction(lines,j)
                 line = change_instruction("rts",lines,i)
             elif line_address == 0xE261:
                 line = change_instruction("addq\t#4,sp",lines,i)
@@ -120,9 +137,9 @@ def doit():
                 lines[i+1] = "\tPUSH_SR\n"
             elif line_address == 0xc9f3:
                 lines[i+2] = remove_error(lines[i+2])
-            elif line_address in [0x90b3,0xbce3]:
+            elif line_address in [0x90b3,0xbce3,0xbde2]:
                 line = "\tPOP_SR\n" + line
-            elif line_address in [0xbcdc]:
+            elif line_address in [0xbcdc,0xbddd]:
                 line += "\tPUSH_SR\n"
             elif line_address == 0xe81d and "addx" in line:
                 line = "\tINVERT_XC_FLAGS\n"+line
@@ -131,6 +148,12 @@ def doit():
             elif line_address == 0xbfb7:
                 lines[i+2] += "\tSET_X_FROM_C\n\tINVERT_XC_FLAGS\n"
                 lines[i+3] = remove_error(lines[i+3])
+            elif line_address == 0xa4f5:
+                remove_error(lines[i-1])
+                lines[i-1] = "\tSET_X_FROM_C\n\tINVERT_XC_FLAGS\n"
+            elif line_address == 0xa4f7:
+                line = "\tSET_C_FROM_X\n"+line
+
             elif line_address == 0xe894:
                 line = remove_instruction(lines,i)
             elif line_address == 0x902b:
@@ -145,7 +168,7 @@ def doit():
 
             elif line_address == 0xe150:
                 line += "\tSET_C_FROM_X\n"
-            elif line_address == 0xe989:
+            elif line_address in [0xe989,0xbefe]:
                 lines[i-1] = remove_error(lines[i-1])
 
             elif line_address == 0Xde51:
@@ -192,10 +215,32 @@ def doit():
                     rest = re.sub(".*\"","",line)
                     line = f"\t{inst}_{ireg}_INDEXED\t{reg}{rest}"
 
+            if line_address == 0xcc44:
+                # disable call to ea_rom_io_mainline
+                line = remove_instruction(lines,i)
+                lines[i+1] = remove_instruction(lines,i+1)
+
+            if line_address == 0xe506:
+                # remove all ea_rom_io_mainline routine
+                for j in range(i,len(lines)):
+                    lines[j] = remove_instruction(lines,j,force=True)
+                    if "[$e5f3" in lines[j]:
+                        break
+                line = lines[i]
+
+            if line_address == 0xCBEA:
+                # remove check/register preserve stuff from IRQ
+                for j in range(i,len(lines)):
+                    lines[j] = remove_instruction(lines,j,force=True)
+                    if "[$cc05" in lines[j]:
+                        break
+                line = lines[i]
+
             if line_address == 0xe8cf:
                 # stop after that line
                 lines[i+1:] = []
 
+            line = line.replace("\tjmp\t","\tjra\t")  # optimize branches
             lines[i] = line
             i+=1
 

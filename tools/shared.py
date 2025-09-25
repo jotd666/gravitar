@@ -10,8 +10,12 @@ src_dir = this_dir / "../src"
 tablere = re.compile("move.w\t#(\w*table_....),d(.)")
 jmpre = re.compile("(j..)\s+\[([ab]),(.)\]")
 
-def remove_instruction(lines,i):
-    return change_instruction("",lines,i)
+def remove_instruction(lines,i,force=False):
+    rval = change_instruction("",lines,i)
+    if rval.strip().startswith("|") or not force:
+        return rval
+    else:
+        return ""
 
 def remove_continuing_lines(lines,i):
     for j in range(i+1,i+4):

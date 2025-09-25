@@ -11,7 +11,7 @@ cmd = ["cmd","/c","6502to68k.py","-i","mot","-o","mit","gravitar_6502_syms.asm",
 subprocess.run(cmd,cwd=src_dir)
 
 nb_errors = post_process.doit()
-if False and nb_errors:
+if nb_errors:
     pass
 else:
 

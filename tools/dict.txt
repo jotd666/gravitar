@@ -381,7 +381,7 @@ $E413 center_and_halt_vector_generator
 $E41F display_digit_with_zero_suppression
 $E425 display_digit
 $37 ZOOMST
-$48 FUESED
+$48 fuel_used
 $2b LFTSCT
 $15 lander_velocity_VH
 $16 lander_velocity_VL
@@ -726,8 +726,8 @@ $e0 interrupt_counter
 $e506 ea_rom_io_mainline
 $fb INCNTR
 $E47F VGSCAL
-$02 SYNC
-$03 BUFRDY
+$02 sync
+$03 buffer_ready
 $E466 center_beam_in_middle_of_screen
 $e45f set_vector_generator_status
 $D98D SETRND
@@ -754,12 +754,12 @@ $cdf5 DATRM1
 $cdd4 DATRM2
 $ce37 DJIVE
 $d9a7 DFCOUNT
-$d904 DSCORE
+$d904 display_score
 $DCF5 STUPID
-$dad9 DBONUS
-$da89 DSUBON
+$dad9 display_bonus
+$da89 display_super_bonus
 $db0a DNXBON
-$da03 DLIVES
+$da03 display_lives
 $dcb4 DMESGE
 $dd5A no_coin
 $dd3c COIOPT
