@@ -4,7 +4,6 @@
 ; the service mode/self-tests are less documented (if you need that consult the original
 ; sources) because I'm going to skip those when I remake it
 
-; file LOOSEU.MAC
 
 ;	map(0x0000, 0x07ff).ram();
 ;	map(0x2000, 0x27ff).ram(); // vector RAM
@@ -23,6 +22,81 @@
 ;	map(0x8940, 0x897f).w(FUNC(bwidow_state::earom_write));
 ;	map(0x8980, 0x89ed).nopw(); // watchdog clear
 ;	map(0x9000, 0xffff).rom();
+
+;	PORT_START("IN0")
+;	PORT_BIT( 0x01, IP_ACTIVE_LOW, IPT_COIN2 )  // To fit "Coin B" Dip Switch
+;	PORT_BIT( 0x02, IP_ACTIVE_LOW, IPT_COIN1 )  // To fit "Coin A" Dip Switch
+;	PORT_BIT( 0x0c, IP_ACTIVE_LOW, IPT_UNUSED )
+;	PORT_SERVICE( 0x10, IP_ACTIVE_LOW )
+;	PORT_BIT( 0x20, IP_ACTIVE_LOW, IPT_SERVICE1 ) PORT_NAME("Diagnostic Step")
+;	/* bit 6 is the VG HALT bit. We set it to "low" */
+;	/* per default (busy vector processor). */
+;	PORT_BIT( 0x40, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("avg", avg_device, done_r)
+;	/* bit 7 is tied to a 3kHz clock */
+;	PORT_BIT( 0x80, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_MEMBER(bwidow_state, clock_r)
+;
+;	PORT_START("DSW0")
+;	PORT_DIPUNUSED_DIPLOC( 0x03, IP_ACTIVE_HIGH, "D4:!7,!8" )
+;	PORT_DIPNAME(0x0c, 0x04, DEF_STR( Lives ) ) PORT_DIPLOCATION("D4:!5,!6")
+;	PORT_DIPSETTING (  0x00, "3" )
+;	PORT_DIPSETTING (  0x04, "4" )
+;	PORT_DIPSETTING (  0x08, "5" )
+;	PORT_DIPSETTING (  0x0c, "6" )
+;	PORT_DIPNAME(0x10, 0x00, DEF_STR( Difficulty ) ) PORT_DIPLOCATION("D4:!4")
+;	PORT_DIPSETTING (  0x00, DEF_STR( Easy ) )
+;	PORT_DIPSETTING (  0x10, DEF_STR( Hard ) )
+;	PORT_DIPUNUSED_DIPLOC( 0x20, IP_ACTIVE_HIGH, "D4:!3" )
+;	PORT_DIPNAME(0xc0, 0x00, DEF_STR( Bonus_Life ) ) PORT_DIPLOCATION("D4:!1,!2")
+;	PORT_DIPSETTING (  0x00, "10000" )
+;	PORT_DIPSETTING (  0x40, "20000" )
+;	PORT_DIPSETTING (  0x80, "30000" )
+;	PORT_DIPSETTING (  0xc0, DEF_STR( None ) )
+;
+;	PORT_START("DSW1")
+;	PORT_DIPNAME(0x03, 0x00, DEF_STR( Coinage ) ) PORT_DIPLOCATION("B4:!7,!8")
+;	PORT_DIPSETTING (  0x01, DEF_STR( 2C_1C ) )
+;	PORT_DIPSETTING (  0x00, DEF_STR( 1C_1C ) )
+;	PORT_DIPSETTING (  0x03, DEF_STR( 1C_2C ) )
+;	PORT_DIPSETTING (  0x02, DEF_STR( Free_Play ) )
+;	PORT_DIPNAME(0x0c, 0x00, DEF_STR( Coin_B ) ) PORT_DIPLOCATION("B4:!5,!6")
+;	PORT_DIPSETTING (  0x00, "*1" )
+;	PORT_DIPSETTING (  0x04, "*4" )
+;	PORT_DIPSETTING (  0x08, "*5" )
+;	PORT_DIPSETTING (  0x0c, "*6" )
+;	PORT_DIPNAME(0x10, 0x00, DEF_STR( Coin_A ) ) PORT_DIPLOCATION("B4:!4")
+;	PORT_DIPSETTING (  0x00, "*1" )
+;	PORT_DIPSETTING (  0x10, "*2" )
+;	PORT_DIPNAME(0xe0, 0x00, "Bonus Coins" ) PORT_DIPLOCATION("B4:!1,!2,!3")
+;	PORT_DIPSETTING (  0x80, "1 each 5" )
+;	PORT_DIPSETTING (  0x60, "2 each 4" )
+;	PORT_DIPSETTING (  0x40, "1 each 4" )
+;	PORT_DIPSETTING (  0xa0, "1 each 3" )
+;	PORT_DIPSETTING (  0x20, "1 each 2" )
+;	PORT_DIPSETTING (  0x00, DEF_STR( None ) )
+;
+;	PORT_START("IN3")
+;	PORT_BIT( 0x01, IP_ACTIVE_LOW, IPT_BUTTON3 )
+;	PORT_BIT( 0x02, IP_ACTIVE_LOW, IPT_BUTTON1 )
+;	PORT_BIT( 0x04, IP_ACTIVE_LOW, IPT_JOYSTICK_RIGHT ) PORT_2WAY
+;	PORT_BIT( 0x08, IP_ACTIVE_LOW, IPT_JOYSTICK_LEFT ) PORT_2WAY
+;	PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_BUTTON2 )
+;	PORT_BIT( 0x20, IP_ACTIVE_LOW, IPT_UNUSED )
+;	PORT_BIT( 0x40, IP_ACTIVE_LOW, IPT_UNUSED )
+;	PORT_BIT( 0x80, IP_ACTIVE_LOW, IPT_UNUSED )
+;
+;	PORT_START("IN4")
+;	PORT_BIT( 0x01, IP_ACTIVE_LOW, IPT_UNUSED )
+;	PORT_BIT( 0x02, IP_ACTIVE_LOW, IPT_UNUSED )
+;	PORT_BIT( 0x04, IP_ACTIVE_LOW, IPT_UNUSED )
+;	PORT_BIT( 0x08, IP_ACTIVE_LOW, IPT_UNUSED )
+;	PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_UNUSED )
+;	PORT_BIT( 0x20, IP_ACTIVE_LOW, IPT_START1 )
+;	PORT_BIT( 0x40, IP_ACTIVE_LOW, IPT_START2 )
+;	PORT_BIT( 0x80, IP_ACTIVE_LOW, IPT_UNUSED )
+
+
+
+; file LOOSEU.MAC
 
 5000: 20 9B 50 jsr $509b
 5003: C6 D6    dec $d6
@@ -7219,7 +7293,7 @@ E451: D0 1F    bne $e472
 ;USES	A,Y,(VGLIST,VGLIST+1)
 
 E453: 38       sec
-E454: E9 20    sbc #$20
+E454: E9 20    sbc #$20			; reframe to remove $2000 for AVG address
 E456: 4A       lsr a
 E457: 29 1F    and #$1f         ;BASE ADDRESS IS RELATIVE
 E459: 09 A0    ora #$a0
@@ -7336,12 +7410,12 @@ E4A7: A2 04    ldx #$04
 
 E4A9: A0 00    ldy #$00
 E4AB: B5 02    lda $02, x
-E4AD: 91 08    sta ($08), y
+E4AD: 91 08    sta ($08), y		; Y LSB
 E4AF: B5 03    lda $03, x
 E4B1: 29 1F    and #$1f
 E4B3: C8       iny
-E4B4: 91 08    sta ($08), y
-E4B6: B5 00    lda $00, x
+E4B4: 91 08    sta ($08), y		; Y MSB
+E4B6: B5 00    lda $00, x		; X LSB
 E4B8: C8       iny
 E4B9: 91 08    sta ($08), y
 E4BB: B5 01    lda $01, x

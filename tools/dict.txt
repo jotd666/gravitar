@@ -112,7 +112,7 @@ $04 XLSB
 $0170 erase_flag
 $0171 ea_read_request
 $0172 ea_write_request
-$0A VGBRIT
+$0A vector_brightness
 $4A7A:2 ASADR
 $E4D4 ea_zero_bookkeeping
 $E4D8 ea_zero_hiscores
@@ -784,6 +784,7 @@ $E4C8 TEAX
 $E4C9 TEACNT
 $0177 EACNT
 $e413 VGHALT
+$CF47 DPLANO
 $ef32 DDIFF
 $ef49 DBOADR
 $ef68 DMMULT
@@ -794,7 +795,7 @@ $ee94 MSTABL
 $d169 DSHOTS
 $ee9c VGMSG
 $eead TOTPLA
-$cf57 DEXPLO
+$cf57 display_explosion
 $d2ce DLSCAP
 $E1 ea_source
 $8900 ea_control
@@ -835,14 +836,13 @@ $f5 MSGBT4
 $04AA NMSCAL
 $ce44 DHISCR
 $017f NAMCNT
-$e466 VGCNTR
+$e466 vg_center_beam
 $D9F6 FCPHH
 $d972  set_green
 $de47 DIGIT2
 $e48a VGVTR
 $d986 set_white
 $d976 set_red
-$cf47 VGCNTR
 $d9f8 display_char
 $ceF9 display_letter
 $E0D7 shield_sound
