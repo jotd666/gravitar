@@ -46,10 +46,10 @@ from PIL import Image, ImageDraw
 ##im.save("foo.png")
 
 
-with open("vectors_game_over",'rb') as f:
+with open("vectors",'rb') as f:
     contents = f.read()
 with open("../assets/roms/vector_rom.bin",'rb') as f:
-    contents += f.read()
+    rom_contents = f.read()
 
 class VectorMachine:
     WIDTH = 8192
@@ -60,8 +60,9 @@ class VectorMachine:
         self.__stack = []
         self.__x = 0
         self.__y = 0
-        self.__color = None
-        self.__scale = 1
+        self.__color = 7
+        self.__binary_scaling_factor = 1
+        self.__linear_scaling_factor = 0
         self.__intensity = 1
         self.__im = Image.new("RGB",(VectorMachine.WIDTH,VectorMachine.HEIGHT))
         self.__draw = ImageDraw.Draw(self.__im)
@@ -72,19 +73,34 @@ class VectorMachine:
     def __address(self,a):
         return self.__hex(a*2+0x2000,4)
 
-    def __draw_line(self,new_x,new_y):
-        self.__draw.line((self.__x, self.__y, self.__x+new_x,self.__y+new_y), fill=(0xFF,0xFF,0xFF))
+    def __draw_line(self,new_x,new_y,intensity):
+        r=g=b=0
+
+        if self.__color & 1:
+            b = 0xFF
+        if self.__color & 2:
+            g = 0xFF
+        if self.__color & 4:
+            r = 0xFF
+
+        # temp
+        intensity = bool(intensity)
+
+        fill = (r,g,b)
+        if intensity:
+            self.__draw.line((self.__x, self.__y, self.__x+new_x,self.__y-new_y), fill=fill)
         self.__x+=new_x
-        self.__y+=new_y
+        self.__y-=new_y
 
     def f_set_status(self):
-        self.__color = (self.__word>>8) & 0x7
-        self.__intensity = self.__word & 0xFF
+        self.__color = (self.__word) & 0x7
+        self.__intensity = (self.__word >> 8)
         return f"color={self.__color},dbrit={self.__intensity}"
 
     def f_set_scale(self):
-        self.__scale = self.__word & 0x7FF
-        return f"scale={self.__scale}"
+        self.__binary_scaling_factor = (self.__word >> 8)& 0x7
+        self.__linear_scaling_factor = (self.__word & 0xFF)
+        return f"binary_scaling={self.__binary_scaling_factor}, linear_scaling={self.__linear_scaling_factor}"
 
     def f_draw(self):
         extra_arg = self.__memory[self.__pc] + self.__memory[self.__pc]*256
@@ -92,25 +108,36 @@ class VectorMachine:
         dy = self.__word & 0xFFF
         dx = extra_arg & 0xFFF
         if self.__word & 0x1000:
-            dy = -dy
+            dy -= 0x1000
         if extra_arg & 0x1000:
-            dx = -dx
-        intensity = (extra_arg >> 13)
+            dx -= 0x1000
 
-        self.__draw_line(dx,dy)
+        intensity = (extra_arg >> 13)
+        scaling = self.__get_scaling()
+        dx *= scaling
+        dy *= scaling
+
+        self.__draw_line(dx,dy,intensity)
 
         return f"dx={dx},dy={dy},brit={intensity}"
+
+    def __get_scaling(self):
+        return (1<<(1-self.__binary_scaling_factor)) * (1-self.__linear_scaling_factor/256)
+
     def f_short_draw(self):
         dy = (self.__word >> 8) & 0xF
-        if dy & 0x10:
-            ddd
-            dy = -dy
+        if self.__word & 0x1000:
+            dy -= 16
         dx = self.__word & 0xF
-        if dx & 0x10:
-            ffff
-            dx = -dx
+        if self.__word & 0x10:
+            dx -= 16
+
+        scaling = self.__get_scaling()
+        dx *= 2 * scaling
+        dy *= 2 * scaling
+
         intensity = (self.__word & 0x00E0) >> 5
-        self.__draw_line(dx,dy)
+        self.__draw_line(dx,dy,intensity)
 
         return f"dx={dx},dy={dy},brit={intensity}"
 
@@ -165,11 +192,15 @@ class VectorMachine:
             prefix = f"PC = {self.__address(prev_pc)}, cmd = {self.__command:01x}, arg = ${self.__word:04x}, inst = {cmdname}"
             if args:
                 prefix += f" {args}"
-            print("--"*old_stack+prefix)
+            if "status" in prefix:
+                print("--"*old_stack+prefix)
 
+# VGMSGA aka vg_letters_table at $4d48
+##contents = bytearray(0x800)
+##short_command = [0x00,0x80,0x3F,0xB6,0x3B,0xB6,0x3F,0xB6,0x3B,0xB6,0x20,0x20,0x00,0x00]
+##contents[0:len(short_command)] = short_command
 
-
-
+contents += rom_contents
 vm = VectorMachine(contents)
 vm.run()
 
