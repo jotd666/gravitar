@@ -1,0 +1,162 @@
+Theory of operation for Atari Color Vector Generator 1981-1985
+Jess M. Askey
+jess@askey.org
+
+Last Modified on 2/16/97
+
+	The Atari vector generator is a state machine run that runs 
+independently of the 6502 processor.  The state machine has its own 
+instruction set as well. Most of these instructions are two bytes long while one
+is four. The VG can do many tasks with its time.  It can: HALT itself and tell the
+6502 that it is done, Move the beam to the CENTER of the screen,  Load 
+SCALE info to the binary and linear scaling registers,  Load STATS to the stat 
+registers,  JMP to a new memory location,  JSR to a new location saving the old 
+address on the stack,  RTS from a Subroutine by pulling an address off of the 
+stack, and two DRAW commands; SDRAW(short vector) and LDRAW (long vector).
+
+    This information is for Tempest, other games all vary in minor way but have the 
+same general priciple.
+ 
+    The Vector Generator addresses its instructions in a peculiar way.  Not in 
+order as most processors.  The first address of any instruction is on the odd
+byte and then back to the even byte.  Therefore it is always addressing odd to 
+even.  Example:
+                    Data Listing:    $4000  00
+                                     $4001  45
+                                     $4002  25
+                                     $4003  40
+                                     $4004  .........
+
+    The order of execution is : 4001,4000,4003,4002,4005,4004.......
+
+This is important so keep it in mind when your looking at a vector generator 
+listing!!!!!
+
+                                  
+The format for the instructions are:
+                 
+                            OOOYYYYY  Word 1
+                            ZZZXXXXX  Word 2
+
+	Where OOO is the opcode, ZZZ is the relative intensity,  YYYYYY and 
+XXXXX are data.  
+
+SDRAW: opcode 010, 2 bytes
+
+    Format:    OOOYyyyy
+               ZZZXxxxx
+
+	The DRAW opcode(010) will be discussed first.  yyyy is the 
+lenght in the y direction, and xxxx is the lenght in the x direction. Any 
+vector drawn is from the previous location of the vector. The most significant
+digit of the lenghts is the sign bit. Zero is positive and One is negative, for
+negative vectors the lenght is the one's complement of yyyy or xxxx.
+Here are some examples:
+          
+This following procedure draws a capital letter T
+        
+	Hex string:  20 4C 2C 40 1A 40 20 54
+
+     Order of Execution:   4C    OPC=010   YYYYY=0C 
+	                     20    ZZZ=000   XXXXX=00    Beam off
+	     	               40    OPC=010   YYYYY=00
+                           2C    ZZZ=001   XXXXX=0C    Beam on
+		               40    OPC=010   YYYYY=00
+                           1A    ZZZ=000   XXXXX=1A    (-6)
+		               54    OPC=010   YYYYY=14    (-12)
+                           20    ZZZ=001   XXXXX=00
+
+Hopefully that clears things up a bit on the drawing of the vectors.  The  
+LDRAW command is the same with the addition of two more data bytes.  
+Its format is as follows:
+
+LDRAW: opcode 000, 4 bytes
+
+                         OOOYYYYY    Word 1
+ 	                   YYYYYYYY    Word 2
+                         ZZZXXXXX    Word 3
+                         XXXXXXXX    Word 4
+
+	The added bits of data allow the vectors that are drawn with this 
+command to be very long or very precise( if they are scaled down ). NOTE:
+on the LDRAW command a vectors actual lenght is the YYYYYYYYYYYYY lenght 
+divided by two!!!
+
+The Remaining instructions follow:
+   
+HALT:  opcode=001, bytes 2        
+                            001*****  Word 1
+                            ********  Word 2     *don't care
+
+
+SCALE: opcode 0111, bytes 2
+
+                            011,1,YBBB     Word 1
+			    LLLLLLLL       Word 2
+         
+         Where:  BBB is the Binary Scaling factor. Default=001
+                 LLLLLLLL is the Linear Scaling Factor 
+		 Y is the Y Window flag in Major Havoc only
+
+STAT:  opcode 0110, bytes 2
+                            
+                            011,0,SXPP    Word 1
+                            ZZZZCCCC      Word 2
+
+        Where: CCCC is a color number.
+		   ZZZZ is an intensity for the vector
+		   PP   is the Vector ROM Page(Major Havoc)
+		   S    is the Sparkle Enable(Major Havoc)
+		   X    is the Vector XFLIP flag(Major Havoc)
+
+CENTER: opcode=100 , bytes 2
+                             100*****  Word 1
+                             ********  Word 2
+
+JSR:  opcode=101, bytes 2
+                             101AAAAA    Word 1
+                             AAAAAAAA   Word 2     Jump Sub A
+
+RTS:  opcode=110, bytes 2      
+                             110*****    Word 1
+                             ********    Word 2
+
+JUMP: opcode=111, bytes 2     
+                             111AAAAA    Word 1
+                             AAAAAAAA   Word 2    JUMP A
+
+As with the old VG, the newer one is also dual ported.  This means that the 
+6502 and the VG can access the VG RAM/ROM at at the same time.  The 
+addresses are identical which is different from the old system but more 
+convenient.  The reason for this is because on the JUMP and JSR instructions
+the 13 bit of data are left shifted one position and a 1 is brought in, giving
+you  the effective address.
+
+EXAMPLE:   F8  OPC=111  AAAAA=18
+	   58  AAAAAAAA=58          A=1858
+
+   Left shift 1858 and bring in a 1 to the low bit
+               1858<1  =   40B1  Effective Address
+
+Alpha/numerics Coding:
+      I know that this is the format for Major Havoc, but I haven't
+checked the validity on any other games yet. I assume that they are
+all the same though!  First a little background.
+    The Alpha/Numerics are stored in a lookup table in the vector roms.
+The table contains calls to the appropriate drawing subroutine which is
+a two byte instruction (JSR instruction). The order of the table and it's
+contents are shown during the crosshatch/alpha/numerics screen of the 
+self test, so you can see for yourself.  [Space]=00 0=02 1=04 2=06 ect....
+after 9 is A and after Z are various puctuations marks(these don't exist 
+in older games.  If the letter is the last in its string the high order 
+byte of it's code is set to one making the code negative, this way the game
+doesn't need any lenghth data for each string.   
+
+EXAMPLE:
+       00 02 04 86    Prints-> 012    Notice the code for "2" is now 86
+
+
+Thats all for now, new info soon!!!
+
+     
+		    	

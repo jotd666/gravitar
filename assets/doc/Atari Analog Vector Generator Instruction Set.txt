@@ -1,0 +1,56 @@
+Atari Analog Vector Generator Instruction Set
+
+Compiled from Atari schematics and specifications
+Eric Smith  7/2/92
+---------------------------------------------
+
+NOTE: The vector generator is little-endian.  The instructions are 16 bit
+      words, which need to be stored with the least significant byte in the
+      lower (even) address.  They are shown here with the MSB on the left.
+
+The stack allows four levels of subroutine calls in the TTL version, but only
+three levels in the gate array version.
+
+inst  bit pattern          description
+----  -------------------  -------------------
+VCTR  000- yyyy yyyy yyyy  normal vector
+      zzz- xxxx xxxx xxxx
+HALT  001- ---- ---- ----  halt - does CNTR also on newer hardware
+SVEC  010y yyyy zzzx xxxx  short vector - don't use zero length
+STAT  0110 ---- zzzz cccc  status
+SCAL  0111 -bbb llll llll  scaling
+CNTR  100- ---- dddd dddd  center
+JSRL  101a aaaa aaaa aaaa  jump to subroutine
+RTSL  110- ---- ---- ----  return
+JMPL  111a aaaa aaaa aaaa  jump
+
+-     unused bits
+x, y  relative x and y coordinates in two's complement (5 or 13 bit,
+      5 bit quantities are scaled by 2, so x=1 is really a length 2 vector.
+z     intensity, 0 = blank, 1 means use z from STAT instruction,  2-7 are
+      doubled
+      for actual range of 4-14
+c     color
+b     binary scaling, multiplies all lengths by 2**(1-b), 0 is double size,
+      1 is normal, 2 is half, 3 is 1/4, etc.
+l     linear scaling, multiplies all lengths by 1-l/256, don't exceed $80
+d     delay time, use $40
+a     address (word address relative to base of vector memory)
+
+Notes:
+
+Quantum:
+	the VCTR instruction has a four bit Z field, that is not
+	doubled.  The value 2 means use Z from STAT instruction.
+
+	the SVEC instruction can't be used
+
+Major Havoc:
+	SCAL bit 11 is used for setting a Y axis window.
+
+	STAT bit 11 is used to enable "sparkel" color.
+	STAT bit 10 inverts the X axis of vectors.
+	STAT bits 9 and 8 are the Vector ROM bank select.
+
+Star Wars:
+	STAT bits 10, 9, and 8 are used directly for R, G, and B.
