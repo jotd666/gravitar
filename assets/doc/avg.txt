@@ -47,10 +47,10 @@ SDRAW: opcode 010, 2 bytes
                ZZZXxxxx
 
 	The DRAW opcode(010) will be discussed first.  yyyy is the 
-lenght in the y direction, and xxxx is the lenght in the x direction. Any 
+length in the y direction, and xxxx is the length in the x direction. Any 
 vector drawn is from the previous location of the vector. The most significant
-digit of the lenghts is the sign bit. Zero is positive and One is negative, for
-negative vectors the lenght is the one's complement of yyyy or xxxx.
+digit of the lengths is the sign bit. Zero is positive and One is negative, for
+negative vectors the length is the one's complement of yyyy or xxxx.
 Here are some examples:
           
 This following procedure draws a capital letter T
@@ -79,7 +79,7 @@ LDRAW: opcode 000, 4 bytes
 
 	The added bits of data allow the vectors that are drawn with this 
 command to be very long or very precise( if they are scaled down ). NOTE:
-on the LDRAW command a vectors actual lenght is the YYYYYYYYYYYYY lenght 
+on the LDRAW command a vectors actual length is the YYYYYYYYYYYYY length 
 divided by two!!!
 
 The Remaining instructions follow:
@@ -150,7 +150,7 @@ self test, so you can see for yourself.  [Space]=00 0=02 1=04 2=06 ect....
 after 9 is A and after Z are various puctuations marks(these don't exist 
 in older games.  If the letter is the last in its string the high order 
 byte of it's code is set to one making the code negative, this way the game
-doesn't need any lenghth data for each string.   
+doesn't need any lengthh data for each string.   
 
 EXAMPLE:
        00 02 04 86    Prints-> 012    Notice the code for "2" is now 86

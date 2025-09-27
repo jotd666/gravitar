@@ -62,31 +62,69 @@ class VectorMachine:
         self.__y = 0
         self.__color = None
         self.__scale = 1
+        self.__intensity = 1
+        self.__im = Image.new("RGB",(VectorMachine.WIDTH,VectorMachine.HEIGHT))
+        self.__draw = ImageDraw.Draw(self.__im)
+
+    def __hex(self,a,size):
+        return f"${a:0{size}x}"
 
     def __address(self,a):
-        return f"${a*2+0x2000:04x}"
+        return self.__hex(a*2+0x2000,4)
+
+    def __draw_line(self,new_x,new_y):
+        self.__draw.line((self.__x, self.__y, self.__x+new_x,self.__y+new_y), fill=(0xFF,0xFF,0xFF))
+        self.__x+=new_x
+        self.__y+=new_y
 
     def f_set_status(self):
-        pass
+        self.__color = (self.__word>>8) & 0x7
+        self.__intensity = self.__word & 0xFF
+        return f"color={self.__color},dbrit={self.__intensity}"
+
+    def f_set_scale(self):
+        self.__scale = self.__word & 0x7FF
+        return f"scale={self.__scale}"
+
     def f_draw(self):
         extra_arg = self.__memory[self.__pc] + self.__memory[self.__pc]*256
         self.__pc += 2
+        dy = self.__word & 0xFFF
+        dx = extra_arg & 0xFFF
+        if self.__word & 0x1000:
+            dy = -dy
+        if extra_arg & 0x1000:
+            dx = -dx
+        intensity = (extra_arg >> 13)
 
+        self.__draw_line(dx,dy)
+
+        return f"dx={dx},dy={dy},brit={intensity}"
     def f_short_draw(self):
-        pass
-    def f_unknown(self):
-        pass
-    def f_scale(self):
-        pass
-    def f_color(self):
-        self.__color = self.__word & 0xF
+        dy = (self.__word >> 8) & 0xF
+        if dy & 0x10:
+            ddd
+            dy = -dy
+        dx = self.__word & 0xF
+        if dx & 0x10:
+            ffff
+            dx = -dx
+        intensity = (self.__word & 0x00E0) >> 5
+        self.__draw_line(dx,dy)
+
+        return f"dx={dx},dy={dy},brit={intensity}"
+
+
 
     def f_center(self):
         self.__x = VectorMachine.WIDTH // 2
         self.__y = VectorMachine.HEIGHT // 2
+        return ""
 
     def f_halt(self):
         self.__running = False
+        return ""
+
     def f_jsr(self):
         self.__stack.append(self.__pc)
         self.__pc = self.__word
@@ -98,11 +136,16 @@ class VectorMachine:
 
     def f_return(self):
         self.__pc = self.__stack.pop()
+        return ""
 
-    __commands = [f_draw,f_halt,f_short_draw,f_set_status,f_center,f_jsr,f_return,f_jmp]
+    __commands = [f_draw,f_draw,f_halt,f_halt,f_short_draw,f_short_draw,f_set_status,f_set_scale,f_center,f_center,f_jsr,f_jsr,f_return,f_return,f_jmp,f_jmp]
+
+    def dump(self,filename):
+        self.__im.save(filename)
 
     def run(self):
         self.__running = True
+
         while self.__running:
             prev_pc = self.__pc
             lsb = self.__memory[self.__pc*2]
@@ -110,23 +153,24 @@ class VectorMachine:
             self.__pc += 1
             word = (lsb + msb*256)
 
-            self.__command = word >> 13
+            self.__command = word >> 12
             self.__word = word & 0x1FFF
 
             f = self.__commands[self.__command]
             old_stack = len(self.__stack)
             args = f(self)
+            if args is None:
+                raise Exception(f"{cmdname}: None args!!")
             cmdname = f.__name__[2:]
             prefix = f"PC = {self.__address(prev_pc)}, cmd = {self.__command:01x}, arg = ${self.__word:04x}, inst = {cmdname}"
             if args:
                 prefix += f" {args}"
             print("--"*old_stack+prefix)
 
-im = Image.new("RGB",(VectorMachine.WIDTH,VectorMachine.HEIGHT))
-draw = ImageDraw.Draw(im)
+
+
 
 vm = VectorMachine(contents)
 vm.run()
 
-#print(max(xlist),max(ylist))
-#im.save("out.png")
+vm.dump("out.png")
