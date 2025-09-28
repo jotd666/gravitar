@@ -1,1 +1,15 @@
-resolve 100 missing symbols
+blocked here:
+
+	LOG_REGS	e8b2   | added by add_reg_log.py
+	OP_W_ON_ZP_ADDRESS	addq,INCNTR_fb,#1 |  [$e8b2: inc INCNTR_fb]
+l_e8b4:
+	LOG_REGS	e8b4   | added by add_reg_log.py
+	OP_R_ON_ZP_ADDRESS	move,INCNTR_fb,d0 |  [$e8b4: lda INCNTR_fb]
+	PUSH_SR
+	 |  [$e8b6: sta watchdog_8980]
+	POP_SR
+	
+when +$2000 is filled properly, try to implement vector draw
+
+- ECS: 8 colors
+- AGA: 8 colors, 8 intensities

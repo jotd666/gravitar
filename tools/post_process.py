@@ -10,22 +10,24 @@ from shared import *
 
 
 input_read_dict = {
-"p1_1000":"read_p1_inputs",
-"p2_1001":"read_p2_inputs",
-"p3_1005":"",
-"p4_1006":"",   # no P3 and P4
-"system_1002":"read_system",
+"input_0_7800":"read_inputs_0",
+"input_1_8000":"read_inputs_1",
+"input_2_8800":"read_inputs_2",
+
 "dsw1_1003":"read_dsw1",
 "dsw2_1004":"read_dsw2",
 
 }
 
 input_write_dict = {
-"irq_ack_100a":"",
-"irq_ack_100b":"",
-"p1_1000":"",
-"p2_1001":"",
-"p3_1005":"",
+"watchdog_8980":"",
+"interrupt_ack_88c0":"",
+"vg_stop_8880":"",
+"input_2_8800":"",  # reset vector graphics engine
+"pokey_6000":"",
+"pokey2_6800":"",
+"serial_port_control_600f":"",
+"serial_port_control_680f":"",
 "p4_1006":"",   # no P3 and P4
 "sound_100d":"sound_start",   # sound_start
 "bankswitch_1009":"set_bank",
@@ -239,6 +241,40 @@ def doit():
             if line_address == 0xe8cf:
                 # stop after that line
                 lines[i+1:] = []
+
+            if "GET_ADDRESS" in line:
+                val = line.split()[1]
+                toks = line.split()
+                if '|' in toks:
+                    original_inst = toks[toks.index('|')+2]
+                    input_dict = input_read_dict if original_inst in ["lda","bit"] else input_write_dict
+                    osd_call = input_dict.get(val)
+                    if osd_call is not None:
+                        if input_dict == input_write_dict and original_inst != "sta":
+                            print(f"Unsupported {original_inst} for I/O address: {line.strip()}")
+                            i += 1
+                            continue
+                        if osd_call:
+                            line = change_instruction(f"jbsr\tosd_{osd_call}",lines,i)
+                            if original_inst == "bit":
+                                # bit for those special locations doesn't require d0 to be changed
+                                # it even requires it NOT to be changed by the syscall
+                                # here we "cheat" by copying the result of the syscall in RAM, it works because
+                                # ram is mapped here, since 0x1xxx is between RAM/sprite RAM and video ram but in
+                                # some smaller memory models it would not work!
+                                line = f"""\tmove.w\td0,-(a7)   | save d0
+\tGET_ADDRESS\t{val}
+"""+line+"""\tmove.b\td0,(a0)   | update in ram so we can use BIT
+\tBIT\t(a0)
+\tmovem.w\t(a7)+,d0   | restore d0, preserving BIT status flags
+"""
+                        else:
+                            line = remove_instruction(lines,i)
+                        lines[i+1] = remove_instruction(lines,i+1)
+                        if "stx" in line:
+                            line = f"\texg\td0,d1\n{line}\texg\td0,d1\n"
+                        if "sty" in line:
+                            line = f"\texg\td0,d2\n{line}\texg\td0,d2\n"
 
             line = line.replace("\tjmp\t","\tjra\t")  # optimize branches
             lines[i] = line

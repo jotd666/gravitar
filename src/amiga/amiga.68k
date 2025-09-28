@@ -180,11 +180,11 @@ w\@:
 	.global osd_read_dsw1
 	.global osd_read_dsw2
 	.global	osd_sound_command
-	.global	osd_read_inputs
+	.global	osd_read_inputs_0
+	.global	osd_read_inputs_1
+	.global	osd_read_inputs_2
 	.global	osd_wait_for_sync
-	.global	osd_video_control
-	.global	osd_video_byte_dirty
-	.global	osd_set_charbank
+
 	.global	osd_read_system
 
 	.global	is_game_playing
@@ -607,7 +607,7 @@ demo_game:
 	lea	rom_2800,a0
 	move.l	a6,a1
 	add.w	#0x2800,a1
-	move.w	#(0x5000-0x2800)/4-1,d0
+	move.w	#(0x6000-0x2800)/4-1,d0
 0:
 	move.l	(a0)+,(a1)+
 	dbf		d0,0b
@@ -616,48 +616,46 @@ demo_game:
 	* but relies on vbl sync flags
 	jbsr	cpu_init		| zero all registers
 	
-	lea	_custom,a6
-	jbsr 	draw_line_init
+*	lea	_custom,a6
+*	jbsr 	draw_line_init
+*
+*	move.l	playfield_displayed_screen_ptr,a0
+*	move.w	#20,d0
+*	move.w	#20,d1
+*	move.w	#180,d2
+*	move.w	#180,d3
+*	move.w	#NB_BYTES_PER_ROW,d4
+*
+*	jbsr	draw_line
+*	move.l	playfield_displayed_screen_ptr,a0
+*	add.l	#SCREEN_PLANE_SIZE*2,a0
+*	move.w	#20,d0
+*	move.w	#20,d1
+*	move.w	#160,d2
+*	move.w	#160,d3
+*	move.w	#NB_BYTES_PER_ROW,d4
+*	jbsr	draw_line
+*
+*	move.w	#NB_BYTES_PER_ROW,d4
+*	move.l	playfield_displayed_screen_ptr,a0
+*	add.l	#SCREEN_PLANE_SIZE,a0
+*	move.w	#60,d0
+*	move.w	#60,d1
+*	move.w	#80,d2
+*	move.w	#80,d3
+*	jbsr	draw_line
+*
+*
+*	move.w	#NB_BYTES_PER_ROW,d4
+*	move.l	playfield_displayed_screen_ptr,a0
+*	move.w	#100,d0
+*	move.w	#100,d1
+*	move.w	#110,d2
+*	move.w	#110,d3
+*	jbsr	draw_line_off
+*	jbsr	draw_line
 
-	move.l	playfield_displayed_screen_ptr,a0
-	move.w	#20,d0
-	move.w	#20,d1
-	move.w	#180,d2
-	move.w	#180,d3
-	move.w	#NB_BYTES_PER_ROW,d4
 
-	jbsr	draw_line
-	move.l	playfield_displayed_screen_ptr,a0
-	add.l	#SCREEN_PLANE_SIZE*2,a0
-	move.w	#20,d0
-	move.w	#20,d1
-	move.w	#160,d2
-	move.w	#160,d3
-	move.w	#NB_BYTES_PER_ROW,d4
-	jbsr	draw_line
-
-	move.w	#NB_BYTES_PER_ROW,d4
-	move.l	playfield_displayed_screen_ptr,a0
-	add.l	#SCREEN_PLANE_SIZE,a0
-	move.w	#60,d0
-	move.w	#60,d1
-	move.w	#80,d2
-	move.w	#80,d3
-	jbsr	draw_line
-
-
-	move.w	#NB_BYTES_PER_ROW,d4
-	move.l	playfield_displayed_screen_ptr,a0
-	move.w	#100,d0
-	move.w	#100,d1
-	move.w	#110,d2
-	move.w	#110,d3
-	jbsr	draw_line_off
-	jbsr	draw_line
-
-
-
-	.word	0x60FE
 *	moveq	#1,d0
 *	jbsr	osd_interrupt_control
 	jmp			POWERON_e83a					| pass control to the mpatrol core
@@ -1465,8 +1463,10 @@ set_bitplanes:
 osd_debug_hook:
 	rts
 	
-osd_read_inputs:
-	move.b	player_1_controls,d0
+osd_read_inputs_0:
+osd_read_inputs_1:
+osd_read_inputs_2:
+	move.b	#-1,d0
 	rts
 	
 

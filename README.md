@@ -1,14 +1,15 @@
-# Lock'n'Chase
+# Gravitar
 transcode of Gravitar arcade version for amiga machines
 
 Credits:
 
-- jotd: game reverse engineering, 6502 to 68000 conversion, 
+- jotd: game disassembly & merge with original sources, 6502 to 68000 conversion, 
         amiga sound effects
-
+- historicalsource: thanks for making the original sources available!
+- : invaluable info about vector hardware
 Features:
 
-- 100% original game code, sound & graphics
+- original game code, sound & graphics
 
 
 Controls:
@@ -16,7 +17,7 @@ Controls:
 - joystick left/right: rotate ship 
 - joystick fire 1: fire
 - joystick fire 2: thrust
-- joystick fire 3: beam capture
+- joystick fire 3: beam capture/shield
 
 To start a game (when game not running):
 
