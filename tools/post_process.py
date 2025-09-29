@@ -14,8 +14,9 @@ input_read_dict = {
 "input_1_8000":"read_inputs_1",
 "input_2_8800":"read_inputs_2",
 
-"dsw1_1003":"read_dsw1",
-"dsw2_1004":"read_dsw2",
+"potin_6008":"read_dsw1",
+"potin_6008":"read_dsw2",
+"random_600a":"get_random",
 
 }
 
@@ -23,17 +24,18 @@ input_write_dict = {
 "watchdog_8980":"",
 "interrupt_ack_88c0":"",
 "vg_stop_8880":"",
+"vg_start_8840":"",
 "input_2_8800":"",  # reset vector graphics engine
 "pokey_6000":"",
 "pokey2_6800":"",
 "serial_port_control_600f":"",
 "serial_port_control_680f":"",
-"p4_1006":"",   # no P3 and P4
-"sound_100d":"sound_start",   # sound_start
-"bankswitch_1009":"set_bank",
-"scrollx_lo_100c":"set_scrollx_lo",
-"scrolly_lo_100e":"set_scrolly_lo",
-"scrollx_hi_1008":"set_scrollx_hi",
+"potgo_600b":"",
+"potgo2_680b":"",
+"potin_6008":"",  # audio control
+"potin_6008":"",  # audio control
+
+
 }
 
 
@@ -238,6 +240,14 @@ def doit():
                         break
                 line = lines[i]
 
+            if line_address == 0xe8b2:
+                # remove all NV RAM  low-level stuff & timer
+                for j in range(i,len(lines)):
+                    if "[$e8cc" in lines[j]:
+                        break
+                    lines[j] = remove_instruction(lines,j,force=True)
+                line = lines[i]
+
             if line_address == 0xe8cf:
                 # stop after that line
                 lines[i+1:] = []
@@ -250,11 +260,13 @@ def doit():
                     input_dict = input_read_dict if original_inst in ["lda","bit"] else input_write_dict
                     osd_call = input_dict.get(val)
                     if osd_call is not None:
-                        if input_dict == input_write_dict and original_inst != "sta":
+                        if input_dict == input_write_dict and original_inst not in ["sta","stx"]:
                             print(f"Unsupported {original_inst} for I/O address: {line.strip()}")
                             i += 1
                             continue
                         if osd_call:
+                            if original_inst == "stx":
+                                print("Unsupported {original_inst} for non-dummy I/O address: {line.strip()}")
                             line = change_instruction(f"jbsr\tosd_{osd_call}",lines,i)
                             if original_inst == "bit":
                                 # bit for those special locations doesn't require d0 to be changed
@@ -285,8 +297,8 @@ def doit():
 
     header = """\t.include "gravitar_data.inc"
     \t.include "breakpoint.inc"
-    \t.global\tPOWERON_e83a
-    \t.global\tIRQ_cbea
+    \t.global\tpower_on_e83a
+    \t.global\tirq_cbea
 
 
 

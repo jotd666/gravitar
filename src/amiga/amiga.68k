@@ -174,7 +174,9 @@ w\@:
 	.global		_dosbase
 	.global		cheat_used
 * osd layer		
-	.global osd_interrupt_control
+	.global osd_enable_interrupts
+	.global osd_disable_interrupts
+	.global osd_get_random
 	.global osd_break		| for debug	
 	.global osd_blitz		| for debug
 	.global osd_read_dsw1
@@ -612,8 +614,6 @@ demo_game:
 	move.l	(a0)+,(a1)+
 	dbf		d0,0b
 	
-	* enable interrupts. Game doesn't use them
-	* but relies on vbl sync flags
 	jbsr	cpu_init		| zero all registers
 	
 *	lea	_custom,a6
@@ -656,9 +656,7 @@ demo_game:
 *	jbsr	draw_line
 
 
-*	moveq	#1,d0
-*	jbsr	osd_interrupt_control
-	jmp			POWERON_e83a					| pass control to the mpatrol core
+	jmp			power_on_e83a					| pass control to the mpatrol core
 		
 	
 * just in case some hardware calls nmi
@@ -735,7 +733,7 @@ _vblank:
 	bne.b	1f
 	* clear the sync flag a few lines later
 	* to simulate an extra vblank
-	jbsr	IRQ_cbea
+	jbsr	irq_cbea
 	clr.b	d0
 1:
 	move.b	d0,mid_screen_interrupt_count
@@ -744,7 +742,7 @@ _vblank:
 
 	subq.w	#1,delay_timer
 		
-	jbsr	IRQ_cbea
+	jbsr	irq_cbea
 
 	tst.b	frameskip
 	jeq		0f
@@ -872,6 +870,23 @@ add_10000_points:
 	move.l	(a7)+,a6
 	rts
 
+
+osd_get_random:
+* > D0: pseudo random value (8 bits, all other bits zeroed)
+	movem.l	a0,-(a7)
+	lea	seed(pc),a0
+	move.l	(a0),d0
+	* thanks meynaf
+	mulu #0xa57b,d0
+	addi.l #0xbb40e62d,d0
+	rol.l #6,d0	
+	move.l	d0,(a0) 
+	movem.l	(a7)+,a0
+	add.b	_custom+vposr,d0
+	and.l	#0xFF,d0
+	rts
+seed:
+	dc.l	0x12345678
 	
 * what: blits data on bg plane, no horizontal shifting (erase)
 * args:
@@ -949,36 +964,12 @@ update_bobs_and_hw_sprites:
 	lea		_custom,a5
 	
 
-	* clear previous positions
-
-	move.w	#NB_TARGET_SPRITES-1,d7
-1:
-	move.w	(2,a4),d1
-	beq.b	11f		| y=0: inactive
-	move.w	(a4),d0
-	and.w	#0x1F0,d0		| align on 16 lower bound
-	* clear area where the sprite was
-	clr.l	(a4)+			| ack deletion
-	move.w	(a4),d4			| height
-	move.w	(2,a4),d2		| width
-	clr.l	(a4)+			| ack deletion
-	move.w	#NB_PLAYFIELD_PLANES,d3
-	move.l	playfield_drawed_screen_ptr(pc),a1
-	jbsr		clear_planes_any_blitter_internal
-	dbf		d7,1b	
-	bra.b	12f
-11:
-	addq	#PREVIOUS_SPRITE_SIZE,a4
-	dbf		d7,1b
-12:	
-
 
 	************************
 	* draw current vectors *
 	************************
 
 	GET_RAM_START_IN_A6
-	lea	(MIRROR_ADDRESS,a6),a0
     lea _custom,A5
 	
 	moveq	#NB_TARGET_SPRITES-1,d7
@@ -1351,18 +1342,14 @@ load_palette:
 
 
 	
-	
-
-* 60Hz VBLANK interrupt (also keyboard)
-* only called at bootup, not from interrupts (at least!!)
-osd_interrupt_control:
-	tst.b	d0
-	jeq		0f
+osd_enable_interrupts:
 	move.w	#0xC038,_custom+intena
 	rts
-0:
+osd_disable_interrupts:
 	move.w	#0x0030,_custom+intena
 	rts
+
+
 	
 	
 * write to 0x4003 to issue a sound
@@ -1545,8 +1532,13 @@ direction_table:
 
 osd_read_dsw1:
 	* actual dipswitches
-	not.b	d0		| active low
-	move.b	#0xBF,d0	| what MAME returns
+	st.b	d0		| active low
+	
+	rts
+osd_read_dsw2:
+	* actual dipswitches
+	st.b	d0		| active low
+	
 	rts
 	
 osd_read_system:
@@ -1577,13 +1569,6 @@ osd_read_system:
 1:	
 	movem.l	(a7)+,a0/d1
 	or.b	dsw0_value_high_bit,d0
-	rts
-
-	
-osd_read_dsw2:
-	* actual dipswitches
-	move.b	dip_switches_2(pc),d0
-	
 	rts
 
 	

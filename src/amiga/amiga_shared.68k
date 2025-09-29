@@ -296,7 +296,7 @@ osd_cpu_logging_control:
 osd_log_cpu:
 
 	move.w	(6,a7),last_known_m6502_pc
-
+	move.w	(6,a7),0x100
 	move.l	a6,-(a7)
 	* check if cpu log is enabled
 	tst.b	cpu_log_enable

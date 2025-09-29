@@ -90,7 +90,7 @@ $5e SEGCNT
 $41 OGLORY
 $a063 add_element
 $a0a2 LSHCOR
-$f1 OPTSW2
+$f1 dip_switches_2
 $d6 CREDITS
 $46 YACL2
 $1d SWITCH
@@ -128,7 +128,7 @@ $d954 SCPHH
 $d8cb DSHIP1
 $d8b1 DPATRO
 $9036 MSGBIT
-$e83a POWERON
+$e83a power_on
 $6000:16 pokey
 $6800:16 pokey2
 $e8d2 ram_test
@@ -182,7 +182,7 @@ $bf7b DSBEND
 $ce BSCALE
 $bc62 ship_vs_shot_collision
 $9676 up_fuel_count
-$f0 OPTSW1
+$f0 dip_switches_1
 $f5 MSGBT4
 $cf PLAYUP
 $30 LSCALE
@@ -542,7 +542,7 @@ $00e3 ash_speed
 $a56F load_coordinates
 $a499 ABSDIF
 $9d56 else
-$600a RANDOM
+$600a random
 $9e04 else
 $9e5c ADDPOS
 $9ead ADHPOS
@@ -705,10 +705,10 @@ $cbda DHIINM
 $cbca DHISCL
 $cbe2 DHIINL
 $cbd2 DHIINH
-$CBEA IRQ
+$CBEA irq
 $0106 unk
-$cc08 SOFTOK
-$cc05 problem
+$cc08 soft_irq_ok
+$cc05 soft_irq_problem
 $8980 watchdog
 $88c0 interrupt_ack
 $cc8a READSW
@@ -724,7 +724,7 @@ $0175 ea_source_index
 $ccc0 CTLEDS
 $e0 interrupt_counter
 $e506 ea_rom_io_mainline
-$fb INCNTR
+$fb interrupt_counter
 $E47F VGSCAL
 $02 sync
 $03 buffer_ready
