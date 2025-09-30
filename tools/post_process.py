@@ -15,7 +15,7 @@ input_read_dict = {
 "input_2_8800":"read_inputs_2",
 
 "potin_6008":"read_dsw1",
-"potin_6008":"read_dsw2",
+"potin2_6808":"read_dsw2",
 "random_600a":"get_random",
 
 }
@@ -33,7 +33,7 @@ input_write_dict = {
 "potgo_600b":"",
 "potgo2_680b":"",
 "potin_6008":"",  # audio control
-"potin_6008":"",  # audio control
+"potin2_6808":"",  # audio control
 
 
 }

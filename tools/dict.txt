@@ -79,7 +79,7 @@ $5207 ENDVYG
 $92a3 ENDGAM
 $92b5 PAUSE
 $937c EXPAND
-$555b ATRACT
+$555b attract_mode
 $a083 ADDSEG
 $9176 MKDPSP
 $a4d2 collision_test

@@ -10,13 +10,6 @@ from shared import *
 address2symbol = dict()
 
 
-# atm removed immediates
-"""
-#$16 CATRCT
-#$08 CDATRC
-#$10  MSTEST
-"""
-
 def doit():
     with open(this_dir / "dict.txt") as f:
         for line in f:
@@ -116,6 +109,7 @@ def doit():
         if symb is not None:
             lines[lineno] = f"{symb}:\n"+lines[lineno]
 
+
     # rebuild buffer
     contents = "".join(lines)
 
@@ -124,8 +118,12 @@ def doit():
         fw.write(contents)
     with open(src_dir / "gravitar_data.inc","w") as fw:
         for a,s in sorted(named_symbols.items()):
-            fw.write(f"{s} = 0x{a:04x}\n")
-
+            # if it's a label it's been handled in the source (like jump table)
+            # DON'T add it as define as it's then overridden by gnu as and it's BAD!
+            if a not in address2line:
+                fw.write(f"{s} = 0x{a:04x}\n")
+        # corner case: label references the data minus one...
+        fw.write("command_minus_1_94f1 = 0x94F1\n")
 
     nb_unresolved = set(unresolved.values())
     print(f"nb unresolved symbols: {len(nb_unresolved)}")

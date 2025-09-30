@@ -1,5 +1,5 @@
-if label in source, don't output in data as offset!
-	
+crash in e47c ???
+
 when +$2000 is filled properly, try to implement vector draw
 
 - ECS: 8 colors
