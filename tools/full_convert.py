@@ -26,6 +26,7 @@ else:
 ##            print(u)
 ##        print(f"{len(undefined)} undefined symbols")
 
-cmd = ["cmd","/c","add_reg_log.py","-s","5000","-e","FF00","-p","1","gravitar.68k"]
+if instrument:
+    cmd = ["cmd","/c","add_reg_log.py","-s","5000","-e","FF00","-p","1","gravitar.68k"]
 
-subprocess.run(cmd,cwd=src_dir)
+    subprocess.run(cmd,cwd=src_dir)

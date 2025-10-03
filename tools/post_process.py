@@ -95,6 +95,9 @@ def doit():
             if line_address in {0xEF16,0x95a4,0xddb1,0x9687}: # sed shit
                 line = remove_error(line)
 
+            elif line_address == 0xe1b2:
+                line = remove_instruction(lines,i)  # remove pokey write
+
             if line_address == 0x968b:
                 line = remove_instruction(lines,i)  # remove SEC
                 lines[i+1] = change_instruction("move.b\tfuel_used_48,d4",lines,i+1)
@@ -135,6 +138,8 @@ def doit():
                 for j in range(i,i-6,-1):
                     lines[j] = remove_instruction(lines,j)
                 line = change_instruction("rts",lines,i)
+            elif line_address == 0xE260:
+                line = remove_instruction(lines,i)
             elif line_address == 0xE261:
                 line = change_instruction("addq\t#4,sp",lines,i)
             elif line_address in [0x90af]:
