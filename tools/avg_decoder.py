@@ -46,7 +46,7 @@ from PIL import Image, ImageDraw
 ##im.save("foo.png")
 
 
-with open("vectors",'rb') as f:
+with open("amiga_vectors",'rb') as f:
     contents = f.read()
 with open("../assets/roms/vector_rom.bin",'rb') as f:
     rom_contents = f.read()
@@ -185,15 +185,17 @@ class VectorMachine:
 
             f = self.__commands[self.__command]
             old_stack = len(self.__stack)
+            cmdname = f.__name__[2:]
+            prefix = f"PC = {self.__address(prev_pc)}, cmd = {self.__command:01x}, arg = ${self.__word:04x}, inst = {cmdname}"
+            print("--"*old_stack+prefix,end="")
             args = f(self)
             if args is None:
                 raise Exception(f"{cmdname}: None args!!")
-            cmdname = f.__name__[2:]
-            prefix = f"PC = {self.__address(prev_pc)}, cmd = {self.__command:01x}, arg = ${self.__word:04x}, inst = {cmdname}"
             if args:
-                prefix += f" {args}"
-            if "status" in prefix:
-                print("--"*old_stack+prefix)
+                print(f" {args}")
+            else:
+                print()
+
 
 # VGMSGA aka vg_letters_table at $4d48
 ##contents = bytearray(0x800)

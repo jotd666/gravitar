@@ -5283,7 +5283,9 @@ CD70: D8       cld
 CD71: 60       rts
 CD72: A6 03    ldx $03
 CD74: F0 FC    beq $cd72
+; store either $20 or $24 (flip flop for vector buffer MSB)
 CD76: 86 09    stx $09
+; LSB for vector buffer ($2002 or $2402)
 CD78: A9 02    lda #$02
 CD7A: 85 08    sta $08
 CD7C: A5 CE    lda $ce

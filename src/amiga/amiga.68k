@@ -1532,16 +1532,16 @@ direction_table:
 
 osd_read_dsw1:
 	* actual dipswitches
-	st.b	d0		| active low
+	move.b	#0xC,d0
 	
 	rts
 osd_read_dsw2:
 	* actual dipswitches
-	st.b	d0		| active low
+	clr.b	d0
 	
 	rts
 	
-osd_read_system:
+osd_read_system_zzzzzzzzzzzzzzzzzzz:
 	move.b	#0x3F,d0
 	movem.l	a0/d1,-(a7)
 	lea		keyboard_table(pc),a0
