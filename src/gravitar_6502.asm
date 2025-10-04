@@ -5446,6 +5446,8 @@ CEF2: 85 38    sta $38
 CEF4: C6 23    dec $23
 CEF6: 10 83    bpl $ce7b
 CEF8: 60       rts
+
+; DSPLTR
 CEF9: 0A       asl a
 CEFA: A8       tay
 CEFB: D0 09    bne $cf06

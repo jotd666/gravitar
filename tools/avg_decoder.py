@@ -51,6 +51,16 @@ with open("amiga_vectors",'rb') as f:
 with open("../assets/roms/vector_rom.bin",'rb') as f:
     rom_contents = f.read()
 
+routine_dict = {}
+offset = 0x2D48-0x800
+letters = rom_contents[offset:offset+(11+26)*2]
+
+letter_values = ["space"]+[str(i) for i in range(0,10)] + [chr(i) for i in range(ord('A'),ord('Z')+1)]
+
+for i in range(0,len(letters),2):
+    value = ((letters[i]+letters[i+1]*256) & 0xFFF)*2
+    routine_dict[value+0x4000] = letter_values[i//2]
+
 class VectorMachine:
     WIDTH = 8192
     HEIGHT = 8192
@@ -102,9 +112,14 @@ class VectorMachine:
         self.__linear_scaling_factor = (self.__word & 0xFF)
         return f"binary_scaling={self.__binary_scaling_factor}, linear_scaling={self.__linear_scaling_factor}"
 
+    def __read_word(self):
+        rval = self.__memory[self.__pc*2] + self.__memory[self.__pc*2+1]*256
+        self.__pc += 1
+        return rval
+
+
     def f_draw(self):
-        extra_arg = self.__memory[self.__pc] + self.__memory[self.__pc]*256
-        self.__pc += 2
+        extra_arg = self.__read_word()
         dy = self.__word & 0xFFF
         dx = extra_arg & 0xFFF
         if self.__word & 0x1000:
@@ -122,7 +137,7 @@ class VectorMachine:
         return f"dx={dx},dy={dy},brit={intensity}"
 
     def __get_scaling(self):
-        return (1<<(1-self.__binary_scaling_factor)) * (1-self.__linear_scaling_factor/256)
+        return (1<<(1-self.__binary_scaling_factor)) * (1-self.__linear_scaling_factor//256)
 
     def f_short_draw(self):
         dy = (self.__word >> 8) & 0xF
@@ -155,7 +170,8 @@ class VectorMachine:
     def f_jsr(self):
         self.__stack.append(self.__pc)
         self.__pc = self.__word
-        return self.__address(self.__pc)
+        real_pc = self.__pc*2 + 0x2000
+        return f"{self.__address(self.__pc)} ({routine_dict.get(real_pc,'?')})"
 
     def f_jmp(self):
         self.__pc = self.__word
@@ -175,10 +191,7 @@ class VectorMachine:
 
         while self.__running:
             prev_pc = self.__pc
-            lsb = self.__memory[self.__pc*2]
-            msb = self.__memory[self.__pc*2+1]
-            self.__pc += 1
-            word = (lsb + msb*256)
+            word = self.__read_word()
 
             self.__command = word >> 12
             self.__word = word & 0x1FFF
