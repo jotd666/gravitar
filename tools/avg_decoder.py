@@ -62,8 +62,8 @@ for i in range(0,len(letters),2):
     routine_dict[value+0x4000] = letter_values[i//2]
 
 class VectorMachine:
-    WIDTH = 8192
-    HEIGHT = 8192
+    WIDTH = 1024
+    HEIGHT = 1024
     def __init__(self,memory):
         self.__pc = 0
         self.__memory = memory

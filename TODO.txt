@@ -1,6 +1,3 @@
-crash in e47c ???
-
-when +$2000 is filled properly, try to implement vector draw
-
+000000 stuff at top, check diff amiga / arcade at line 807 (space vs 0) 163B 163F
 - ECS: 8 colors
 - AGA: 8 colors, 8 intensities

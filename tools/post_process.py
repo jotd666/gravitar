@@ -124,6 +124,9 @@ def doit():
             if line_address in [0xbbe7]:
                 line = "\tPUSH_SR\n"+line
                 lines[i+1] += "\tPOP_SR\n"
+            if line_address in [0xe44b]:
+                # protect carry
+                line = "\tPUSH_SR   | protect carry\n"+line+ "\tPOP_SR   | protect carry\n"
             elif line_address == 0xc9f4:
                 # make up for bug in converter
                 line = "l_c9f4:\n"+line
