@@ -39,27 +39,10 @@ from PIL import Image, ImageDraw
 ##    Jump to new address        0xE0     111AAAAA AAAAAAAA
 ##
 ##
-##draw = ImageDraw.Draw(im)
-##draw.line((0, 0) + im.size, fill=(0xFF,0xFF,0xFF))
-##draw.line((0, im.size[1], im.size[0], 0), fill=(0xFF,0xFF,0xFF))
-##
-##im.save("foo.png")
 
 
-with open("amiga_vectors",'rb') as f:
-    contents = f.read()
-with open("../assets/roms/vector_rom.bin",'rb') as f:
-    rom_contents = f.read()
 
 routine_dict = {}
-offset = 0x2D48-0x800
-letters = rom_contents[offset:offset+(11+26)*2]
-
-letter_values = ["space"]+[str(i) for i in range(0,10)] + [chr(i) for i in range(ord('A'),ord('Z')+1)]
-
-for i in range(0,len(letters),2):
-    value = ((letters[i]+letters[i+1]*256) & 0xFFF)*2
-    routine_dict[value+0x4000] = letter_values[i//2]
 
 class VectorMachine:
     WIDTH = 1024
@@ -119,7 +102,7 @@ class VectorMachine:
 
 
     def f_draw(self):
-        extra_arg = self.__read_word()
+        extra_arg = self.__read_word()   # X
         dy = self.__word & 0xFFF
         dx = extra_arg & 0xFFF
         if self.__word & 0x1000:
@@ -133,11 +116,13 @@ class VectorMachine:
         dy *= scaling
 
         self.__draw_line(dx,dy,intensity)
+        rval = "" if intensity else "(move) "
 
-        return f"dx={dx},dy={dy},brit={intensity}"
+        return f"{rval}dx={dx},dy={dy},brit={intensity},extra_arg=${extra_arg:04x}"
 
     def __get_scaling(self):
-        return int((1<<(1-self.__binary_scaling_factor)) * (1-self.__linear_scaling_factor/256))
+        return ((1<<(1-self.__binary_scaling_factor)) * (1-self.__linear_scaling_factor//256))
+
 
     def f_short_draw(self):
         dy = (self.__word >> 8) & 0xF
@@ -215,8 +200,25 @@ class VectorMachine:
 ##short_command = [0x00,0x80,0x3F,0xB6,0x3B,0xB6,0x3F,0xB6,0x3B,0xB6,0x20,0x20,0x00,0x00]
 ##contents[0:len(short_command)] = short_command
 
-contents += rom_contents
-vm = VectorMachine(contents)
-vm.run()
+def doit(filename):
+    with open(filename,'rb') as f:
+        contents = f.read()
+    with open("../assets/roms/vector_rom.bin",'rb') as f:
+        rom_contents = f.read()
 
-vm.dump("out.png")
+    offset = 0x2D48-0x800
+    letters = rom_contents[offset:offset+(11+26)*2]
+
+    letter_values = ["space"]+[str(i) for i in range(0,10)] + [chr(i) for i in range(ord('A'),ord('Z')+1)]
+
+    for i in range(0,len(letters),2):
+        value = ((letters[i]+letters[i+1]*256) & 0xFFF)*2
+        routine_dict[value+0x4000] = letter_values[i//2]
+
+    contents += rom_contents
+    vm = VectorMachine(contents)
+    vm.run()
+
+    vm.dump(filename+".png")
+
+doit("amiga_vectors")

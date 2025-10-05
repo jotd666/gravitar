@@ -971,8 +971,6 @@ draw_vectors:
 	*****************************
 	
 	lea		_custom,a5
-	
-
 
 	************************
 	* draw current vectors *
@@ -997,7 +995,7 @@ draw_vectors:
 	move.w	#0,(program_counter,a4)
 	lea	command_table(pc),a3
 	
-	move.b	#0,0x100
+
 vector_loop:
 	jbsr	read_word
 	move.w	d0,d1
@@ -1007,6 +1005,15 @@ vector_loop:
 	add.w	d1,d1		| command *4
 	and.w	#0x1FFF,d0	| argument
 	move.l	(a3,d1.w),a0
+	
+	* debug
+	lsr	#2,d1
+	move.w	(program_counter,a4),d2
+	move.w	d2,d3
+	add.w	d3,d3
+	add.w	#0x2000,d3
+	move.b	#0,0x100
+	nop
 	jsr	(a0)
 	
 	tst.b	(vector_running,a4)
@@ -1070,46 +1077,55 @@ read_word:
 * < D2: dy
 * < D3: intensity
 do_draw_line:
-	move.w	d3,d6	| save intensity
+	move.b	d3,d6	| save intensity
 	move.w	(vector_y,a4),d5
 	move.w	d5,d3
-	add.w	d2,d3	| new Y
+	sub.w	d2,d3	| new Y
 	move.w	(vector_x,a4),d4
 	move.w	d4,d2
 	add.w	d1,d2	| new X
 	
-	move.w	d4,d1
-	move.w	d5,d2
-	move.w	#NB_BYTES_PER_ROW,d4
+	* start X and Y for line draw
+	move.w	d4,d0
+	move.w	d5,d1
+	
+	* update X and Y after move (also line draw end)
+	move.w	d2,(vector_x,a4)
+	move.w	d3,(vector_y,a4)
 
 	.ifne	VECTOR_SCALING
+	lsr.w	#VECTOR_SCALING,d0
 	lsr.w	#VECTOR_SCALING,d1
 	lsr.w	#VECTOR_SCALING,d2
+	lsr.w	#VECTOR_SCALING,d3
 	.endif
 	
+	tst.b	d6
+	jeq		0f
 	* TODO: draw several times according to bitplanes
+	move.w	#NB_BYTES_PER_ROW,d4
 	move.l	playfield_displayed_screen_ptr,a0
 	jbsr	draw_line
-
+0:
 	rts
 	
 f_draw:
-	move.w	d0,d4			| save arg
+	move.w	d0,d4			| save arg (Y)
 	* extra_arg = self.__read_word()
-	jbsr	read_word		| extra arg
+	jbsr	read_word		| extra arg (X)
 	* dy = self.__word & 0xFFF
 	move.w	d4,d2
 	and.w	#0x0FFF,d2
 	* dx = extra_arg & 0xFFF
 	move.w	d0,d1
-	and.w	#0x0FFF,d2
-	* if self.__word & 0x1000:
+	and.w	#0x0FFF,d1
+	* if self.__word & 0x1000:  | test Y sign
 	btst	#11,d4
 	jeq		0f
 	* dy -= 0x1000
 	sub.w	#0x1000,d2
 0:
-	* if extra_arg & 0x1000:
+	* if extra_arg & 0x1000:   | test X sign
 	btst	#11,d0
 	jeq		0f
 	* dx -= 0x1000
@@ -1123,9 +1139,12 @@ f_draw:
 	* scaling = self.__get_scaling()
 	jbsr	get_scaling
 	* dx *= scaling
-	mulu	d0,d1
+	muls	d0,d1
 	* dy *= scaling
-	mulu	d0,d2
+	muls	d0,d2
+
+	asr.l	#8,d1
+	asr.l	#8,d2
 
     * self.__draw_line(dx,dy,intensity)
 	jbsr	do_draw_line
@@ -1133,7 +1152,6 @@ f_draw:
 	rts
 	
 f_halt:
-	BREAKPOINT	"halt"
 	clr.b	(vector_running,a4)
 	rts
 	
@@ -1144,7 +1162,7 @@ f_short_draw:
 	lsr.w	#8,d2
 	and.b	#0xF,d2
 	* if self.__word & 0x1000:
-	btst	#11,d0
+	btst	#12,d0
 	jeq		0f
 	* 	dy -= 16
 	sub	#16,d2
@@ -1168,15 +1186,17 @@ f_short_draw:
 	add.w	d2,d2
 	mulu	d0,d2
 	* adjust coordinates
-	lsr.l	#8,d1
-	lsr.l	#8,d2
+
+	asr.l	#8,d1
+	asr.l	#8,d2
+
 
 	* intensity = (self.__word & 0x00E0) >> 5
 	and.b	#0xE0,d3
 	lsr.b	#5,d3
-	
 	* self.__draw_line(dx,dy,intensity)
 	jbsr	do_draw_line
+0:
 	rts
 	
 f_set_status:
@@ -1193,12 +1213,15 @@ f_center:
 f_jsr:
 	move.l	(vector_stack_pointer,a4),a0
 	move.w	(program_counter,a4),-(a0)
+	move.l	a0,(vector_stack_pointer,a4)
 f_jmp:
 	move.w	d0,(program_counter,a4)
 	rts
 	
 f_return:
+	move.l	(vector_stack_pointer,a4),a0
 	move.w	(a0)+,(program_counter,a4)
+	move.l	a0,(vector_stack_pointer,a4)
 	rts
 	
 
