@@ -121,7 +121,7 @@ class VectorMachine:
         return f"{rval}dx={dx},dy={dy},brit={intensity},extra_arg=${extra_arg:04x}"
 
     def __get_scaling(self):
-        return ((1<<(1-self.__binary_scaling_factor)) * (1-self.__linear_scaling_factor//256))
+        return ((1<<(1-self.__binary_scaling_factor)) * (1-self.__linear_scaling_factor/256))
 
 
     def f_short_draw(self):
@@ -221,4 +221,4 @@ def doit(filename):
 
     vm.dump(filename+".png")
 
-doit("amiga_vectors")
+doit("field")
