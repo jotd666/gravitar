@@ -29,8 +29,8 @@ NO68020 = 1
 	UWORD	vector_x
 	UWORD	vector_y
 	UWORD	program_counter
+	UWORD	linear_scaling_factor
 	UBYTE	binary_scaling_factor
-	UBYTE	linear_scaling_factor
 	UBYTE	vector_intensity
 	UBYTE	vector_color
 	UBYTE	vector_running
@@ -961,16 +961,6 @@ blit_background:
 
 
 
-* < A4: vector state	
-read_word:
-	* rval = self.__memory[self.__pc*2] + self.__memory[self.__pc*2+1]*256
-	move.w	(program_counter,a4),d0
-	add.w	d0,d0
-	move.w	(a6,d0.w),d0
-	ror.w	#8,d0		| little endian
-	* self.__pc += 1
-	addq.w	#1,(program_counter,a4)
-	rts
 	
 draw_vectors:
 
@@ -989,8 +979,9 @@ draw_vectors:
 	************************
 
 	GET_RAM_START_IN_A6
-	lea		(0x2000,a6),a6		| start of vectors
-    lea _custom,A5
+	lea		(0x2000,a6),a5		| start of vectors
+	lea	_custom,a6
+	jbsr 	draw_line_init
 	
 	* init
 	
@@ -998,7 +989,7 @@ draw_vectors:
 	move.l	#vector_stack_top,(vector_stack_pointer,a4)
 	move.b	#1,(binary_scaling_factor,a4)
 	move.b	#1,(vector_intensity,a4)
-	move.b	#0,(linear_scaling_factor,a4)
+	move.w	#0,(linear_scaling_factor,a4)
 	move.w	#0,(vector_x,a4)
 	move.w	#0,(vector_y,a4)
 	st.b	(vector_running,a4)
@@ -1042,18 +1033,150 @@ command_table:
 	.long	f_jmp                | E
 	.long	f_jmp                | F
 	
+* returns scaling times 256
+get_scaling:
+	movem.w	d1-d2,-(a7)
+	* (1<<(1-self.__binary_scaling_factor)) * (1-self.__linear_scaling_factor/256)
+	* which is a floating point number
+	move.b	(binary_scaling_factor,a4),d0
+	neg.b	d0
+	add.b	#1,d0
+	move.w	#0x1,d1
+	lsl.w	d0,d1
+	
+	move.w	#0x100,d0
+	sub.w	(linear_scaling_factor,a4),d0		| 8 lower bits are the "decimal" part
+	
+	mulu	d1,d0
+	movem.w	(a7)+,d1-d2
+	rts
+	
+
+* < A4: vector state
+* < A5: pointer on vector memory (ram+0x2000,ram+0x5000)
+* > D0: LSB word
+* vector PC += 1
+read_word:
+	* rval = self.__memory[self.__pc*2] + self.__memory[self.__pc*2+1]*256
+	move.w	(program_counter,a4),d0
+	add.w	d0,d0
+	move.w	(a5,d0.w),d0
+	ror.w	#8,d0		| little endian
+	* self.__pc += 1
+	addq.w	#1,(program_counter,a4)
+	rts
+	
+* < D1: dx
+* < D2: dy
+* < D3: intensity
+do_draw_line:
+	move.w	d3,d6	| save intensity
+	move.w	(vector_y,a4),d5
+	move.w	d5,d3
+	add.w	d2,d3	| new Y
+	move.w	(vector_x,a4),d4
+	move.w	d4,d2
+	add.w	d1,d2	| new X
+	
+	move.w	d4,d1
+	move.w	d5,d2
+	move.w	#NB_BYTES_PER_ROW,d4
+
+	.ifne	VECTOR_SCALING
+	lsr.w	#VECTOR_SCALING,d1
+	lsr.w	#VECTOR_SCALING,d2
+	.endif
+	
+	* TODO: draw several times according to bitplanes
+	move.l	playfield_displayed_screen_ptr,a0
+	jbsr	draw_line
+
+	rts
 	
 f_draw:
-	move.w	d0,d2			| save arg
+	move.w	d0,d4			| save arg
+	* extra_arg = self.__read_word()
 	jbsr	read_word		| extra arg
+	* dy = self.__word & 0xFFF
+	move.w	d4,d2
+	and.w	#0x0FFF,d2
+	* dx = extra_arg & 0xFFF
+	move.w	d0,d1
+	and.w	#0x0FFF,d2
+	* if self.__word & 0x1000:
+	btst	#11,d4
+	jeq		0f
+	* dy -= 0x1000
+	sub.w	#0x1000,d2
+0:
+	* if extra_arg & 0x1000:
+	btst	#11,d0
+	jeq		0f
+	* dx -= 0x1000
+	sub.w	#0x1000,d1	
+0:
+	* intensity = (extra_arg >> 13)
+	lsr.w	#8,d0
+	lsr.w	#5,d0
+	move.b	d0,d3
+	
+	* scaling = self.__get_scaling()
+	jbsr	get_scaling
+	* dx *= scaling
+	mulu	d0,d1
+	* dy *= scaling
+	mulu	d0,d2
+
+    * self.__draw_line(dx,dy,intensity)
+	jbsr	do_draw_line
 	
 	rts
 	
 f_halt:
+	BREAKPOINT	"halt"
 	clr.b	(vector_running,a4)
 	rts
 	
 f_short_draw:
+	* dy = (self.__word >> 8) & 0xF
+	move.w	d0,d2
+	move.w	d0,d3		| save in d3
+	lsr.w	#8,d2
+	and.b	#0xF,d2
+	* if self.__word & 0x1000:
+	btst	#11,d0
+	jeq		0f
+	* 	dy -= 16
+	sub	#16,d2
+0:
+	* dx = self.__word & 0xF
+	move.w	d0,d1
+	and.w	#0xF,d1
+	
+	* if self.__word & 0x10:
+	btst	#4,d0
+	jeq		0f
+	* 	dx -= 16
+	sub	#16,d1
+0:
+	* scaling = self.__get_scaling()
+	jbsr	get_scaling
+	* dx *= 2 * scaling
+	add.w	d1,d1
+	mulu	d0,d1
+	* dy *= 2 * scaling
+	add.w	d2,d2
+	mulu	d0,d2
+	* adjust coordinates
+	lsr.l	#8,d1
+	lsr.l	#8,d2
+
+	* intensity = (self.__word & 0x00E0) >> 5
+	and.b	#0xE0,d3
+	lsr.b	#5,d3
+	
+	* self.__draw_line(dx,dy,intensity)
+	jbsr	do_draw_line
 	rts
 	
 f_set_status:

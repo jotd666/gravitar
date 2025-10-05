@@ -137,7 +137,7 @@ class VectorMachine:
         return f"dx={dx},dy={dy},brit={intensity}"
 
     def __get_scaling(self):
-        return (1<<(1-self.__binary_scaling_factor)) * (1-self.__linear_scaling_factor//256)
+        return int((1<<(1-self.__binary_scaling_factor)) * (1-self.__linear_scaling_factor/256))
 
     def f_short_draw(self):
         dy = (self.__word >> 8) & 0xF
