@@ -980,7 +980,7 @@ draw_vectors:
 	lea		(0x2000,a6),a5		| start of vectors
 	lea	_custom,a6
 	jbsr 	draw_line_init
-	
+	jbsr	draw_line_on
 	* init
 	
 	lea		vector_state,a4
@@ -1103,9 +1103,23 @@ do_draw_line:
 	tst.b	d6
 	jeq		0f
 	* TODO: draw several times according to bitplanes
+	
+	move.l	playfield_displayed_screen_ptr,a2
+	moveq	#2,d7
+	moveq	#0,d6
+10:
+	move.b	(vector_color,a4),d4
+	btst	d6,d4
+	jeq		1f
+	movem.w	D0-D3,-(a7)
+	move.l	a2,a0
 	move.w	#NB_BYTES_PER_ROW,d4
-	move.l	playfield_displayed_screen_ptr,a0
 	jbsr	draw_line
+	movem.w	(a7)+,D0-D3
+1:
+	add.w	#SCREEN_PLANE_SIZE,a2
+	addq	#1,d6		| shift bit
+	dbf		d7,10b
 0:
 	rts
 	
@@ -1200,9 +1214,25 @@ f_short_draw:
 	rts
 	
 f_set_status:
+    * self.__color = (self.__word) & 0x7
+	move.w	d0,d1
+	and.b	#7,d1
+	move.b	d1,(vector_color,a4)
+	* self.__intensity = (self.__word >> 8)
+	lsr.w	#8,d0
+	move.b	d0,(vector_intensity,a4)
 	rts
 
 f_set_scale:
+	RTS
+    * self.__binary_scaling_factor = (self.__word >> 8)& 0x7
+	move.w	d0,d1
+	lsr.w	#8,d1
+	and.b	#7,d1
+	move.b	d1,(binary_scaling_factor,a4)
+    * self.__linear_scaling_factor = (self.__word & 0xFF)
+	lsr.w	#8,d0
+	move.w	d0,(linear_scaling_factor,a4)
 	rts
 	
 f_center:
@@ -2108,9 +2138,8 @@ vector_state:
 	.align 2
 
 
-
-
-	.include "palette.68k"
+playfield_palette:
+	.word 	0x000,0x00F,0x0F0,0x0FF,0xF00,0xFF0,0x0F0F,0xFFF
 
 	
 	* on amiga, this file is included in mpatrol.68k file

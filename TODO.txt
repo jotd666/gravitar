@@ -1,3 +1,6 @@
-000000 stuff at top, check diff amiga / arcade at line 807 (space vs 0) 163B 163F
-- ECS: 8 colors
+- 000000 stuff at top, check diff amiga / arcade at line 807 (space vs 0) 163B 163F
+- set_scale doesn't work at all. Try mockup on demo screen / title screen
+
+
+- ECS: 8 colors, no intensity
 - AGA: 8 colors, 8 intensities
