@@ -1,6 +1,17 @@
 - 000000 stuff at top, check diff amiga / arcade at line 807 (space vs 0) 163B 163F
-- set_scale doesn't work at all. Try mockup on demo screen / title screen
+- maybe scaling should be increased: highscore could stand a scaling of 0
+  (no scaling, no 0x40 scaling!)
+- crash on demo when reaching planet
+- identify all JSRLS to optimize draws/erase: letters & symbols & 
+  planets/all ROM objects 
+  
 
+
+graphics optimization: logging should identify all JSRL ROM address
+  for all objects. Then we figure out which zoom factor is the most
+  displayed and we pre-draw the bobs (once resolution has been settled)
+  for some given zooms (intercept JSRL calls and check resolutions where
+  a BOB is available)
 
 - ECS: 8 colors, no intensity
 - AGA: 8 colors, 8 intensities

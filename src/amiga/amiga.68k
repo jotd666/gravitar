@@ -1040,16 +1040,24 @@ command_table:
 	.long	f_jmp                | E
 	.long	f_jmp                | F
 	
-* returns scaling times 256
-get_scaling:
+* returns scaling times 256 to be able to use integer operations/shifting
+get_scaling_times_256:
 	movem.w	d1-d2,-(a7)
-	* (1<<(1-self.__binary_scaling_factor)) * (1-self.__linear_scaling_factor/256)
-	* which is a floating point number
+	* (1<<(1-self.__binary_scaling_factor)) * (0x100-self.__linear_scaling_factor)
+	* which is the scaling times 256
 	move.b	(binary_scaling_factor,a4),d0
 	neg.b	d0
 	add.b	#1,d0
 	move.w	#0x1,d1
 	lsl.w	d0,d1
+	
+	* if linear_scaling_factor is 0, then it will multiply by 256, then
+	* when used, they ended up shifted by 8 after they've been multiplied
+	* so it will revert the multiplication and doesn't scale anything
+	*
+	* if it's not zero, say 128 like in world view,
+	* then it will only multiply by for instance 256-128 = 128
+	* and in the end when we shift it amounts to dividing every distance by 2
 	
 	move.w	#0x100,d0
 	sub.w	(linear_scaling_factor,a4),d0		| 8 lower bits are the "decimal" part
@@ -1151,12 +1159,12 @@ f_draw:
 	move.b	d0,d3
 	
 	* scaling = self.__get_scaling()
-	jbsr	get_scaling
+	jbsr	get_scaling_times_256
 	* dx *= scaling
 	muls	d0,d1
 	* dy *= scaling
 	muls	d0,d2
-
+	* divide by 256 to make it right
 	asr.l	#8,d1
 	asr.l	#8,d2
 
@@ -1192,17 +1200,15 @@ f_short_draw:
 	sub	#16,d1
 0:
 	* scaling = self.__get_scaling()
-	jbsr	get_scaling
+	jbsr	get_scaling_times_256
 	* dx *= 2 * scaling
-	add.w	d1,d1
-	mulu	d0,d1
+	muls	d0,d1
 	* dy *= 2 * scaling
-	add.w	d2,d2
-	mulu	d0,d2
+	muls	d0,d2
 	* adjust coordinates
-
-	asr.l	#8,d1
-	asr.l	#8,d2
+	* we skipped the times 2 above, so just divide by 128
+	asr.l	#7,d1
+	asr.l	#7,d2
 
 
 	* intensity = (self.__word & 0x00E0) >> 5
@@ -1224,14 +1230,13 @@ f_set_status:
 	rts
 
 f_set_scale:
-	RTS
     * self.__binary_scaling_factor = (self.__word >> 8)& 0x7
 	move.w	d0,d1
 	lsr.w	#8,d1
 	and.b	#7,d1
 	move.b	d1,(binary_scaling_factor,a4)
     * self.__linear_scaling_factor = (self.__word & 0xFF)
-	lsr.w	#8,d0
+	and.w	#0xFF,d0
 	move.w	d0,(linear_scaling_factor,a4)
 	rts
 	

@@ -111,17 +111,20 @@ class VectorMachine:
             dx -= 0x1000
 
         intensity = (extra_arg >> 13)
-        scaling = self.__get_scaling()
-        dx *= scaling
-        dy *= scaling
+        scaling = self.__get_scaling_times_256()
+        dx = (dx * scaling) >>8
+        dy = (dy * scaling) >>8
 
         self.__draw_line(dx,dy,intensity)
         rval = "" if intensity else "(move) "
 
         return f"{rval}dx={dx},dy={dy},brit={intensity},extra_arg=${extra_arg:04x}"
 
-    def __get_scaling(self):
-        return ((1<<(1-self.__binary_scaling_factor)) * (1-self.__linear_scaling_factor/256))
+    def __get_scaling_times_256(self):
+        """
+        return scaling value * 256, so everything can be done in integer operation, not float
+        """
+        return ((1<<(1-self.__binary_scaling_factor)) * (0x100-self.__linear_scaling_factor))
 
 
     def f_short_draw(self):
@@ -132,9 +135,9 @@ class VectorMachine:
         if self.__word & 0x10:
             dx -= 16
 
-        scaling = self.__get_scaling()
-        dx *= 2 * scaling
-        dy *= 2 * scaling
+        scaling = self.__get_scaling_times_256()
+        dx = (dx * scaling)>>7
+        dy = (dy * scaling)>>7
 
         intensity = (self.__word & 0x00E0) >> 5
         self.__draw_line(dx,dy,intensity)
@@ -221,4 +224,4 @@ def doit(filename):
 
     vm.dump(filename+".png")
 
-doit("field")
+doit("amiga_vectors")
