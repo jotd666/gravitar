@@ -1007,13 +1007,13 @@ vector_loop:
 	move.l	(a3,d1.w),a0
 	
 	* debug
-	lsr	#2,d1
-	move.w	(program_counter,a4),d2
-	move.w	d2,d3
-	add.w	d3,d3
-	add.w	#0x2000,d3
-	move.b	#0,0x100
-	nop
+*	lsr	#2,d1
+*	move.w	(program_counter,a4),d2
+*	move.w	d2,d3
+*	add.w	d3,d3
+*	add.w	#0x2000,d3
+
+
 	jsr	(a0)
 	
 	tst.b	(vector_running,a4)
@@ -1060,9 +1060,16 @@ get_scaling_times_256:
 	* and in the end when we shift it amounts to dividing every distance by 2
 	
 	move.w	#0x100,d0
-	sub.w	(linear_scaling_factor,a4),d0		| 8 lower bits are the "decimal" part
+	move.w	(linear_scaling_factor,a4),d2
+	* hack: if scaling factor is 0x40 (maybe we need to check
+	* binary scaling too) then don't scale (highscore screen)
+	cmp.b	#0x40,d2
+	jeq		10f
+	
+	sub.w	d2,d0		| 8 lower bits are the "decimal" part
 	
 	mulu	d1,d0
+10:
 	movem.w	(a7)+,d1-d2
 	rts
 	

@@ -156,10 +156,12 @@ class VectorMachine:
         return ""
 
     def f_jsr(self):
+        real_pc = self.__word*2 + 0x2000
+        routine_name = routine_dict.get(real_pc)
         self.__stack.append(self.__pc)
         self.__pc = self.__word
-        real_pc = self.__pc*2 + 0x2000
-        return f"{self.__address(self.__pc)} ({routine_dict.get(real_pc,'?')})"
+
+        return f"{self.__address(self.__pc)} ({routine_name or '?'})"
 
     def f_jmp(self):
         self.__pc = self.__word
