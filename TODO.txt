@@ -4,7 +4,7 @@
 - crash on demo when reaching planet: seems to be on the amiga code side
 - identify all JSRLS to optimize draws/erase: letters & symbols & 
   planets/all ROM objects 
-  
+
 
 
 graphics optimization: logging should identify all JSRL ROM address

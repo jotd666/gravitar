@@ -41,7 +41,7 @@ from PIL import Image, ImageDraw
 ##
 
 
-
+colors = ["black","blue","green","cyan","red","magenta","yellow","white"]
 routine_dict = {}
 
 class VectorMachine:
@@ -59,6 +59,7 @@ class VectorMachine:
         self.__intensity = 1
         self.__im = Image.new("RGB",(VectorMachine.WIDTH,VectorMachine.HEIGHT))
         self.__draw = ImageDraw.Draw(self.__im)
+        self.__unknown_subroutines = dict()
 
     def __hex(self,a,size):
         return f"${a:0{size}x}"
@@ -88,7 +89,7 @@ class VectorMachine:
     def f_set_status(self):
         self.__color = (self.__word) & 0x7
         self.__intensity = (self.__word >> 8)
-        return f"color={self.__color},dbrit={self.__intensity}"
+        return f"color={self.__color} ({colors[self.__color]}),dbrit={self.__intensity}"
 
     def f_set_scale(self):
         self.__binary_scaling_factor = (self.__word >> 8)& 0x7
@@ -158,14 +159,19 @@ class VectorMachine:
     def f_jsr(self):
         real_pc = self.__word*2 + 0x2000
         routine_name = routine_dict.get(real_pc)
+        if not routine_name:
+            address = self.__address(self.__word)
+            self.__unknown_subroutines[self.__word] = (self.__x,self.__y)
+            return f"{address}: [SKIPPED]"
+
         self.__stack.append(self.__pc)
         self.__pc = self.__word
-
         return f"{self.__address(self.__pc)} ({routine_name or '?'})"
 
     def f_jmp(self):
         self.__pc = self.__word
-        return self.__address(self.__pc)
+        routine_name = routine_dict.get(self.__word*2 + 0x2000)
+        return f"{self.__address(self.__pc)} ({routine_name or '?'})"
 
     def f_return(self):
         self.__pc = self.__stack.pop()
@@ -175,6 +181,9 @@ class VectorMachine:
 
     def dump(self,filename):
         self.__im.save(filename)
+        print("Unknown subroutines:")
+        for x,at in sorted(self.__unknown_subroutines.items()):
+            print(x,at)
 
     def run(self):
         self.__running = True
@@ -205,6 +214,9 @@ class VectorMachine:
 ##short_command = [0x00,0x80,0x3F,0xB6,0x3B,0xB6,0x3F,0xB6,0x3B,0xB6,0x20,0x20,0x00,0x00]
 ##contents[0:len(short_command)] = short_command
 
+def add_routine(addr,name):
+    routine_dict[addr*2+0x2000] = name
+
 def doit(filename):
     with open(filename,'rb') as f:
         contents = f.read()
@@ -220,10 +232,43 @@ def doit(filename):
         value = ((letters[i]+letters[i+1]*256) & 0xFFF)*2
         routine_dict[value+0x4000] = letter_values[i//2]
 
+    add_routine(5587,"draw_invisible_x_lines")  # useless shit on title screen...
+    add_routine(3434,"red_dot")
+    add_routine(3756,"white_hexagon")
+    add_routine(3825,"killer_star")
+    add_routine(3782,"killer_star_surface")
+    add_routine(0x0ed2,"killer_star_spikes")
+
+    add_routine(3935,"bottom_left_planet")
+    add_routine(3854,"planet_yellow_hexagon")
+    add_routine(3887,"bottom_right_planet")
+    add_routine(3891,"bottom_right_planet_surface")
+    add_routine(0x0f13,"bottom_right_planet_ring")
+    add_routine(0x0f38,"bottom_left_planet_ring")
+
+    add_routine(3986,"upper_left_planet")
+    add_routine(4899,"player_ship")
+    add_routine(6935,"copyright")
+    add_routine(3937,"upper_left_planet_ring")
+
+    add_routine(4087,"upper_right_planet") # calls the 4 routines below:
+    add_routine(3988,"upper_right_planet_surface")
+    add_routine(0X0fc0,"white_planet_peak")
+    add_routine(4001,"yellow_planet_peak")
+    add_routine(4010,"red_planet_peak")
+    add_routine(4021,"blue_planet_peak")
+
+    add_routine(4205,"link_planet") # calls the 2 routines below:
+    add_routine(4097,"link_planet_surface")
+    add_routine(0X1016,"link_planet_spikes")
+
+    add_routine(0x0f72,"planet_white_core")
+
+    add_routine(0x0f98,"hexagon")
     contents += rom_contents
     vm = VectorMachine(contents)
     vm.run()
 
     vm.dump(filename+".png")
 
-doit("amiga_vectors")
+doit("field")
