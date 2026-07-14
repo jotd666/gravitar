@@ -233,12 +233,18 @@ def doit(filename):
         routine_dict[value+0x4000] = letter_values[i//2]
 
     add_routine(5587,"draw_invisible_x_lines")  # useless shit on title screen...
+
+    # global view, reusable calls
+    add_routine(4899,"player_ship")
     add_routine(3434,"red_dot")
-    add_routine(3756,"white_hexagon")
     add_routine(3825,"killer_star")
     add_routine(3782,"killer_star_surface")
     add_routine(0x0ed2,"killer_star_spikes")
+    add_routine(6935,"copyright")
+    add_routine(0x0f98,"hexagon")
+    add_routine(3756,"white_hexagon")
 
+    # world one
     add_routine(3935,"bottom_left_planet")
     add_routine(3854,"planet_yellow_hexagon")
     add_routine(3887,"bottom_right_planet")
@@ -247,8 +253,6 @@ def doit(filename):
     add_routine(0x0f38,"bottom_left_planet_ring")
 
     add_routine(3986,"upper_left_planet")
-    add_routine(4899,"player_ship")
-    add_routine(6935,"copyright")
     add_routine(3937,"upper_left_planet_ring")
 
     add_routine(4087,"upper_right_planet") # calls the 4 routines below:
@@ -264,7 +268,6 @@ def doit(filename):
 
     add_routine(0x0f72,"planet_white_core")
 
-    add_routine(0x0f98,"hexagon")
     contents += rom_contents
     vm = VectorMachine(contents)
     vm.run()

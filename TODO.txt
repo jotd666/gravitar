@@ -1,3 +1,4 @@
+- check bounds for lines to be drawn to avoid crashes!
 - 000000 stuff at top, check diff amiga / arcade at line 807 (space vs 0) 163B 163F
 - maybe scaling should be increased: highscore could stand a scaling of 0
   (no scaling, no 0x40 scaling!)
