@@ -1,7 +1,7 @@
 *
 *	Amiga-specific portions of Gravitar
 *
-* (c) JOTD 2025
+* (c) JOTD 2025-2026
 *
 
 
@@ -24,17 +24,7 @@ NO68020 = 1
 
 
 
-	STRUCTURE	VECTOR_STATE,0
-	APTR	vector_stack_pointer
-	UWORD	vector_x
-	UWORD	vector_y
-	UWORD	program_counter
-	UWORD	linear_scaling_factor
-	UBYTE	binary_scaling_factor
-	UBYTE	vector_intensity
-	UBYTE	vector_color
-	UBYTE	vector_running
-	LABEL	VECTOR_STATE_SPRITE_SIZEOF
+
 
 
 * start displaying earlier in ntsc mode, allowing
@@ -85,7 +75,7 @@ _custom = 0xDFF000
 
 OPT_ENABLE_MULTIPLEXED_SPRITES = 0
 
-NB_PLAYFIELD_PLANES = 4
+NB_PLAYFIELD_PLANES = 3
 TOTAL_NB_COLORS = 1<<NB_PLAYFIELD_PLANES
 NB_BYTES_PER_ROW = 40
 
@@ -327,7 +317,7 @@ _user:
 	move.l	a0,cop1lc(a5)
 	
 	lea		bobs_screen_buffer_1,a0
-	addq	#2,a0	| leave 16 bits hidden for left side clipping
+	*addq	#2,a0	| leave 16 bits hidden for left side clipping
 	move.l	a0,playfield_screen_data_1
 	move.l	a0,playfield_drawed_screen_ptr
 	move.l	a0,playfield_displayed_screen_ptr
@@ -337,7 +327,7 @@ _user:
 
 	.ifne	OPT_ENABLE_DOUBLE_BUFFERING
 	lea		bobs_screen_buffer_2,a0
-	addq	#2,a0	| leave 16 bits hidden for left side clipping
+	*addq	#2,a0	| leave 16 bits hidden for left side clipping
 	move.l	a0,playfield_screen_data_2
 	move.l	a0,playfield_displayed_screen_ptr
 	.endif
@@ -740,6 +730,8 @@ _vblank:
 	bne.b	1f
 	* clear the sync flag a few lines later
 	* to simulate an extra vblank
+	moveq	#0,d1
+	moveq	#0,d2
 	jbsr	irq_cbea
 	clr.b	d0
 1:
@@ -757,8 +749,9 @@ _vblank:
 	jeq		23f
 0:
 
-	jbsr		draw_vectors
-	
+	jbsr	draw_vectors
+	tst.l	d0
+	jeq	23f			| no new frame: keep displaying the current one
 	.ifne	OPT_ENABLE_DOUBLE_BUFFERING
 	jbsr		switch_screen_buffers
 	.endif
@@ -958,312 +951,6 @@ blit_background:
 	rts
 
 
-
-	
-draw_vectors:
-
-
-	
-	*****************************
-	* erase previous lines/dots *
-	*****************************
-	
-	lea		_custom,a5
-
-	************************
-	* draw current vectors *
-	************************
-
-	GET_RAM_START_IN_A6
-	lea		(0x2000,a6),a5		| start of vectors
-	lea	_custom,a6
-	jbsr 	draw_line_init
-	jbsr	draw_line_on
-	* init
-	
-	lea		vector_state,a4
-	move.l	#vector_stack_top,(vector_stack_pointer,a4)
-	move.b	#1,(binary_scaling_factor,a4)
-	move.b	#1,(vector_intensity,a4)
-	move.w	#0,(linear_scaling_factor,a4)
-	move.w	#0,(vector_x,a4)
-	move.w	#0,(vector_y,a4)
-	st.b	(vector_running,a4)
-	move.b	#7,(vector_color,a4)
-	move.w	#0,(program_counter,a4)
-	lea	command_table(pc),a3
-	
-
-vector_loop:
-	jbsr	read_word
-	move.w	d0,d1
-	rol.w	#4,d1
-	and.w	#0xF,d1
-	add.w	d1,d1		| command *4
-	add.w	d1,d1		| command *4
-	and.w	#0x1FFF,d0	| argument
-	move.l	(a3,d1.w),a0
-	
-	* debug
-*	lsr	#2,d1
-*	move.w	(program_counter,a4),d2
-*	move.w	d2,d3
-*	add.w	d3,d3
-*	add.w	#0x2000,d3
-
-
-	jsr	(a0)
-	
-	tst.b	(vector_running,a4)
-	jne		vector_loop
-	
-	rts
-	
-
-command_table:
-	.long	f_draw               | 0
-	.long	f_draw               | 1
-	.long	f_halt               | 2
-	.long	f_halt               | 3
-	.long	f_short_draw         | 4
-	.long	f_short_draw         | 5
-	.long	f_set_status         | 6
-	.long	f_set_scale          | 7  different from 6
-	.long	f_center             | 8
-	.long	f_center             | 9
-	.long	f_jsr                | A
-	.long	f_jsr                | B
-	.long	f_return             | C
-	.long	f_return             | D
-	.long	f_jmp                | E
-	.long	f_jmp                | F
-	
-* returns scaling times 256 to be able to use integer operations/shifting
-get_scaling_times_256:
-	movem.w	d1-d2,-(a7)
-	* (1<<(1-self.__binary_scaling_factor)) * (0x100-self.__linear_scaling_factor)
-	* which is the scaling times 256
-	move.b	(binary_scaling_factor,a4),d0
-	neg.b	d0
-	add.b	#1,d0
-	move.w	#0x1,d1
-	lsl.w	d0,d1
-	
-	* if linear_scaling_factor is 0, then it will multiply by 256, then
-	* when used, they ended up shifted by 8 after they've been multiplied
-	* so it will revert the multiplication and doesn't scale anything
-	*
-	* if it's not zero, say 128 like in world view,
-	* then it will only multiply by for instance 256-128 = 128
-	* and in the end when we shift it amounts to dividing every distance by 2
-	
-	move.w	#0x100,d0
-	move.w	(linear_scaling_factor,a4),d2
-	* hack: if scaling factor is 0x40 (maybe we need to check
-	* binary scaling too) then don't scale (highscore screen)
-	cmp.b	#0x40,d2
-	jeq		10f
-	
-	sub.w	d2,d0		| 8 lower bits are the "decimal" part
-	
-	mulu	d1,d0
-10:
-	movem.w	(a7)+,d1-d2
-	rts
-	
-
-* < A4: vector state
-* < A5: pointer on vector memory (ram+0x2000,ram+0x5000)
-* > D0: LSB word
-* vector PC += 1
-read_word:
-	* rval = self.__memory[self.__pc*2] + self.__memory[self.__pc*2+1]*256
-	move.w	(program_counter,a4),d0
-	add.w	d0,d0
-	move.w	(a5,d0.w),d0
-	ror.w	#8,d0		| little endian
-	* self.__pc += 1
-	addq.w	#1,(program_counter,a4)
-	rts
-	
-* < D1: dx
-* < D2: dy
-* < D3: intensity
-do_draw_line:
-	move.b	d3,d6	| save intensity
-	move.w	(vector_y,a4),d5
-	move.w	d5,d3
-	sub.w	d2,d3	| new Y
-	move.w	(vector_x,a4),d4
-	move.w	d4,d2
-	add.w	d1,d2	| new X
-	
-	* start X and Y for line draw
-	move.w	d4,d0
-	move.w	d5,d1
-	
-	* update X and Y after move (also line draw end)
-	move.w	d2,(vector_x,a4)
-	move.w	d3,(vector_y,a4)
-
-	.ifne	VECTOR_SCALING
-	lsr.w	#VECTOR_SCALING,d0
-	lsr.w	#VECTOR_SCALING,d1
-	lsr.w	#VECTOR_SCALING,d2
-	lsr.w	#VECTOR_SCALING,d3
-	.endif
-	
-	tst.b	d6
-	jeq		0f
-	* TODO: draw several times according to bitplanes
-	
-	move.l	playfield_displayed_screen_ptr,a2
-	moveq	#2,d7
-	moveq	#0,d6
-10:
-	move.b	(vector_color,a4),d4
-	btst	d6,d4
-	jeq		1f
-	movem.w	D0-D3,-(a7)
-	move.l	a2,a0
-	move.w	#NB_BYTES_PER_ROW,d4
-	jbsr	draw_line
-	movem.w	(a7)+,D0-D3
-1:
-	add.w	#SCREEN_PLANE_SIZE,a2
-	addq	#1,d6		| shift bit
-	dbf		d7,10b
-0:
-	rts
-	
-f_draw:
-	move.w	d0,d4			| save arg (Y)
-	* extra_arg = self.__read_word()
-	jbsr	read_word		| extra arg (X)
-	* dy = self.__word & 0xFFF
-	move.w	d4,d2
-	and.w	#0x0FFF,d2
-	* dx = extra_arg & 0xFFF
-	move.w	d0,d1
-	and.w	#0x0FFF,d1
-	* if self.__word & 0x1000:  | test Y sign
-	btst	#11,d4
-	jeq		0f
-	* dy -= 0x1000
-	sub.w	#0x1000,d2
-0:
-	* if extra_arg & 0x1000:   | test X sign
-	btst	#11,d0
-	jeq		0f
-	* dx -= 0x1000
-	sub.w	#0x1000,d1	
-0:
-	* intensity = (extra_arg >> 13)
-	lsr.w	#8,d0
-	lsr.w	#5,d0
-	move.b	d0,d3
-	
-	* scaling = self.__get_scaling()
-	jbsr	get_scaling_times_256
-	* dx *= scaling
-	muls	d0,d1
-	* dy *= scaling
-	muls	d0,d2
-	* divide by 256 to make it right
-	asr.l	#8,d1
-	asr.l	#8,d2
-
-    * self.__draw_line(dx,dy,intensity)
-	jbsr	do_draw_line
-	
-	rts
-	
-f_halt:
-	clr.b	(vector_running,a4)
-	rts
-	
-f_short_draw:
-	* dy = (self.__word >> 8) & 0xF
-	move.w	d0,d2
-	move.w	d0,d3		| save in d3
-	lsr.w	#8,d2
-	and.b	#0xF,d2
-	* if self.__word & 0x1000:
-	btst	#12,d0
-	jeq		0f
-	* 	dy -= 16
-	sub	#16,d2
-0:
-	* dx = self.__word & 0xF
-	move.w	d0,d1
-	and.w	#0xF,d1
-	
-	* if self.__word & 0x10:
-	btst	#4,d0
-	jeq		0f
-	* 	dx -= 16
-	sub	#16,d1
-0:
-	* scaling = self.__get_scaling()
-	jbsr	get_scaling_times_256
-	* dx *= 2 * scaling
-	muls	d0,d1
-	* dy *= 2 * scaling
-	muls	d0,d2
-	* adjust coordinates
-	* we skipped the times 2 above, so just divide by 128
-	asr.l	#7,d1
-	asr.l	#7,d2
-
-
-	* intensity = (self.__word & 0x00E0) >> 5
-	and.b	#0xE0,d3
-	lsr.b	#5,d3
-	* self.__draw_line(dx,dy,intensity)
-	jbsr	do_draw_line
-0:
-	rts
-	
-f_set_status:
-    * self.__color = (self.__word) & 0x7
-	move.w	d0,d1
-	and.b	#7,d1
-	move.b	d1,(vector_color,a4)
-	* self.__intensity = (self.__word >> 8)
-	lsr.w	#8,d0
-	move.b	d0,(vector_intensity,a4)
-	rts
-
-f_set_scale:
-    * self.__binary_scaling_factor = (self.__word >> 8)& 0x7
-	move.w	d0,d1
-	lsr.w	#8,d1
-	and.b	#7,d1
-	move.b	d1,(binary_scaling_factor,a4)
-    * self.__linear_scaling_factor = (self.__word & 0xFF)
-	and.w	#0xFF,d0
-	move.w	d0,(linear_scaling_factor,a4)
-	rts
-	
-f_center:
-	move.w	#VECTOR_WIDTH/2,(vector_x,a4)
-	move.w	#VECTOR_HEIGHT/2,(vector_y,a4)
-	rts
-	
-f_jsr:
-	move.l	(vector_stack_pointer,a4),a0
-	move.w	(program_counter,a4),-(a0)
-	move.l	a0,(vector_stack_pointer,a4)
-f_jmp:
-	move.w	d0,(program_counter,a4)
-	rts
-	
-f_return:
-	move.l	(vector_stack_pointer,a4),a0
-	move.w	(a0)+,(program_counter,a4)
-	move.l	a0,(vector_stack_pointer,a4)
-	rts
-	
 
 * < D0,D1: x,y
 * < A1: foreground plane pointer (often first plane!)
@@ -1496,7 +1183,7 @@ quit_to_os:
 
 	
 platform_init:
-	bsr		store_system
+	jbsr		store_system
 	
 
 	lea		_custom,a5
@@ -1511,7 +1198,7 @@ platform_init:
 	move.w	#0x1FE,pal_intreq_block_game
 	move.w	#0x1FE,pal_wait			| else intreq never happens
 0:
-    move.w #0x4200,bplcon0(a5)		| 16 colors
+    move.w #(NB_PLAYFIELD_PLANES<<12)+0x200,bplcon0(a5)
 
  	*         VVHH
     move.w #0x2489,d0
@@ -2116,7 +1803,7 @@ playfield_displayed_screen_ptr:
 	.long	0
 
 
-	.include	"draw_line.68k"
+	.include	"vectors.68k"
 	.include	"sound_entries.68k"
 
 _keyexit:
@@ -2139,11 +1826,6 @@ temp_filename_buffer:
 _end_of_ng_code:
 		
   
-	.skip	0x10
-vector_stack_top:
-
-vector_state:
-	.skip	VECTOR_STATE_SPRITE_SIZEOF
 
 	.align 2
 
@@ -2226,7 +1908,7 @@ game_copperlist:
 	* enable sprite colors now
 
 bobs_bitplanes:
-	DECL_BITPLANES	0,4
+	DECL_BITPLANES	0,NB_PLAYFIELD_PLANES
 
 
 	* priority: BOBs playfield on top

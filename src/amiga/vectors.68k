@@ -1,0 +1,510 @@
+*
+* vectors.68k - Atari AVG (Gravitar / Black Widow) display list
+* interpreter + blitter line renderer for the Amiga port
+*
+* Replaces in amiga.68k: STRUCTURE VECTOR_STATE, draw_vectors ... f_return,
+* get_scaling_times_256, read_word, do_draw_line, vector_stack_top,
+* vector_state and the include of "draw_line.68k".
+*
+* Needs (from amiga.68k): _custom, NB_BYTES_PER_ROW, NB_LINES,
+*   NB_PLAYFIELD_PLANES, SCREEN_PLANE_SIZE, mulNB_BYTES_PER_ROW_table,
+*   playfield_drawed_screen_ptr, WAIT_BLIT, GET_RAM_START_IN_A6
+*
+* Pipeline (draw_vectors):
+*   1) start a blitter clear of the back buffer (no wait)
+*   2) CPU interprets the AVG display list into a segment list
+*      (runs while the blitter clears)
+*   3) each segment is clipped by the CPU (while the blitter draws the
+*      previous one), then drawn as a blitter line (OR) in the planes
+*      selected by the color, or plotted with bset if it's a dot.
+*
+
+	.global	vector_frame_ready
+
+* --- tunables -------------------------------------------------------
+
+VEC_SHIFT = 2			| AVG units -> pixels (1024 units = 256 px)
+SCREEN_W = 320
+SCREEN_H = NB_LINES
+VEC_X_CENTER = SCREEN_W/2	| screen position of AVG CNTR
+VEC_Y_CENTER = SCREEN_H/2
+MAX_VEC_OPS = 4000		| max AVG instructions per frame (runaway guard)
+MAX_SEGMENTS = 1200
+SEG_SIZEOF = 10			| x0,y0,x1,y1,color (words)
+VEC_STACK_DEPTH = 8		| real AVG has 4, keep some margin
+
+	STRUCTURE	AVG_STATE,0
+	UWORD	avg_scale_mul		| 256 - linear scale
+	UWORD	avg_scale_shift		| binary scale + 7
+	UWORD	avg_color		| STAT color (bit0 blue, bit1 green, bit2 red)
+	UWORD	avg_sp			| JSRL stack index (bytes)
+	UWORD	avg_ops			| remaining instruction budget
+	STRUCT	avg_stack,VEC_STACK_DEPTH*2
+	LABEL	AVG_STATE_SIZEOF
+
+* outcode for Cohen-Sutherland: 1=left 2=right 4=top 8=bottom
+.macro	OUTCODE	x,y,dest
+	moveq	#0,\dest
+	tst.w	\x
+	bpl.b	oc_nl\@
+	moveq	#1,\dest
+	jra	oc_y\@
+oc_nl\@:
+	cmp.w	#SCREEN_W-1,\x
+	ble.b	oc_y\@
+	moveq	#2,\dest
+oc_y\@:
+	tst.w	\y
+	bpl.b	oc_nt\@
+	addq.w	#4,\dest
+	jra	oc_end\@
+oc_nt\@:
+	cmp.w	#SCREEN_H-1,\y
+	ble.b	oc_end\@
+	addq.w	#8,\dest
+oc_end\@:
+.endm
+
+* --------------------------------------------------------------------
+* called from the copper interrupt after irq_cbea
+* > D0: 0 if no new vector frame was drawn (don't switch buffers)
+* trashes everything (caller saves all registers)
+draw_vectors:
+	moveq	#0,d0
+	tst.b	vector_frame_ready
+	jeq	0f
+	clr.b	vector_frame_ready
+	lea	_custom,a5
+	jbsr	clear_drawn_screen
+	jbsr	parse_display_list	| > A1: end of segment list
+	jbsr	draw_segments
+	moveq	#1,d0
+0:
+	rts
+
+* --------------------------------------------------------------------
+* starts a blit clearing all planes of the back buffer, doesn't wait
+* < A5: _custom
+clear_drawn_screen:
+	move.l	playfield_drawed_screen_ptr,a0
+	WAIT_BLIT
+	move.l	#0x01000000,(bltcon0,a5)	| D only, minterm 0
+	clr.w	(bltdmod,a5)
+	move.l	a0,(bltdpt,a5)
+	* planes are contiguous: one blit (height 1024 is encoded as 0)
+	move.w	#(((NB_LINES*NB_PLAYFIELD_PLANES)&0x3FF)<<6)+(NB_BYTES_PER_ROW/2),(bltsize,a5)
+	rts
+
+* --------------------------------------------------------------------
+* interprets the AVG program starting at vector address 0 ($2000)
+* > A1: end of segment list
+*
+* registers while interpreting:
+*  A3: vector memory ($2000 in 6502 space)   A4: AVG state
+*  A1: segment write pointer                 A2: segment buffer end
+*  D5: AVG program counter (word index)
+*  D6: beam X, D7: beam Y (AVG units, 0 = center, Y up)
+parse_display_list:
+	GET_RAM_START_IN_A6
+	lea	(0x2000,a6),a3
+	lea	avg_state,a4
+	lea	segment_buffer,a1
+	lea	segment_buffer_end,a2
+	move.w	#0x100,(avg_scale_mul,a4)
+	move.w	#8,(avg_scale_shift,a4)
+	move.w	#7,(avg_color,a4)
+	clr.w	(avg_sp,a4)
+	move.w	#MAX_VEC_OPS,(avg_ops,a4)
+	moveq	#0,d5
+	moveq	#0,d6
+	moveq	#0,d7
+
+avg_loop:
+	subq.w	#1,(avg_ops,a4)
+	jmi	avg_halt
+	move.w	d5,d0
+	and.w	#0x1FFF,d0
+	add.w	d0,d0
+	move.w	(a3,d0.w),d0
+	ror.w	#8,d0			| little endian
+	addq.w	#1,d5
+	move.w	d0,d1
+	rol.w	#4,d1
+	and.w	#0xF,d1
+	add.w	d1,d1
+	add.w	d1,d1
+	lea	avg_jump_table(pc),a0
+	move.l	(a0,d1.w),a0
+	jmp	(a0)
+
+avg_jump_table:
+	.long	avg_vctr,avg_vctr	| 0,1  VCTR
+	.long	avg_halt,avg_halt	| 2,3  HALT
+	.long	avg_svec,avg_svec	| 4,5  SVEC
+	.long	avg_stat,avg_scal	| 6    STAT, 7 SCAL
+	.long	avg_cntr,avg_cntr	| 8,9  CNTR
+	.long	avg_jsrl,avg_jsrl	| A,B  JSRL
+	.long	avg_rtsl,avg_rtsl	| C,D  RTSL
+	.long	avg_jmpl,avg_jmpl	| E,F  JMPL
+
+avg_halt:
+	rts				| returns from parse_display_list
+
+* VCTR: word1 = dy (13 bits signed), word2 = z (bits 15-13) | dx (13 bits signed)
+avg_vctr:
+	move.w	d0,d2
+	lsl.w	#3,d2
+	asr.w	#3,d2			| dy sign-extended from bit 12
+	move.w	d5,d0
+	and.w	#0x1FFF,d0
+	add.w	d0,d0
+	move.w	(a3,d0.w),d0
+	ror.w	#8,d0
+	addq.w	#1,d5
+	move.w	d0,d1
+	lsl.w	#3,d1
+	asr.w	#3,d1			| dx sign-extended from bit 12
+	rol.w	#3,d0
+	and.w	#7,d0			| z (intensity, 0 = blank)
+	move.w	(avg_scale_shift,a4),d4
+
+* < D1: dx  D2: dy  D0: z  D4: shift
+* scale = 2^(1-bin) * (256-lin)/256  => v * (256-lin) >> (bin+7)
+avg_scale_and_move:
+	move.w	(avg_scale_mul,a4),d3
+	muls	d3,d1
+	asr.l	d4,d1
+	muls	d3,d2
+	asr.l	d4,d2
+	move.w	d6,d3			| old X
+	move.w	d7,d4			| old Y
+	add.w	d1,d6			| new X
+	add.w	d2,d7			| new Y
+	tst.w	d0
+	jeq	avg_loop		| blank vector: move only
+	move.w	(avg_color,a4),d0
+	jeq	avg_loop		| black: invisible, skip
+	cmp.l	a2,a1
+	jcc	avg_loop		| segment buffer full
+	asr.w	#VEC_SHIFT,d3
+	add.w	#VEC_X_CENTER,d3
+	move.w	d3,(a1)+		| x0
+	asr.w	#VEC_SHIFT,d4
+	neg.w	d4
+	add.w	#VEC_Y_CENTER,d4
+	move.w	d4,(a1)+		| y0
+	move.w	d6,d3
+	asr.w	#VEC_SHIFT,d3
+	add.w	#VEC_X_CENTER,d3
+	move.w	d3,(a1)+		| x1
+	move.w	d7,d4
+	asr.w	#VEC_SHIFT,d4
+	neg.w	d4
+	add.w	#VEC_Y_CENTER,d4
+	move.w	d4,(a1)+		| y1
+	move.w	d0,(a1)+		| color
+	jra	avg_loop
+
+* SVEC: dy bits 12-8 (signed), z bits 7-5, dx bits 4-0 (signed), 2x scale
+avg_svec:
+	move.w	d0,d2
+	lsl.w	#3,d2
+	asr.w	#8,d2
+	asr.w	#3,d2			| dy
+	move.b	d0,d1
+	lsl.b	#3,d1
+	asr.b	#3,d1
+	ext.w	d1			| dx
+	lsr.w	#5,d0
+	and.w	#7,d0			| z
+	move.w	(avg_scale_shift,a4),d4
+	subq.w	#1,d4			| short vectors count double
+	jra	avg_scale_and_move
+
+avg_stat:
+	and.w	#7,d0
+	move.w	d0,(avg_color,a4)
+	jra	avg_loop
+
+avg_scal:
+	move.w	d0,d1
+	lsr.w	#8,d1
+	and.w	#7,d1
+	addq.w	#7,d1
+	move.w	d1,(avg_scale_shift,a4)
+	and.w	#0xFF,d0
+	neg.w	d0
+	add.w	#0x100,d0
+	move.w	d0,(avg_scale_mul,a4)
+	jra	avg_loop
+
+avg_cntr:
+	moveq	#0,d6
+	moveq	#0,d7
+	jra	avg_loop
+
+avg_jsrl:
+	move.w	(avg_sp,a4),d1
+	cmp.w	#VEC_STACK_DEPTH*2,d1
+	jcc	avg_halt		| stack overflow: abort frame
+	move.w	d5,(avg_stack,a4,d1.w)
+	addq.w	#2,d1
+	move.w	d1,(avg_sp,a4)
+avg_jmpl:
+	and.w	#0x1FFF,d0
+	move.w	d0,d5
+	jra	avg_loop
+
+avg_rtsl:
+	move.w	(avg_sp,a4),d1
+	jeq	avg_halt		| stack underflow: abort frame
+	subq.w	#2,d1
+	move.w	d1,(avg_sp,a4)
+	move.w	(avg_stack,a4,d1.w),d5
+	jra	avg_loop
+
+* --------------------------------------------------------------------
+* < A1: end of segment list   A5: _custom
+draw_segments:
+	move.l	a1,a4
+	lea	segment_buffer,a3
+	move.l	playfield_drawed_screen_ptr,a2
+	WAIT_BLIT			| screen clear must be finished
+	moveq	#-1,d0
+	move.l	d0,(bltafwm,a5)		| afwm + alwm
+	move.w	d0,(bltbdat,a5)		| solid line pattern
+	move.w	#0x8000,(bltadat,a5)
+	move.w	#NB_BYTES_PER_ROW,(bltcmod,a5)
+	move.w	#NB_BYTES_PER_ROW,(bltdmod,a5)
+seg_loop:
+	cmp.l	a4,a3
+	jcc	seg_done
+	movem.w	(a3)+,d0-d3/d7		| x0,y0,x1,y1,color
+	jbsr	clip_line
+	jcs	seg_loop		| fully outside
+	cmp.w	d0,d2
+	jne	0f
+	cmp.w	d1,d3
+	jne	0f
+	jbsr	plot_pixel		| zero length: a dot (NEVER blit it)
+	jra	seg_loop
+0:
+	jbsr	draw_line_planes
+	jra	seg_loop
+seg_done:
+	rts
+
+* --------------------------------------------------------------------
+* Cohen-Sutherland clipping to [0,SCREEN_W-1] x [0,SCREEN_H-1]
+* < D0,D1: x0,y0   D2,D3: x1,y1 (signed words, pixels)
+* > same registers clipped (endpoints may be swapped)
+* > carry set: nothing to draw
+* trashes D4-D6
+clip_line:
+	move.w	d7,-(a7)
+	moveq	#8,d7			| iteration guard
+cl_loop:
+	OUTCODE	d0,d1,d4
+	OUTCODE	d2,d3,d5
+	move.w	d4,d6
+	or.w	d5,d6
+	beq.b	cl_accept
+	move.w	d4,d6
+	and.w	d5,d6
+	bne.b	cl_reject
+	subq.w	#1,d7
+	bmi.b	cl_reject
+	tst.w	d4
+	bne.b	cl_p0_out
+	exg	d0,d2			| make point 0 the outside one
+	exg	d1,d3
+	move.w	d5,d4
+cl_p0_out:
+	btst	#0,d4
+	bne.b	cl_left
+	btst	#1,d4
+	bne.b	cl_right
+	btst	#2,d4
+	bne.b	cl_top
+	move.w	#SCREEN_H-1,d6		| bottom
+	jra	cl_y
+cl_top:
+	moveq	#0,d6
+cl_y:
+	* x0 += (x1-x0)*(ty-y0)/(y1-y0), y0 = ty   (y1-y0 can't be 0 here)
+	move.w	d2,d4
+	sub.w	d0,d4
+	move.w	d6,d5
+	sub.w	d1,d5
+	muls	d5,d4
+	move.w	d3,d5
+	sub.w	d1,d5
+	divs	d5,d4
+	add.w	d4,d0
+	move.w	d6,d1
+	jra	cl_loop
+cl_right:
+	move.w	#SCREEN_W-1,d6
+	jra	cl_x
+cl_left:
+	moveq	#0,d6
+cl_x:
+	* y0 += (y1-y0)*(tx-x0)/(x1-x0), x0 = tx   (x1-x0 can't be 0 here)
+	move.w	d3,d4
+	sub.w	d1,d4
+	move.w	d6,d5
+	sub.w	d0,d5
+	muls	d5,d4
+	move.w	d2,d5
+	sub.w	d0,d5
+	divs	d5,d4
+	add.w	d4,d1
+	move.w	d6,d0
+	jra	cl_loop
+cl_accept:
+	move.w	(a7)+,d7		| move clears carry
+	rts
+cl_reject:
+	move.w	(a7)+,d7
+	ori.b	#1,ccr			| set carry
+	rts
+
+* --------------------------------------------------------------------
+* < D0,D1: x,y (on screen)  D7: color  A2: plane 0  A5: _custom
+* trashes D0,D1,D4,D7,A0,A1
+plot_pixel:
+	lea	mulNB_BYTES_PER_ROW_table,a0
+	add.w	d1,d1
+	move.w	(a0,d1.w),d1
+	move.w	d0,d4
+	lsr.w	#3,d4
+	add.w	d4,d1
+	lea	(a2,d1.w),a1
+	not.b	d0			| bit number = 7-(x&7) (bset .b is mod 8)
+	WAIT_BLIT			| a pending line blit could overwrite the byte
+	lsr.b	#1,d7
+	bcc.b	1f
+	bset	d0,(a1)
+1:
+	lsr.b	#1,d7
+	bcc.b	2f
+	bset	d0,(SCREEN_PLANE_SIZE,a1)
+2:
+	lsr.b	#1,d7
+	bcc.b	3f
+	bset	d0,(SCREEN_PLANE_SIZE*2,a1)
+3:
+	rts
+
+* --------------------------------------------------------------------
+* blitter line, OR mode, drawn in each plane whose bit is set in color
+* < D0,D1: x0,y0  D2,D3: x1,y1 (clipped, not the same point)
+* < D7: color  A2: plane 0  A5: _custom
+* trashes D0-D7,A0,A1
+draw_line_planes:
+	sub.w	d0,d2			| dx
+	bmi.b	dl_xneg
+	sub.w	d1,d3			| dy
+	bmi.b	dl_yneg
+	cmp.w	d3,d2
+	bmi.b	dl_ygtx
+	moveq	#16+1,d5		| octant: SUD            + LINE
+	jra	dl_go
+dl_ygtx:
+	exg	d2,d3
+	moveq	#0+1,d5
+	jra	dl_go
+dl_yneg:
+	neg.w	d3
+	cmp.w	d3,d2
+	bmi.b	dl_ynygtx
+	moveq	#24+1,d5		| SUD|SUL
+	jra	dl_go
+dl_ynygtx:
+	exg	d2,d3
+	moveq	#4+1,d5			| AUL
+	jra	dl_go
+dl_xneg:
+	neg.w	d2
+	sub.w	d1,d3
+	bmi.b	dl_xyneg
+	cmp.w	d3,d2
+	bmi.b	dl_xnygtx
+	moveq	#20+1,d5		| SUD|AUL
+	jra	dl_go
+dl_xnygtx:
+	exg	d2,d3
+	moveq	#8+1,d5			| SUL
+	jra	dl_go
+dl_xyneg:
+	neg.w	d3
+	cmp.w	d3,d2
+	bmi.b	dl_xynygtx
+	moveq	#28+1,d5		| SUD|SUL|AUL
+	jra	dl_go
+dl_xynygtx:
+	exg	d2,d3
+	moveq	#12+1,d5		| SUL|AUL
+dl_go:
+	* D2 = dmax, D3 = dmin (both >= 0)
+	* start address: plane + y0*40 + (x0>>4)*2
+	lea	mulNB_BYTES_PER_ROW_table,a0
+	add.w	d1,d1
+	move.w	(a0,d1.w),d1
+	move.w	d0,d4
+	lsr.w	#4,d4
+	add.w	d4,d4
+	add.w	d4,d1
+	lea	(a2,d1.w),a1
+	* bltcon0: ASH = x0&15, USEA|USEC|USED, minterm $CA (D = A|C with B=$FFFF)
+	and.w	#15,d0
+	ror.w	#4,d0
+	or.w	#0x0BCA,d0
+	add.w	d3,d3
+	add.w	d3,d3			| 4*dmin -> bltbmod
+	move.w	d3,d4
+	sub.w	d2,d4
+	sub.w	d2,d4			| 4*dmin-2*dmax -> bltapt
+	bpl.b	0f
+	or.w	#0x40,d5		| SIGN
+0:
+	move.w	d4,d6
+	sub.w	d2,d6
+	sub.w	d2,d6			| 4*dmin-4*dmax -> bltamod
+	ext.l	d4
+	addq.w	#1,d2
+	lsl.w	#6,d2
+	addq.w	#2,d2			| bltsize = (dmax+1)<<6 | 2
+	moveq	#2,d1			| 3 color planes
+dl_plane:
+	lsr.b	#1,d7
+	jcc	dl_next
+	WAIT_BLIT
+	move.w	d0,(bltcon0,a5)
+	move.w	d5,(bltcon1,a5)
+	move.w	d6,(bltamod,a5)
+	move.w	d3,(bltbmod,a5)
+	move.l	d4,(bltapt,a5)
+	move.l	a1,(bltcpt,a5)
+	move.l	a1,(bltdpt,a5)
+	move.w	d2,(bltsize,a5)
+dl_next:
+	tst.b	d7
+	beq.b	dl_out			| no more planes to draw
+	lea	(SCREEN_PLANE_SIZE,a1),a1
+	dbf	d1,dl_plane
+dl_out:
+	rts
+
+* --------------------------------------------------------------------
+* data
+
+vector_frame_ready:
+	.byte	0			| set by irq_cbea when it swaps AVG buffers
+	.align	2
+avg_state:
+	.skip	AVG_STATE_SIZEOF
+	.align	2
+segment_buffer:
+	.skip	MAX_SEGMENTS*SEG_SIZEOF
+segment_buffer_end:
