@@ -884,6 +884,7 @@ osd_get_random:
 	movem.l	(a7)+,a0
 	add.b	_custom+vposr,d0
 	and.l	#0xFF,d0
+	tst.b 	d0		| set flags
 	rts
 seed:
 	dc.l	0x12345678

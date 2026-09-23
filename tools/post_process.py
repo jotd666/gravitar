@@ -278,18 +278,10 @@ def doit():
                             if original_inst == "stx":
                                 print("Unsupported {original_inst} for non-dummy I/O address: {line.strip()}")
                             line = change_instruction(f"jbsr\tosd_{osd_call}",lines,i)
-                            if original_inst == "bit":
-                                # bit for those special locations doesn't require d0 to be changed
-                                # it even requires it NOT to be changed by the syscall
-                                # here we "cheat" by copying the result of the syscall in RAM, it works because
-                                # ram is mapped here, since 0x1xxx is between RAM/sprite RAM and video ram but in
-                                # some smaller memory models it would not work!
-                                line = f"""\tmove.w\td0,-(a7)   | save d0
-\tGET_ADDRESS\t{val}
-"""+line+"""\tmove.b\td0,(a0)   | update in ram so we can use BIT
-\tBIT\t(a0)
-\tmovem.w\t(a7)+,d0   | restore d0, preserving BIT status flags
-"""
+                            # there's a "BIT" instruction on random_600a POKEY address
+                            # but it just tests "bpl" (1 chance out of 2) so it works in that case
+
+
                         else:
                             line = remove_instruction(lines,i)
                         lines[i+1] = remove_instruction(lines,i+1)
